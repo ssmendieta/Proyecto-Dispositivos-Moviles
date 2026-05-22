@@ -8,3 +8,4 @@ flutter/
 .metadata
 *.lock
 *.log
+.opencode/
