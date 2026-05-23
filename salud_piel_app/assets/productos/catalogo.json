@@ -1,0 +1,74 @@
+[
+  {
+    "nombre": "Limpiador Facial Suave",
+    "descripcion": "Limpiador suave que elimina impurezas sin resecar la piel",
+    "ingredientes": "Agua, Glicerina, Aloe Vera, Ácido Salicílico",
+    "tipo_piel": "mixta",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/limpiador_facial.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro húmedo, masajear suavemente y enjuagar"
+  },
+  {
+    "nombre": "Crema Hidratante con Ácido Hialurónico",
+    "descripcion": "Hidratación profunda para piel seca y sensible",
+    "ingredientes": "Ácido Hialurónico, Glicerina, Ceramidas, Vitamina E",
+    "tipo_piel": "seca",
+    "condicion": null,
+    "imagen_path": "assets/productos/crema_ha.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel limpia y seca"
+  },
+  {
+    "nombre": "Protector Solar SPF 50+",
+    "descripcion": "Protección solar de amplio espectro para todo tipo de piel",
+    "ingredientes": "Óxido de Zinc, Dióxido de Titanio, Vitamina E",
+    "tipo_piel": null,
+    "condicion": null,
+    "imagen_path": "assets/productos/protector_solar.png",
+    "como_usar": "Aplicar generosamente 15 minutos antes de la exposición solar. Reaplicar cada 2 horas"
+  },
+  {
+    "nombre": "Sérum de Vitamina C",
+    "descripcion": "Antioxidante que ilumina y unifica el tono de la piel",
+    "ingredientes": "Vitamina C, Ácido Ferúlico, Vitamina E",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/serum_vitamina_c.png",
+    "como_usar": "Aplicar 3 gotas por la mañana antes de la crema hidratante"
+  },
+  {
+    "nombre": "Crema de Noche Reparadora",
+    "descripcion": "Reparación intensiva durante el sueño para piel con eczema",
+    "ingredientes": "Avena Coloidal, Ceramidas, Niacinamida, Manteca de Karité",
+    "tipo_piel": "sensible",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/crema_noche.png",
+    "como_usar": "Aplicar una capa generosa antes de dormir sobre la piel limpia"
+  },
+  {
+    "nombre": "Tónico Facial Calmante",
+    "descripcion": "Reduce el enrojecimiento y calma la irritación de la rosácea",
+    "ingredientes": "Agua de Rosas, Manzanilla, Alantoína, Ácido Azelaico",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/tonico_calmante.png",
+    "como_usar": "Aplicar con un disco de algodón después de la limpieza facial"
+  },
+  {
+    "nombre": "Exfoliante Enzimático Suave",
+    "descripcion": "Elimina células muertas sin irritar, ideal para piel con psoriasis",
+    "ingredientes": "Enzimas de Papaya, Aloe Vera, Ácido Láctico",
+    "tipo_piel": "normal",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/exfoliante_enzimatico.png",
+    "como_usar": "Aplicar 1-2 veces por semana sobre la piel húmeda, masajear suavemente y enjuagar"
+  },
+  {
+    "nombre": "Crema Corporal con Urea",
+    "descripcion": "Hidratación intensiva para piel seca y escamosa",
+    "ingredientes": "Urea 10%, Ácido Láctico, Glicerina",
+    "tipo_piel": "seca",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/crema_urea.png",
+    "como_usar": "Aplicar diariamente después de la ducha sobre la piel aún húmeda"
+  }
+]

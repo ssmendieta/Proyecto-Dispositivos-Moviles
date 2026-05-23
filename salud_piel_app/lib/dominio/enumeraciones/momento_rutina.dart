@@ -1,0 +1,4 @@
+enum MomentoRutina {
+  maniana,
+  noche,
+}
