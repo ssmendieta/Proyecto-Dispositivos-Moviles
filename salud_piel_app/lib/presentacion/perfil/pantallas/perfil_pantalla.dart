@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
 import '../../historial/pantallas/historial_pantalla.dart';
+import '../../rutas/app_rutas.dart';
 
 class PerfilPantalla extends StatelessWidget {
   const PerfilPantalla({super.key});
@@ -83,7 +84,9 @@ class PerfilPantalla extends StatelessWidget {
               icono: Icons.logout,
               texto: 'Logout',
               color: ColoresApp.peligro,
-              onTap: () {},
+              onTap: () {
+                Get.offAllNamed(AppRutas.login);
+              },
             ),
           ],
         ),

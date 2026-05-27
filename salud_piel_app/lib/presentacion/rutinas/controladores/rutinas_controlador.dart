@@ -32,14 +32,38 @@ class RutinasControlador extends GetxController {
   }
 
   void toggleManana(int index) {
-    rutinaManana[index]['completado'] =
-        !rutinaManana[index]['completado'];
+    rutinaManana[index]['completado'] = !rutinaManana[index]['completado'];
     rutinaManana.refresh();
   }
 
   void toggleNoche(int index) {
-    rutinaNoche[index]['completado'] =
-        !rutinaNoche[index]['completado'];
+    rutinaNoche[index]['completado'] = !rutinaNoche[index]['completado'];
     rutinaNoche.refresh();
+  }
+
+  void eliminarManana(int index) {
+    rutinaManana.removeAt(index);
+  }
+
+  void eliminarNoche(int index) {
+    rutinaNoche.removeAt(index);
+  }
+
+  void reordenarManana(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex--;
+    }
+
+    final producto = rutinaManana.removeAt(oldIndex);
+    rutinaManana.insert(newIndex, producto);
+  }
+
+  void reordenarNoche(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex--;
+    }
+
+    final producto = rutinaNoche.removeAt(oldIndex);
+    rutinaNoche.insert(newIndex, producto);
   }
 }

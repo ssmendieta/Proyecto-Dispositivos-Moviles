@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MyApp',
 
-      initialRoute: AppRutas.inicio,
+      initialRoute: AppRutas.carga,
       getPages: AppPaginas.paginas,
 
       theme: ThemeData(
