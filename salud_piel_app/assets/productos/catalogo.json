@@ -1,74 +1,502 @@
 [
   {
-    "nombre": "Limpiador Facial Suave",
-    "descripcion": "Limpiador suave que elimina impurezas sin resecar la piel",
-    "ingredientes": "Agua, Glicerina, Aloe Vera, Ácido Salicílico",
+    "nombre": "CeraVe Limpiador Espumoso",
+    "descripcion": "Limpiador facial espumoso con niacinamida y ceramidas para piel grasa con tendencia acneica",
+    "ingredientes": "Aqua, Cocamidopropyl Hydroxysultaine, Glycerin, Niacinamide, Ceramide NP, Ceramide AP, Ceramide EOP, Sodium Cocoyl Isethionate, Sodium Lauroyl Sarcosinate",
+    "tipo_piel": "grasa",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche masajeando suavemente sobre el rostro húmedo y enjuagar con agua tibia",
+    "marca": "CeraVe"
+  },
+  {
+    "nombre": "La Roche-Posay Effaclar Duo+",
+    "descripcion": "Tratamiento corrector para piel con imperfecciones acneicas, reduce marcas y previene reaparición",
+    "ingredientes": "Aqua, Glycerin, Niacinamide, Dimethicone, Zinc PCA, LHA, Mannose, Salicylic Acid, Piroctone Olamine",
     "tipo_piel": "mixta",
     "condicion": "acne",
-    "imagen_path": "assets/productos/limpiador_facial.png",
-    "como_usar": "Aplicar mañana y noche sobre el rostro húmedo, masajear suavemente y enjuagar"
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar una capa fina mañana y noche sobre las zonas afectadas después de la limpieza",
+    "marca": "La Roche-Posay"
   },
   {
-    "nombre": "Crema Hidratante con Ácido Hialurónico",
-    "descripcion": "Hidratación profunda para piel seca y sensible",
-    "ingredientes": "Ácido Hialurónico, Glicerina, Ceramidas, Vitamina E",
+    "nombre": "The Ordinary Niacinamide 10% + Zinc 1%",
+    "descripcion": "Sérum con alta concentración de niacinamida y zinc para reducir imperfecciones y controlar el sebo",
+    "ingredientes": "Aqua, Niacinamide, Pentylene Glycol, Zinc PCA, Propanediol, Dimethyl Isosorbide, Glycerin, Xanthan Gum",
+    "tipo_piel": "grasa",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar unas gotas mañana y noche antes de la crema hidratante, evitar zona de ojos",
+    "marca": "The Ordinary"
+  },
+  {
+    "nombre": "Neutrogena Hydro Boost Gel Hidratante",
+    "descripcion": "Gel hidratante oil-free con ácido hialurónico para piel grasa y con tendencia acneica",
+    "ingredientes": "Aqua, Dimethicone, Glycerin, Sodium Hyaluronate, Phenoxyethanol, Dimethiconol, Polyacrylamide",
+    "tipo_piel": "grasa",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre la piel limpia, ideal para usar después del sérum",
+    "marca": "Neutrogena"
+  },
+  {
+    "nombre": "Paula's Choice 2% BHA Líquido Exfoliante",
+    "descripcion": "Exfoliante líquido con ácido salicílico que destapa poros y reduce imperfecciones",
+    "ingredientes": "Aqua, Butylene Glycol, Salicylic Acid, Camellia Oleifera Leaf Extract, Green Tea Extract, Sodium Hydroxide",
+    "tipo_piel": "mixta",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar con disco de algodón después de la limpieza, solo por la noche, 2-3 veces por semana",
+    "marca": "Paula's Choice"
+  },
+  {
+    "nombre": "Eucerin Dermopure Gel Limpiador",
+    "descripcion": "Gel limpiador con ácido salicílico para piel con imperfecciones y acné moderado",
+    "ingredientes": "Aqua, Cocamidopropyl Betaine, Salicylic Acid, PEG-7 Glyceryl Cocoate, Glycerin, Panthenol",
+    "tipo_piel": "grasa",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel húmeda, masajear y enjuagar",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "La Roche-Posay Serozinc",
+    "descripcion": "Spray facial con zinc que calma, purifica y regula el exceso de sebo en piel acneica",
+    "ingredientes": "Aqua, Zinc Sulfate, Sodium Chloride",
+    "tipo_piel": "grasa",
+    "condicion": "acne",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Pulverizar sobre el rostro limpio mañana y noche, dejar secar al aire",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "CeraVe Crema Hidratante",
+    "descripcion": "Crema hidratante rica con ceramidas para piel seca a muy seca, restaura la barrera cutánea",
+    "ingredientes": "Aqua, Glycerin, Ceteareth-20, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Sodium Hyaluronate",
     "tipo_piel": "seca",
-    "condicion": null,
-    "imagen_path": "assets/productos/crema_ha.png",
-    "como_usar": "Aplicar mañana y noche sobre la piel limpia y seca"
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar generosamente sobre la piel limpia y seca, mañana y noche",
+    "marca": "CeraVe"
   },
   {
-    "nombre": "Protector Solar SPF 50+",
-    "descripcion": "Protección solar de amplio espectro para todo tipo de piel",
-    "ingredientes": "Óxido de Zinc, Dióxido de Titanio, Vitamina E",
-    "tipo_piel": null,
-    "condicion": null,
-    "imagen_path": "assets/productos/protector_solar.png",
-    "como_usar": "Aplicar generosamente 15 minutos antes de la exposición solar. Reaplicar cada 2 horas"
+    "nombre": "La Roche-Posay Lipikar Baume AP+M",
+    "descripcion": "Bálsamo reparador multiusos para piel seca, muy seca y con tendencia atópica o eczema",
+    "ingredientes": "Aqua, Butyrospermum Parkii Butter, Glycerin, Niacinamide, Manose, Shea Butter, Ceramide NP",
+    "tipo_piel": "seca",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca, especialmente después del baño",
+    "marca": "La Roche-Posay"
   },
   {
-    "nombre": "Sérum de Vitamina C",
-    "descripcion": "Antioxidante que ilumina y unifica el tono de la piel",
-    "ingredientes": "Vitamina C, Ácido Ferúlico, Vitamina E",
-    "tipo_piel": "normal",
-    "condicion": "melasma",
-    "imagen_path": "assets/productos/serum_vitamina_c.png",
-    "como_usar": "Aplicar 3 gotas por la mañana antes de la crema hidratante"
-  },
-  {
-    "nombre": "Crema de Noche Reparadora",
-    "descripcion": "Reparación intensiva durante el sueño para piel con eczema",
-    "ingredientes": "Avena Coloidal, Ceramidas, Niacinamida, Manteca de Karité",
+    "nombre": "Aveeno Crema Calmante con Avena Coloidal",
+    "descripcion": "Crema hidratante con avena coloidal que calma y alivia la piel seca, irritada y con eczema",
+    "ingredientes": "Aqua, Glycerin, Colloidal Oatmeal, Cetearyl Alcohol, Dimethicone, Petrolatum, Ceramide NP",
     "tipo_piel": "sensible",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/crema_noche.png",
-    "como_usar": "Aplicar una capa generosa antes de dormir sobre la piel limpia"
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre la piel afectada, masajear suavemente hasta absorber",
+    "marca": "Aveeno"
   },
   {
-    "nombre": "Tónico Facial Calmante",
-    "descripcion": "Reduce el enrojecimiento y calma la irritación de la rosácea",
-    "ingredientes": "Agua de Rosas, Manzanilla, Alantoína, Ácido Azelaico",
+    "nombre": "Eucerin UreaRepair Plus Crema Facial 5%",
+    "descripcion": "Crema facial con urea 5% que hidrata profundamente la piel seca y con descamación",
+    "ingredientes": "Aqua, Urea, Glycerin, Butyrospermum Parkii Butter, Ceramide NP, Lactic Acid, Squalane",
+    "tipo_piel": "seca",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "Cetaphil Loción Hidratante Corporal",
+    "descripcion": "Loción hidratante suave para piel seca y sensible, ideal para eczema y dermatitis",
+    "ingredientes": "Aqua, Glycerin, Cetearyl Alcohol, Dimethicone, Tocopheryl Acetate, Panthenol, Almond Oil",
+    "tipo_piel": "seca",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre la piel limpia, especialmente después de la ducha",
+    "marca": "Cetaphil"
+  },
+  {
+    "nombre": "Bioderma Atoderm Baume",
+    "descripcion": "Bálsamo nutritivo que restaura la barrera cutánea de piel seca y con tendencia atópica",
+    "ingredientes": "Aqua, Glycerin, Canola Oil, Paraffinum Liquidum, Sucrose Ester, Niacinamide, Ceramide NP",
+    "tipo_piel": "seca",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca",
+    "marca": "Bioderma"
+  },
+  {
+    "nombre": "Mustela Crema Corporal para Piel Atópica",
+    "descripcion": "Crema emoliente para piel atópica con ingredientes naturales, apta para toda la familia",
+    "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Avocado Persea Gratissima Oil, Sunflower Seed Oil, Ceramide NP",
+    "tipo_piel": "sensible",
+    "condicion": "eczema",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel limpia, preferiblemente después del baño",
+    "marca": "Mustela"
+  },
+  {
+    "nombre": "La Roche-Posay Rosaliac AR Intense",
+    "descripcion": "Tratamiento antirrojeces que calma y atenúa las rojeces persistentes de la rosácea",
+    "ingredientes": "Aqua, Glycerin, Dimethicone, Ambophenol, Dextran Sulfate, Vitamin CG, Silica, Niacinamide",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/tonico_calmante.png",
-    "como_usar": "Aplicar con un disco de algodón después de la limpieza facial"
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre las zonas afectadas después de la limpieza",
+    "marca": "La Roche-Posay"
   },
   {
-    "nombre": "Exfoliante Enzimático Suave",
-    "descripcion": "Elimina células muertas sin irritar, ideal para piel con psoriasis",
-    "ingredientes": "Enzimas de Papaya, Aloe Vera, Ácido Láctico",
+    "nombre": "Avène Antirougeurs Crema",
+    "descripcion": "Crema protectora que calma las rojeces y fortalece la barrera cutánea de piel reactiva",
+    "ingredientes": "Avène Thermal Spring Water, Glycerin, Cetearyl Alcohol, Shea Butter, Safflower Oil, Tocopherol",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio, evitando el contorno de ojos",
+    "marca": "Avène"
+  },
+  {
+    "nombre": "The Ordinary Azelaic Acid Suspension 10%",
+    "descripcion": "Suspensión con ácido azelaico 10% que reduce rojeces, imperfecciones y unifica el tono",
+    "ingredientes": "Aqua, Azelaic Acid, Dimethicone, Isodecyl Neopentanoate, Caprylyl Methicone, Glycerin, Dimethicone Crosspolymer",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar una pequeña cantidad mañana y noche después del sérum y antes de la crema hidratante",
+    "marca": "The Ordinary"
+  },
+  {
+    "nombre": "Cetaphil Limpiador Facial Suave",
+    "descripcion": "Limpiador facial no espumoso ideal para piel sensible, reactiva y con rosácea",
+    "ingredientes": "Aqua, Cetyl Alcohol, Propylene Glycol, Sodium Lauryl Sulfate, Methylparaben, Propylparaben",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar sobre la piel seca masajeando suavemente, retirar con agua o un paño suave, mañana y noche",
+    "marca": "Cetaphil"
+  },
+  {
+    "nombre": "Eucerin AntiREDNESS Crema Calmante",
+    "descripcion": "Crema calmante que reduce visiblemente las rojeces de la rosácea y fortalece la barrera cutánea",
+    "ingredientes": "Aqua, Glycerin, Squalane, Licochalcone A, SymSitive, Ceramide NP, Dimethicone",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio, como tratamiento diario",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "Bioderma Sensibio AR Crema",
+    "descripcion": "Crema descongestionante que calma las rojeces y reduce la reactividad de la piel",
+    "ingredientes": "Aqua, Glycerin, Paraffinum Liquidum, Canola Oil, Sucrose Ester, Niacinamide, Ambophenol",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco",
+    "marca": "Bioderma"
+  },
+  {
+    "nombre": "La Roche-Posay Cicaplast Baume B5",
+    "descripcion": "Bálsamo reparador multiusos que calma y repara piel irritada, sensible y con rojeces",
+    "ingredientes": "Aqua, Dimethicone, Panthenol, Madecassoside, Zinc Gluconate, Manganese Gluconate, Shea Butter",
+    "tipo_piel": "sensible",
+    "condicion": "rosacea",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar sobre piel limpia y seca, mañana y noche, en las zonas irritadas",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "The Ordinary Vitamina C Suspension 23% + HA Spheres 2%",
+    "descripcion": "Suspensión con alta concentración de vitamina C que ilumina y reduce manchas oscuras",
+    "ingredientes": "Ascorbic Acid, Squalane, Glycerin, Lauryl Laurate, Cetearyl Dimethicone Crosspolymer, Sodium Hyaluronate",
     "tipo_piel": "normal",
-    "condicion": "psoriasis",
-    "imagen_path": "assets/productos/exfoliante_enzimatico.png",
-    "como_usar": "Aplicar 1-2 veces por semana sobre la piel húmeda, masajear suavemente y enjuagar"
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar una pequeña cantidad por la mañana, evitar zona de ojos, esperar absorción antes de crema hidratante",
+    "marca": "The Ordinary"
   },
   {
-    "nombre": "Crema Corporal con Urea",
-    "descripcion": "Hidratación intensiva para piel seca y escamosa",
-    "ingredientes": "Urea 10%, Ácido Láctico, Glicerina",
+    "nombre": "La Roche-Posay Pigmentclar Sérum",
+    "descripcion": "Sérum concentrado que corrige manchas oscuras y unifica el tono de la piel",
+    "ingredientes": "Aqua, Glycerin, Niacinamide, Ascorbyl Glucoside, Dimethicone, Piroctone Olamine, LHA",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 3-4 gotas mañana y noche sobre el rostro limpio antes de la crema hidratante",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "ISDIN Melaclear Crema",
+    "descripcion": "Crema despigmentante con tecnología Dermactive que reduce manchas y previene su reaparición",
+    "ingredientes": "Aqua, Niacinamide, Ascorbyl Tetraisopalmitate, Glycolic Acid, Kojic Acid, Licorice Extract, Shea Butter",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la zona afectada, con protección solar obligatoria durante el día",
+    "marca": "ISDIN"
+  },
+  {
+    "nombre": "Eucerin AntiPigment Crema Facial",
+    "descripcion": "Crema facial con Thiamidol que reduce las manchas oscuras visibles y previene su reaparición",
+    "ingredientes": "Aqua, Glycerin, Isobutylamido Thiazolyl Resorcinol (Thiamidol), Dimethicone, Cetearyl Alcohol, Shea Butter",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre las zonas con manchas, acompañar de protector solar",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "SkinCeuticals C E Ferulic",
+    "descripcion": "Sérum antioxidante con vitamina C 15%, E y ácido ferúlico que ilumina y protege contra radicales libres",
+    "ingredientes": "Aqua, Ascorbic Acid, Glycerin, Tocopherol, Ferulic Acid, Sodium Hyaluronate, Laureth-23",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 4-5 gotas por la mañana sobre la piel seca, después de la limpieza facial",
+    "marca": "SkinCeuticals"
+  },
+  {
+    "nombre": "Vichy LiftActiv Pure Retinol Sérum",
+    "descripcion": "Sérum con retinol puro y vitamina C que renueva la textura y unifica el tono de la piel",
+    "ingredientes": "Aqua, Glycerin, Retinol, Ascorbyl Glucoside, Dimethicone, Propanediol, Vichy Mineralizing Water",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 2-3 gotas por la noche, evitar zona de ojos, usar protección solar al día siguiente",
+    "marca": "Vichy"
+  },
+  {
+    "nombre": "Heliocare 360 Crema Color SPF 50+",
+    "descripcion": "Protector solar con color de amplio espectro que protege y unifica el tono, ideal para melasma",
+    "ingredientes": "Aqua, Zinc Oxide, Titanium Dioxide, Dimethicone, Glycerin, Niacinamide, Fernblock LC",
+    "tipo_piel": "normal",
+    "condicion": "melasma",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar generosamente cada mañana como última capa de la rutina facial, reaplicar cada 2 horas",
+    "marca": "Heliocare"
+  },
+  {
+    "nombre": "CeraVe Psoriasis Crema",
+    "descripcion": "Crema hidratante con ácido salicílico y ceramidas para piel con psoriasis, suaviza las escamas",
+    "ingredientes": "Aqua, Salicylic Acid, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Niacinamide",
     "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar sobre las zonas afectadas 1-2 veces al día, masajear suavemente",
+    "marca": "CeraVe"
+  },
+  {
+    "nombre": "Eucerin UreaRepair Plus 10% Crema Corporal",
+    "descripcion": "Crema corporal con urea 10% y ceramidas que hidrata intensamente y suaviza la piel escamosa",
+    "ingredientes": "Aqua, Urea, Glycerin, Ceramide NP, Lactic Acid, Shea Butter, Squalane, Lanolin Alcohol",
+    "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre la piel limpia, preferiblemente después de la ducha",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "La Roche-Posay Lipikar Huile Lavante",
+    "descripcion": "Aceite limpiador corporal que calma y nutre la piel seca y con tendencia a psoriasis",
+    "ingredientes": "Aqua, Glycerin, Niacinamide, Coco-Glucoside, Shea Butter, Sodium Cocoamphoacetate, Manosa",
+    "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar sobre la piel húmeda durante la ducha, masajear y enjuagar",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "Cetaphil Restoraderm Crema Corporal",
+    "descripcion": "Crema hidratante restauradora para piel seca y con tendencia a psoriasis, eczema y dermatitis",
+    "ingredientes": "Aqua, Glycerin, Sunflower Seed Oil, Cetearyl Alcohol, Niacinamide, Panthenol, Ceramide NP, Vitamin E",
+    "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre la piel limpia y seca, 2 veces al día si es necesario",
+    "marca": "Cetaphil"
+  },
+  {
+    "nombre": "Aveeno Crema Corporal con Cáñamo",
+    "descripcion": "Crema corporal con aceite de cáñamo que calma y alivia la piel seca, irritada y con descamación",
+    "ingredientes": "Aqua, Cannabis Sativa Seed Oil, Glycerin, Avena Sativa Kernel Flour, Dimethicone, Cetearyl Alcohol",
+    "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar generosamente sobre las zonas afectadas, masajear hasta su absorción",
+    "marca": "Aveeno"
+  },
+  {
+    "nombre": "Bioderma Atoderm Crema Corporal",
+    "descripcion": "Crema corporal nutritiva que restaura la barrera cutánea de piel seca y con descamación",
+    "ingredientes": "Aqua, Glycerin, Canola Oil, Paraffinum Liquidum, Sucrose Ester, Niacinamide, Ceramide NP",
+    "tipo_piel": "seca",
+    "condicion": "psoriasis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca",
+    "marca": "Bioderma"
+  },
+  {
+    "nombre": "La Roche-Posay Toleriane Crema Hidratante",
+    "descripcion": "Crema hidratante ligera para piel normal a mixta, con prebiótico y agua termal",
+    "ingredientes": "Aqua, Glycerin, Squalane, Dimethicone, Niacinamide, Ceramide NP, Allantoin, Vitamin CG",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "CeraVe Loción Hidratante Facial",
+    "descripcion": "Loción hidratante facial ligera con ceramidas y ácido hialurónico para piel normal a mixta",
+    "ingredientes": "Aqua, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Sodium Hyaluronate, Niacinamide",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio, antes del protector solar si es de día",
+    "marca": "CeraVe"
+  },
+  {
+    "nombre": "The Ordinary Ácido Hialurónico 2% + B5",
+    "descripcion": "Sérum con ácido hialurónico y vitamina B5 para hidratación intensa de todo tipo de piel",
+    "ingredientes": "Aqua, Sodium Hyaluronate, Panthenol, Glycerin, Pentylene Glycol, Propanediol, Urea",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar unas gotas mañana y noche sobre la piel húmeda antes de la crema hidratante",
+    "marca": "The Ordinary"
+  },
+  {
+    "nombre": "Cetaphil Loción Hidratante Facial",
+    "descripcion": "Loción hidratante facial suave no comedogénica para piel normal a seca",
+    "ingredientes": "Aqua, Glycerin, Dimethicone, Cetearyl Alcohol, Tocopheryl Acetate, Panthenol, Almond Oil",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel limpia y seca",
+    "marca": "Cetaphil"
+  },
+  {
+    "nombre": "Neutrogena Crema Hidratante Facial",
+    "descripcion": "Crema hidratante facial con glicerina que hidrata la piel normal sin dejar sensación grasa",
+    "ingredientes": "Aqua, Glycerin, Dimethicone, Cetyl Alcohol, Glyceryl Stearate, PEG-100 Stearate, Phenoxyethanol",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel limpia con movimientos ascendentes",
+    "marca": "Neutrogena"
+  },
+  {
+    "nombre": "Vichy Mineral 89 Sérum",
+    "descripcion": "Sérum con 89% de agua volcánica de Vichy y ácido hialurónico que fortalece y protege la barrera cutánea",
+    "ingredientes": "Aqua, Glycerin, Sodium Hyaluronate, Vichy Mineralizing Water, Carbomer, Phenoxyethanol",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar 2-3 gotas mañana y noche sobre el rostro limpio antes de la crema hidratante",
+    "marca": "Vichy"
+  },
+  {
+    "nombre": "Bioderma Sensibio Gel Limpiador",
+    "descripcion": "Gel limpiador suave para piel sensible y reactiva que respeta el equilibrio de la piel",
+    "ingredientes": "Aqua, Cucumber Extract, Glycerin, Caprylyl Glycol, PEG-7 Glyceryl Cocoate, Sodium Hydroxide",
+    "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/crema_urea.png",
-    "como_usar": "Aplicar diariamente después de la ducha sobre la piel aún húmeda"
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel húmeda, masajear suavemente y enjuagar con abundante agua",
+    "marca": "Bioderma"
+  },
+  {
+    "nombre": "Avène Tolerance Control Crema",
+    "descripcion": "Crema protectora para piel intolerante y reactiva que calma y reduce la irritación",
+    "ingredientes": "Avène Thermal Spring Water, Glycerin, Safflower Oil, Cetearyl Alcohol, Carbomer, Tocopherol",
+    "tipo_piel": "sensible",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco",
+    "marca": "Avène"
+  },
+  {
+    "nombre": "La Roche-Posay Cicaplast Gel B5",
+    "descripcion": "Gel reparador que calma y protege la piel irritada, con textura fresca no grasa",
+    "ingredientes": "Aqua, Panthenol, Madecassoside, Zinc Gluconate, Manganese Gluconate, Copper Gluconate, Dimethicone",
+    "tipo_piel": "sensible",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar sobre la piel limpia y seca 1-2 veces al día en las zonas irritadas",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "Eucerin AtopiControl Crema Calmante",
+    "descripcion": "Crema calmante que reduce el picor y la irritación de la piel con dermatitis atópica",
+    "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Ceramide NP, Licochalcone A, Shea Butter, Squalane",
+    "tipo_piel": "sensible",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar diariamente sobre las zonas afectadas, especialmente después del baño",
+    "marca": "Eucerin"
+  },
+  {
+    "nombre": "Mustela Crema Facial Hidratante",
+    "descripcion": "Crema facial hidratante suave para piel sensible, respeta el pH y la barrera cutánea",
+    "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Avocado Oil, Sunflower Oil, Shea Butter, Vitamin E",
+    "tipo_piel": "sensible",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar mañana y noche sobre la piel limpia con suaves toques",
+    "marca": "Mustela"
+  },
+  {
+    "nombre": "Cetaphil Pro Crema Corporal",
+    "descripcion": "Crema corporal con prebióticos que calma y protege la piel sensible con tendencia a dermatitis",
+    "ingredientes": "Aqua, Glycerin, Dimethicone, Cetearyl Alcohol, Niacinamide, Panthenol, Tocopherol, Ceramide NP",
+    "tipo_piel": "sensible",
+    "condicion": "dermatitis",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar generosamente sobre la piel limpia y seca, 1-2 veces al día",
+    "marca": "Cetaphil"
+  },
+  {
+    "nombre": "Protector Solar ISDIN Fusion Water SPF 50+",
+    "descripcion": "Protector solar ultraligero con textura acuosa para todo tipo de piel, resistente al agua",
+    "ingredientes": "Aqua, Octocrylene, Glycerin, Dimethicone, Butyl Methoxydibenzoylmethane, Alcohol Denat, Aloe Vera",
+    "tipo_piel": "mixta",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar generosamente 15 minutos antes de la exposición solar, reaplicar cada 2 horas",
+    "marca": "ISDIN"
+  },
+  {
+    "nombre": "Protector Solar La Roche-Posay Anthelios SPF 50+",
+    "descripcion": "Protector solar de amplio espectro con tecnología Mexoryl para piel sensible y normal",
+    "ingredientes": "Aqua, Glycerin, Dimethicone, Octocrylene, Butyl Methoxydibenzoylmethane, Titanium Dioxide, Niacinamide",
+    "tipo_piel": "sensible",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar cada mañana como último paso de la rutina facial, reaplicar cada 2 horas si hay exposición solar",
+    "marca": "La Roche-Posay"
+  },
+  {
+    "nombre": "The Ordinary Caffeine Solution 5% + EGCG",
+    "descripcion": "Sérum ligero con cafeína que reduce la hinchazón y las ojeras del contorno de ojos",
+    "ingredientes": "Aqua, Caffeine, Epigallocatechin Gallatyl Glucoside, Dimethyl Isosorbide, Glycerin, Propanediol",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar una pequeña cantidad en el contorno de ojos mañana y noche",
+    "marca": "The Ordinary"
+  },
+  {
+    "nombre": "CeraVe Contorno de Ojos",
+    "descripcion": "Crema de contorno de ojos con ceramidas y ácido hialurónico para hidratar y rejuvenecer",
+    "ingredientes": "Aqua, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Niacinamide, Sodium Hyaluronate, Dimethicone",
+    "tipo_piel": "normal",
+    "condicion": "normal",
+    "imagen_path": "assets/productos/placeholder.png",
+    "como_usar": "Aplicar una pequeña cantidad con el dedo anular en el contorno de ojos, mañana y noche",
+    "marca": "CeraVe"
   }
 ]
