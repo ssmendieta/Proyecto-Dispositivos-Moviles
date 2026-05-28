@@ -4,6 +4,10 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Salud Piel necesita acceso a la cámara para escanear tu piel y realizar diagnósticos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Salud Piel necesita acceso a tu galería para seleccionar fotos de tu piel y analizarlas</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
