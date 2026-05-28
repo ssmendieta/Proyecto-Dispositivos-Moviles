@@ -4,46 +4,60 @@ import '../../dominio/entidades/producto.dart';
 import '../../dominio/enumeraciones/condicion_piel.dart';
 import '../../dominio/enumeraciones/tipo_piel.dart';
 import '../../dominio/repositorios/i_producto_repositorio.dart';
+import '../../nucleo/utilidades/resultado.dart';
 import '../datos/app_database.dart';
+import '../modelos/producto_dto.dart';
 
 class ProductoRepositorio implements IProductoRepositorio {
   final AppDatabase _db;
   ProductoRepositorio(this._db);
 
   @override
-  Future<List<Producto>> listar({TipoPiel? tipoPiel, CondicionPiel? condicion}) async {
-    final conditions = <String>[];
-    final args = <dynamic>[];
+  Future<Resultado<List<Producto>>> listar({TipoPiel? tipoPiel, CondicionPiel? condicion}) async {
+    try {
+      final conditions = <String>[];
+      final args = <dynamic>[];
 
-    if (tipoPiel != null) {
-      conditions.add('(tipo_piel = ? OR tipo_piel IS NULL)');
-      args.add(tipoPiel.name);
-    }
-    if (condicion != null) {
-      conditions.add('(condicion = ? OR condicion IS NULL)');
-      args.add(condicion.name);
-    }
+      if (tipoPiel != null) {
+        conditions.add('(tipo_piel = ? OR tipo_piel IS NULL)');
+        args.add(tipoPiel.name);
+      }
+      if (condicion != null) {
+        conditions.add('(condicion = ? OR condicion IS NULL)');
+        args.add(condicion.name);
+      }
 
-    final where = conditions.isEmpty ? null : conditions.join(' AND ');
-    final maps = await _db.db.query('productos', where: where, whereArgs: args.isNotEmpty ? args : null);
-    return maps.map(_mapear).toList();
+      final where = conditions.isEmpty ? null : conditions.join(' AND ');
+      final maps = await _db.db.query('productos', where: where, whereArgs: args.isNotEmpty ? args : null);
+      return Exito(maps.map(_mapear).toList());
+    } catch (e) {
+      return Fracaso('Error al listar productos: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<Producto?> obtenerPorId(int id) async {
-    final maps = await _db.db.query('productos', where: 'id = ?', whereArgs: [id]);
-    if (maps.isEmpty) return null;
-    return _mapear(maps.first);
+  Future<Resultado<Producto>> obtenerPorId(int id) async {
+    try {
+      final maps = await _db.db.query('productos', where: 'id = ?', whereArgs: [id]);
+      if (maps.isEmpty) return Fracaso('Producto no encontrado');
+      return Exito(_mapear(maps.first));
+    } catch (e) {
+      return Fracaso('Error al obtener producto: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<List<Producto>> buscar(String query) async {
-    final maps = await _db.db.query(
-      'productos',
-      where: 'nombre LIKE ? OR descripcion LIKE ?',
-      whereArgs: ['%$query%', '%$query%'],
-    );
-    return maps.map(_mapear).toList();
+  Future<Resultado<List<Producto>>> buscar(String query) async {
+    try {
+      final maps = await _db.db.query(
+        'productos',
+        where: 'nombre LIKE ? OR descripcion LIKE ?',
+        whereArgs: ['%$query%', '%$query%'],
+      );
+      return Exito(maps.map(_mapear).toList());
+    } catch (e) {
+      return Fracaso('Error al buscar productos: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   Future<void> precargarSemilla() async {
@@ -69,21 +83,6 @@ class ProductoRepositorio implements IProductoRepositorio {
     }
   }
 
-  Producto _mapear(Map<String, dynamic> m) => Producto(
-        id: m['id'] as int,
-        nombre: m['nombre'] as String,
-        marca: m['marca'] as String?,
-        categoria: m['categoria'] as String?,
-        compatibilidad: m['compatibilidad'] as String?,
-        descripcion: m['descripcion'] as String?,
-        ingredientes: m['ingredientes'] as String?,
-        tipoPiel: m['tipo_piel'] != null
-            ? TipoPiel.values.firstWhere((t) => t.name == m['tipo_piel'])
-            : null,
-        condicion: m['condicion'] != null
-            ? CondicionPiel.values.firstWhere((c) => c.name == m['condicion'])
-            : null,
-        imagenPath: m['imagen_path'] as String?,
-        comoUsar: m['como_usar'] as String?,
-      );
+  Producto _mapear(Map<String, dynamic> m) =>
+      ProductoDto.fromMap(m).toEntity();
 }

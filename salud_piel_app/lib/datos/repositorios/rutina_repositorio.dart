@@ -1,91 +1,119 @@
-import '../../dominio/entidades/producto.dart';
 import '../../dominio/entidades/rutina.dart';
-import '../../dominio/enumeraciones/condicion_piel.dart';
 import '../../dominio/enumeraciones/momento_rutina.dart';
-import '../../dominio/enumeraciones/tipo_piel.dart';
 import '../../dominio/repositorios/i_rutina_repositorio.dart';
+import '../../nucleo/utilidades/resultado.dart';
 import '../datos/app_database.dart';
+import '../modelos/producto_dto.dart';
+import '../modelos/rutina_dto.dart';
 
 class RutinaRepositorio implements IRutinaRepositorio {
   final AppDatabase _db;
   RutinaRepositorio(this._db);
 
   @override
-  Future<int> crear(String nombre, MomentoRutina momento) async {
-    return await _db.db.insert('rutinas', {
-      'nombre': nombre,
-      'momento': momento.name,
-      'fecha_creacion': DateTime.now().toIso8601String(),
-    });
+  Future<Resultado<int>> crear(String nombre, MomentoRutina momento) async {
+    try {
+      final id = await _db.db.insert('rutinas', {
+        'nombre': nombre,
+        'momento': momento.name,
+        'fecha_creacion': DateTime.now().toIso8601String(),
+      });
+      return Exito(id);
+    } catch (e) {
+      return Fracaso('Error al crear rutina: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<Rutina?> obtener(int id) async {
+  Future<Resultado<Rutina>> obtener(int id) async {
     final maps = await _db.db.query('rutinas', where: 'id = ?', whereArgs: [id]);
-    if (maps.isEmpty) return null;
-    return _mapear(maps.first);
+    if (maps.isEmpty) return Fracaso('Rutina no encontrada');
+    return Exito(await _mapear(maps.first));
   }
 
   @override
-  Future<List<Rutina>> listar() async {
-    final maps = await _db.db.query('rutinas', orderBy: 'fecha_creacion DESC');
-    return Future.wait(maps.map(_mapear));
+  Future<Resultado<List<Rutina>>> listar() async {
+    try {
+      final maps = await _db.db.query('rutinas', orderBy: 'fecha_creacion DESC');
+      return Exito(await Future.wait(maps.map(_mapear)));
+    } catch (e) {
+      return Fracaso('Error al listar rutinas: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> actualizar(Rutina rutina) async {
-    await _db.db.update(
-      'rutinas',
-      {'nombre': rutina.nombre, 'momento': rutina.momento.name},
-      where: 'id = ?',
-      whereArgs: [rutina.id],
-    );
+  Future<Resultado<Null>> actualizar(Rutina rutina) async {
+    try {
+      await _db.db.update(
+        'rutinas',
+        {'nombre': rutina.nombre, 'momento': rutina.momento.name},
+        where: 'id = ?',
+        whereArgs: [rutina.id],
+      );
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al actualizar rutina: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> eliminar(int id) async {
-    await _db.db.delete('rutinas_productos', where: 'rutina_id = ?', whereArgs: [id]);
-    await _db.db.delete('rutinas', where: 'id = ?', whereArgs: [id]);
+  Future<Resultado<Null>> eliminar(int id) async {
+    try {
+      await _db.db.delete('rutinas_productos', where: 'rutina_id = ?', whereArgs: [id]);
+      await _db.db.delete('rutinas', where: 'id = ?', whereArgs: [id]);
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al eliminar rutina: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> agregarProducto(int rutinaId, int productoId, int orden) async {
-    await _db.db.insert('rutinas_productos', {
-      'rutina_id': rutinaId,
-      'producto_id': productoId,
-      'orden': orden,
-      'completado': 0,
-    });
+  Future<Resultado<Null>> agregarProducto(int rutinaId, int productoId, int orden) async {
+    try {
+      await _db.db.insert('rutinas_productos', {
+        'rutina_id': rutinaId,
+        'producto_id': productoId,
+        'orden': orden,
+        'completado': 0,
+      });
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al agregar producto: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> quitarProducto(int rutinaId, int productoId) async {
-    await _db.db.delete(
-      'rutinas_productos',
-      where: 'rutina_id = ? AND producto_id = ?',
-      whereArgs: [rutinaId, productoId],
-    );
+  Future<Resultado<Null>> quitarProducto(int rutinaId, int productoId) async {
+    try {
+      await _db.db.delete(
+        'rutinas_productos',
+        where: 'rutina_id = ? AND producto_id = ?',
+        whereArgs: [rutinaId, productoId],
+      );
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al quitar producto: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> marcarCompletado(int rutinaId, int productoId, bool completado) async {
-    await _db.db.update(
-      'rutinas_productos',
-      {'completado': completado ? 1 : 0},
-      where: 'rutina_id = ? AND producto_id = ?',
-      whereArgs: [rutinaId, productoId],
-    );
+  Future<Resultado<Null>> marcarCompletado(int rutinaId, int productoId, bool completado) async {
+    try {
+      await _db.db.update(
+        'rutinas_productos',
+        {'completado': completado ? 1 : 0},
+        where: 'rutina_id = ? AND producto_id = ?',
+        whereArgs: [rutinaId, productoId],
+      );
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al marcar completado: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   Future<Rutina> _mapear(Map<String, dynamic> m) async {
     final productos = await _obtenerProductos(m['id'] as int);
-    return Rutina(
-      id: m['id'] as int,
-      nombre: m['nombre'] as String,
-      momento: MomentoRutina.values.firstWhere((mr) => mr.name == m['momento']),
-      fechaCreacion: DateTime.parse(m['fecha_creacion'] as String),
-      productos: productos,
-    );
+    return RutinaDto.fromMap(m).toEntity(productos: productos);
   }
 
   Future<List<RutinaProducto>> _obtenerProductos(int rutinaId) async {
@@ -98,23 +126,7 @@ class RutinaRepositorio implements IRutinaRepositorio {
     ''', [rutinaId]);
 
     return maps.map((m) => RutinaProducto(
-          producto: Producto(
-            id: m['id'] as int,
-            nombre: m['nombre'] as String,
-            marca: m['marca'] as String?,
-            categoria: m['categoria'] as String?,
-            compatibilidad: m['compatibilidad'] as String?,
-            descripcion: m['descripcion'] as String?,
-            ingredientes: m['ingredientes'] as String?,
-            tipoPiel: (m['tipo_piel'] as String?) != null
-                ? TipoPiel.values.firstWhere((t) => t.name == m['tipo_piel'])
-                : null,
-            condicion: (m['condicion'] as String?) != null
-                ? CondicionPiel.values.firstWhere((c) => c.name == m['condicion'])
-                : null,
-            imagenPath: m['imagen_path'] as String?,
-            comoUsar: m['como_usar'] as String?,
-          ),
+          producto: ProductoDto.fromMap(m).toEntity(),
           orden: m['orden'] as int,
           completado: (m['completado'] as int) == 1,
         )).toList();

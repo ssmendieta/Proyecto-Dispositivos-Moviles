@@ -2,44 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../rutas/app_rutas.dart';
+import '../controladores/login_controlador.dart';
 
-class LoginPantalla extends StatelessWidget {
-  LoginPantalla({super.key});
-
-  final correoController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  final verPassword = false.obs;
-  final recordarSesion = false.obs;
-
-  void _validarLogin() {
-    final correo = correoController.text.trim();
-    final password = passwordController.text.trim();
-
-    if (correo.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        'Campos incompletos',
-        'Por favor ingresa tu correo y contraseña.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (!correo.contains('@')) {
-      Get.snackbar(
-        'Correo inválido',
-        'Ingresa un correo electrónico válido.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    Get.offAllNamed(AppRutas.inicio);
-  }
+class LoginPantalla extends GetView<LoginControlador> {
+  const LoginPantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -111,116 +81,65 @@ class LoginPantalla extends StatelessWidget {
                       borderRadius: BorderRadius.circular(22),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-                    child: Obx(
-                      () => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _label('Username or Email'),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _label('Username or Email'),
 
-                          _campo(
-                            controller: correoController,
-                            hint: 'name@example.com',
-                            icono: Icons.alternate_email,
-                          ),
+                        _campo(
+                          controller: controller.correoController,
+                          hint: 'name@example.com',
+                          icono: Icons.alternate_email,
+                        ),
 
-                          const SizedBox(height: 18),
+                        const SizedBox(height: 18),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _label('Password'),
-                              Text(
-                                'Forgot Password?',
-                                style: TextStyle(
-                                  color: ColoresApp.primario,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
+                        _buildPasswordField(),
+
+                        const SizedBox(height: 14),
+
+                        _buildRememberMe(),
+
+                        const SizedBox(height: 16),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton.icon(
+                            onPressed: () => controller.iniciarSesion(),
+                            icon: const Icon(Icons.arrow_forward),
+                            label: const Text('Log In'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ColoresApp.primario,
+                              foregroundColor: Colors.white,
+                              textStyle: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
-                          ),
-
-                          _campo(
-                            controller: passwordController,
-                            hint: '••••••••',
-                            icono: Icons.lock_outline,
-                            obscure: !verPassword.value,
-                            suffix: verPassword.value
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            onSuffixTap: () {
-                              verPassword.value = !verPassword.value;
-                            },
-                          ),
-
-                          const SizedBox(height: 14),
-
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: recordarSesion.value,
-                                onChanged: (valor) {
-                                  recordarSesion.value = valor ?? false;
-                                },
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  recordarSesion.value =
-                                      !recordarSesion.value;
-                                },
-                                child: Text(
-                                  'Keep me logged in',
-                                  style: TextStyle(
-                                    color: ColoresApp.textoSecundario,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton.icon(
-                              onPressed: _validarLogin,
-                              icon: const Icon(Icons.arrow_forward),
-                              label: const Text('Log In'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ColoresApp.primario,
-                                foregroundColor: Colors.white,
-                                textStyle: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
                               ),
                             ),
                           ),
+                        ),
 
-                          const SizedBox(height: 22),
+                        const SizedBox(height: 22),
 
-                          Divider(color: Colors.grey.shade300),
-                        ],
-                      ),
+                        Divider(color: Colors.grey.shade300),
+                      ],
                     ),
                   ),
 
                   const SizedBox(height: 28),
 
                   TextButton(
-                    onPressed: () {
-                      Get.toNamed(AppRutas.registro);
-                    },
+                    onPressed: controller.irARegistro,
                     child: Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
@@ -257,7 +176,7 @@ class LoginPantalla extends StatelessWidget {
                     '© 2024 SkinGPT. Clinical Accuracy Guaranteed.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: ColoresApp.textoSecundario.withOpacity(.6),
+                      color: ColoresApp.textoSecundario.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -281,6 +200,65 @@ class LoginPantalla extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildPasswordField() {
+    return Obx(() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _label('Password'),
+            Text(
+              'Forgot Password?',
+              style: TextStyle(
+                color: ColoresApp.primario,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        _campo(
+          controller: controller.passwordController,
+          hint: '••••••••',
+          icono: Icons.lock_outline,
+          obscure: !controller.verPassword.value,
+          suffix: controller.verPassword.value
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            controller.verPassword.value = !controller.verPassword.value;
+          },
+        ),
+      ],
+    ));
+  }
+
+  Widget _buildRememberMe() {
+    return Obx(() => Row(
+      children: [
+        Checkbox(
+          value: controller.recordarSesion.value,
+          onChanged: (valor) {
+            controller.recordarSesion.value = valor ?? false;
+          },
+        ),
+        InkWell(
+          onTap: () {
+            controller.recordarSesion.value =
+                !controller.recordarSesion.value;
+          },
+          child: Text(
+            'Keep me logged in',
+            style: TextStyle(
+              color: ColoresApp.textoSecundario,
+            ),
+          ),
+        ),
+      ],
+    ));
   }
 
   Widget _campo({

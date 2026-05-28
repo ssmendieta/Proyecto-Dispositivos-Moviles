@@ -1,5 +1,16 @@
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+
+DatabaseFactory _resolveFactory() {
+  if (kIsWeb) {
+    return databaseFactoryFfiWeb;
+  }
+  return databaseFactoryFfi;
+}
+
+final DatabaseFactory _factory = _resolveFactory();
 
 class AppDatabase {
   static final AppDatabase _instancia = AppDatabase._();
@@ -10,11 +21,12 @@ class AppDatabase {
   Database get db => _db!;
 
   Future<void> inicializar() async {
-    final dbPath = await getDatabasesPath();
+    final dbPath = await _factory.getDatabasesPath();
     final path = join(dbPath, 'salud_piel.db');
 
-    _db = await openDatabase(
+    _db = await _factory.openDatabase(
       path,
+      options: OpenDatabaseOptions(
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
@@ -82,6 +94,7 @@ class AppDatabase {
           )
         ''');
       },
+      ),
     );
   }
 }

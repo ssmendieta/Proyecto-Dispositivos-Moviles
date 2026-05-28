@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../rutas/app_rutas.dart';
+import '../controladores/bienvenida_controlador.dart';
 
 class BienvenidaPantalla
-    extends StatelessWidget {
+    extends GetView<BienvenidaControlador> {
 
   const BienvenidaPantalla({
     super.key,
@@ -45,7 +45,7 @@ class BienvenidaPantalla
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black
-                          .withOpacity(.05),
+                          .withValues(alpha: 0.05),
 
                       blurRadius: 20,
 
@@ -109,12 +109,7 @@ class BienvenidaPantalla
                 height: 58,
 
                 child: ElevatedButton(
-                  onPressed: () {
-
-                    Get.toNamed(
-                      AppRutas.login,
-                    );
-                  },
+                  onPressed: controller.irALogin,
 
                   style:
                       ElevatedButton.styleFrom(
@@ -153,12 +148,7 @@ class BienvenidaPantalla
                 height: 58,
 
                 child: OutlinedButton(
-                  onPressed: () {
-
-                    Get.toNamed(
-                      AppRutas.registro,
-                    );
-                  },
+                  onPressed: controller.irARegistro,
 
                   style:
                       OutlinedButton.styleFrom(

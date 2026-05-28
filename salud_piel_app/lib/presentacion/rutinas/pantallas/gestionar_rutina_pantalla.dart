@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../inicio/controladores/inicio_controlador.dart';
+import '../../../dominio/entidades/rutina.dart';
 import '../controladores/rutinas_controlador.dart';
 
-class GestionarRutinaPantalla extends StatelessWidget {
+class GestionarRutinaPantalla extends GetView<RutinasControlador> {
   const GestionarRutinaPantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controlador = Get.find<RutinasControlador>();
-    final inicioControlador = Get.find<InicioControlador>();
-
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       appBar: AppBar(
@@ -28,7 +25,9 @@ class GestionarRutinaPantalla extends StatelessWidget {
         ),
       ),
       body: Obx(
-        () => DefaultTabController(
+        () {
+          controller.rutinas.length;
+          return DefaultTabController(
           length: 2,
           child: Column(
             children: [
@@ -44,28 +43,27 @@ class GestionarRutinaPantalla extends StatelessWidget {
                   ],
                 ),
               ),
-
               Expanded(
                 child: TabBarView(
                   children: [
                     _listaGestion(
                       titulo: 'Rutina de Mañana',
-                      productos: controlador.rutinaManana,
-                      onReorder: controlador.reordenarManana,
-                      onEliminar: controlador.eliminarManana,
+                      productos: controller.rutinaManana,
+                      onReorder: controller.reordenarManana,
+                      onEliminar: controller.eliminarManana,
                       onAgregar: () {
                         Get.back();
-                        inicioControlador.cambiarPagina(3);
+                        controller.inicioControlador.cambiarPagina(3);
                       },
                     ),
                     _listaGestion(
                       titulo: 'Rutina de Noche',
-                      productos: controlador.rutinaNoche,
-                      onReorder: controlador.reordenarNoche,
-                      onEliminar: controlador.eliminarNoche,
+                      productos: controller.rutinaNoche,
+                      onReorder: controller.reordenarNoche,
+                      onEliminar: controller.eliminarNoche,
                       onAgregar: () {
                         Get.back();
-                        inicioControlador.cambiarPagina(3);
+                        controller.inicioControlador.cambiarPagina(3);
                       },
                     ),
                   ],
@@ -73,16 +71,17 @@ class GestionarRutinaPantalla extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        );
+        },
       ),
     );
   }
 
   Widget _listaGestion({
     required String titulo,
-    required List<Map<String, dynamic>> productos,
-    required void Function(int oldIndex, int newIndex) onReorder,
-    required void Function(int index) onEliminar,
+    required List<RutinaProducto> productos,
+    required Future<void> Function(int oldIndex, int newIndex) onReorder,
+    required Future<void> Function(int index) onEliminar,
     required VoidCallback onAgregar,
   }) {
     return Padding(
@@ -108,9 +107,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 18),
-
           Expanded(
             child: productos.isEmpty
                 ? Center(
@@ -123,13 +120,15 @@ class GestionarRutinaPantalla extends StatelessWidget {
                   )
                 : ReorderableListView.builder(
                     itemCount: productos.length,
-                    onReorder: onReorder,
+                    onReorder: (oldIndex, newIndex) {
+                      onReorder(oldIndex, newIndex);
+                    },
                     buildDefaultDragHandles: false,
                     itemBuilder: (context, index) {
-                      final producto = productos[index];
+                      final rp = productos[index];
 
                       return Container(
-                        key: ValueKey('${producto['nombre']}-$index'),
+                        key: ValueKey('${rp.producto.id}-$index'),
                         margin: const EdgeInsets.only(bottom: 14),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
@@ -145,9 +144,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
                                 color: ColoresApp.textoSecundario,
                               ),
                             ),
-
                             const SizedBox(width: 10),
-
                             Container(
                               width: 58,
                               height: 58,
@@ -157,9 +154,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
                               ),
                               child: const Icon(Icons.spa_outlined),
                             ),
-
                             const SizedBox(width: 14),
-
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +169,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    producto['nombre'],
+                                    rp.producto.nombre,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: ColoresApp.textoPrincipal,
@@ -182,7 +177,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
-                                    producto['marca'],
+                                    rp.producto.marca ?? '',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: ColoresApp.textoSecundario,
@@ -191,11 +186,8 @@ class GestionarRutinaPantalla extends StatelessWidget {
                                 ],
                               ),
                             ),
-
                             IconButton(
-                              onPressed: () {
-                                onEliminar(index);
-                              },
+                              onPressed: () => onEliminar(index),
                               icon: const Icon(Icons.close),
                             ),
                           ],
@@ -204,9 +196,7 @@ class GestionarRutinaPantalla extends StatelessWidget {
                     },
                   ),
           ),
-
           const SizedBox(height: 12),
-
           SizedBox(
             width: double.infinity,
             height: 56,

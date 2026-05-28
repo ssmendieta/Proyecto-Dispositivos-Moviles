@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../historial/pantallas/historial_pantalla.dart';
-import '../../rutas/app_rutas.dart';
+import '../controladores/perfil_controlador.dart';
 
-class PerfilPantalla extends StatelessWidget {
+class PerfilPantalla extends GetView<PerfilControlador> {
   const PerfilPantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -27,19 +27,19 @@ class PerfilPantalla extends StatelessWidget {
 
             const SizedBox(height: 18),
 
-            Text(
-              'Gemina Ponce',
+            Obx(() => Text(
+              controller.nombreUsuario,
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: ColoresApp.textoPrincipal,
               ),
-            ),
+            )),
 
             const SizedBox(height: 8),
 
-            Text(
-              'Piel grasa • Sensible',
+            const Text(
+              'Próximamente',
               style: TextStyle(
                 color: ColoresApp.textoSecundario,
                 fontSize: 15,
@@ -48,13 +48,13 @@ class PerfilPantalla extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            Row(
+            Obx(() => Row(
               children: [
                 Expanded(
                   child: _infoCard(
                     icono: Icons.camera_alt_outlined,
                     titulo: 'Total scans',
-                    valor: '24',
+                    valor: '${controller.totalScans}',
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -62,20 +62,18 @@ class PerfilPantalla extends StatelessWidget {
                   child: _infoCard(
                     icono: Icons.favorite,
                     titulo: 'Health score',
-                    valor: '88/100',
+                    valor: '${controller.healthScore}/100',
                   ),
                 ),
               ],
-            ),
+            )),
 
             const SizedBox(height: 24),
 
             _opcionPerfil(
               icono: Icons.history,
               texto: 'Ver Historial',
-              onTap: () {
-                Get.to(() => const HistorialPantalla());
-              },
+              onTap: controller.irAHistorial,
             ),
 
             const SizedBox(height: 12),
@@ -84,9 +82,7 @@ class PerfilPantalla extends StatelessWidget {
               icono: Icons.logout,
               texto: 'Logout',
               color: ColoresApp.peligro,
-              onTap: () {
-                Get.offAllNamed(AppRutas.login);
-              },
+              onTap: () => controller.cerrarSesion(),
             ),
           ],
         ),

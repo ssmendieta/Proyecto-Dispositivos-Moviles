@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../dominio/entidades/producto.dart';
 import '../../constantes/colores.dart';
 import '../../rutinas/controladores/rutinas_controlador.dart';
 
 class AgregarARutinaSheet extends StatelessWidget {
-  final String nombreProducto;
+  final Producto producto;
 
-  AgregarARutinaSheet({
+  const AgregarARutinaSheet({
     super.key,
-    required this.nombreProducto,
+    required this.producto,
   });
-
-  final mananaSeleccionada = false.obs;
-  final nocheSeleccionada = false.obs;
 
   @override
   Widget build(BuildContext context) {
+    final controlador = Get.find<RutinasControlador>();
+    controlador.resetSheetState();
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: const BoxDecoration(
@@ -37,9 +38,7 @@ class AgregarARutinaSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-
             const SizedBox(height: 22),
-
             Text(
               'Añadir a mi rutina',
               style: TextStyle(
@@ -48,77 +47,49 @@ class AgregarARutinaSheet extends StatelessWidget {
                 color: ColoresApp.textoPrincipal,
               ),
             ),
-
             const SizedBox(height: 8),
-
             Text(
-              nombreProducto,
+              producto.nombre,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColoresApp.textoSecundario,
               ),
             ),
-
             const SizedBox(height: 24),
-
             _opcionRutina(
               icono: Icons.wb_sunny_outlined,
               titulo: 'Rutina de Mañana',
               descripcion: 'Ideal para limpieza, hidratación y protección solar',
-              seleccionado: mananaSeleccionada.value,
-              onTap: () {
-                mananaSeleccionada.value = !mananaSeleccionada.value;
-              },
+              seleccionado: controlador.mananaSeleccionada.value,
+              onTap: controlador.toggleMananaSheet,
             ),
-
             const SizedBox(height: 12),
-
             _opcionRutina(
               icono: Icons.nightlight_round,
               titulo: 'Rutina de Noche',
               descripcion: 'Ideal para reparación, tratamiento y nutrición',
-              seleccionado: nocheSeleccionada.value,
-              onTap: () {
-                nocheSeleccionada.value = !nocheSeleccionada.value;
-              },
+              seleccionado: controlador.nocheSeleccionada.value,
+              onTap: controlador.toggleNocheSheet,
             ),
-
             const SizedBox(height: 22),
-
             SizedBox(
               width: double.infinity,
               height: 52,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   Get.back();
 
-                  String rutina = '';
+                  await controlador.agregarProducto(
+                    producto: producto,
+                    manana: controlador.mananaSeleccionada.value,
+                    noche: controlador.nocheSeleccionada.value,
+                  );
 
-                  if (mananaSeleccionada.value && nocheSeleccionada.value) {
-                    rutina = 'mañana y noche';
-                  } else if (mananaSeleccionada.value) {
-                    rutina = 'mañana';
-                  } else if (nocheSeleccionada.value) {
-                    rutina = 'noche';
-                  } else {
-                    rutina = 'sin rutina seleccionada';
-                  }
-
-                 final rutinasControlador =
-                  Get.find<RutinasControlador>();
-
-              rutinasControlador.agregarProducto(
-                nombre: nombreProducto,
-                marca: 'SkinGPT',
-                manana: mananaSeleccionada.value,
-                noche: nocheSeleccionada.value,
-              );
-
-              Get.snackbar(
-                'Producto añadido',
-                '$nombreProducto fue añadido correctamente',
-                snackPosition: SnackPosition.BOTTOM,
-              );
+                  Get.snackbar(
+                    'Producto añadido',
+                    '${producto.nombre} fue añadido correctamente',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ColoresApp.primario,
@@ -150,7 +121,7 @@ class AgregarARutinaSheet extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: seleccionado
-              ? ColoresApp.acento.withOpacity(.18)
+              ? ColoresApp.acento.withValues(alpha: 0.18)
               : ColoresApp.fondo,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
@@ -165,9 +136,7 @@ class AgregarARutinaSheet extends StatelessWidget {
               color: seleccionado ? ColoresApp.acento : ColoresApp.primario,
               size: 30,
             ),
-
             const SizedBox(width: 14),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +159,6 @@ class AgregarARutinaSheet extends StatelessWidget {
                 ],
               ),
             ),
-
             Checkbox(
               value: seleccionado,
               onChanged: (_) => onTap(),

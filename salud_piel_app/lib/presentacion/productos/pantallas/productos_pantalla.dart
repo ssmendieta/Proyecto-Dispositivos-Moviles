@@ -2,156 +2,152 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
+import '../../../dominio/entidades/producto.dart';
 import '../controladores/productos_controlador.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
 
-class ProductosPantalla extends StatelessWidget {
-  const ProductosPantalla({super.key});
+class ProductosPantalla extends GetView<ProductosControlador> {
+  ProductosPantalla({super.key});
+
+  final TextEditingController _buscadorCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final controlador = Get.find<ProductosControlador>();
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Obx(() {
-          final productosFiltrados = controlador.productos.where((producto) {
-            final nombre = producto['nombre']!.toLowerCase();
-            final busqueda = controlador.busqueda.value.toLowerCase();
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Catálogo',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: ColoresApp.textoPrincipal,
+              ),
+            ),
 
-            final coincideBusqueda = nombre.contains(busqueda);
+            const SizedBox(height: 6),
 
-            final coincideCategoria =
-                controlador.categoriaSeleccionada.value == 'Todos' ||
-                producto['categoria'] == controlador.categoriaSeleccionada.value;
+            Text(
+              'Productos recomendados para tu piel',
+              style: TextStyle(
+                color: ColoresApp.textoSecundario,
+              ),
+            ),
 
-            return coincideBusqueda && coincideCategoria;
-          }).toList();
+            const SizedBox(height: 20),
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Catálogo',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: ColoresApp.textoPrincipal,
+            TextField(
+              controller: _buscadorCtrl,
+              onChanged: controller.cambiarBusqueda,
+              decoration: InputDecoration(
+                hintText: 'Buscar producto...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: BorderSide.none,
                 ),
               ),
+            ),
 
-              const SizedBox(height: 6),
+            const SizedBox(height: 18),
 
-              Text(
-                'Productos recomendados para tu piel',
-                style: TextStyle(
-                  color: ColoresApp.textoSecundario,
-                ),
-              ),
+            _buildCategoryChips(),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-              TextField(
-                onChanged: controlador.cambiarBusqueda,
-                decoration: InputDecoration(
-                  hintText: 'Buscar producto...',
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              SizedBox(
-                height: 42,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controlador.categorias.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 10),
-                  itemBuilder: (context, index) {
-                    final categoria = controlador.categorias[index];
-                    final seleccionado =
-                        controlador.categoriaSeleccionada.value == categoria;
-
-                    return ChoiceChip(
-                      label: Text(categoria),
-                      selected: seleccionado,
-                      onSelected: (_) {
-                        controlador.cambiarCategoria(categoria);
-                      },
-                      selectedColor: ColoresApp.primario,
-                      backgroundColor: Colors.white,
-                      side: BorderSide.none,
-                      labelStyle: TextStyle(
-                        color: seleccionado
-                            ? Colors.white
-                            : ColoresApp.textoPrincipal,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    int columnas = 2;
-
-                    if (constraints.maxWidth > 1200) {
-                      columnas = 5;
-                    } else if (constraints.maxWidth > 900) {
-                      columnas = 4;
-                    } else if (constraints.maxWidth > 600) {
-                      columnas = 3;
-                    }
-
-                    return GridView.builder(
-                      itemCount: productosFiltrados.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: columnas,
-                        mainAxisSpacing: 14,
-                        crossAxisSpacing: 14,
-                        childAspectRatio: .78,
-                      ),
-                      itemBuilder: (context, index) {
-                        final producto = productosFiltrados[index];
-
-                        return _TarjetaProductoCatalogo(
-                          nombre: producto['nombre']!,
-                          marca: producto['marca']!,
-                          compatibilidad: producto['compatibilidad']!,
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        }),
+            _buildProductGrid(),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildCategoryChips() {
+    return Obx(() {
+      final seleccionado = controller.categoriaSeleccionada.value;
+      return SizedBox(
+      height: 42,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.categorias.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final categoria = controller.categorias[index];
+          final chipSeleccionado = seleccionado == categoria;
+
+          return ChoiceChip(
+            label: Text(categoria),
+            selected: chipSeleccionado,
+            onSelected: (_) {
+              controller.cambiarCategoria(categoria);
+            },
+            selectedColor: ColoresApp.primario,
+            backgroundColor: Colors.white,
+            side: BorderSide.none,
+            labelStyle: TextStyle(
+              color: chipSeleccionado
+                  ? Colors.white
+                  : ColoresApp.textoPrincipal,
+              fontWeight: FontWeight.w600,
+            ),
+          );
+        },
+      ),
+    );
+  });
+  }
+
+  Widget _buildProductGrid() {
+    return Obx(() {
+      final productosFiltrados = controller.productosFiltrados;
+
+      return Expanded(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            int columnas = 2;
+
+            if (constraints.maxWidth > 1200) {
+              columnas = 5;
+            } else if (constraints.maxWidth > 900) {
+              columnas = 4;
+            } else if (constraints.maxWidth > 600) {
+              columnas = 3;
+            }
+
+            return GridView.builder(
+              itemCount: productosFiltrados.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columnas,
+                mainAxisSpacing: 14,
+                crossAxisSpacing: 14,
+                childAspectRatio: .78,
+              ),
+              itemBuilder: (context, index) {
+                final producto = productosFiltrados[index];
+
+                return _TarjetaProductoCatalogo(
+                  producto: producto,
+                );
+              },
+            );
+          },
+        ),
+      );
+    });
   }
 }
 
 class _TarjetaProductoCatalogo extends StatelessWidget {
-  final String nombre;
-  final String marca;
-  final String compatibilidad;
+  final Producto producto;
 
   const _TarjetaProductoCatalogo({
-    required this.nombre,
-    required this.marca,
-    required this.compatibilidad,
+    required this.producto,
   });
 
   @override
@@ -182,7 +178,7 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
           const SizedBox(height: 10),
 
           Text(
-            nombre,
+            producto.nombre,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -194,7 +190,7 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
           const SizedBox(height: 4),
 
           Text(
-            marca,
+            producto.marca ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -208,11 +204,11 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: ColoresApp.acento.withOpacity(.18),
+              color: ColoresApp.acento.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '$compatibilidad compatible',
+              '${producto.compatibilidad ?? ''} compatible',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
@@ -230,7 +226,7 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
               onPressed: () {
                 Get.bottomSheet(
                   AgregarARutinaSheet(
-                    nombreProducto: nombre,
+                    producto: producto,
                   ),
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,

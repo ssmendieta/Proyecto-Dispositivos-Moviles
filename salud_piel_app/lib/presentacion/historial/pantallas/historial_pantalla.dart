@@ -5,12 +5,11 @@ import '../../constantes/colores.dart';
 import '../controladores/historial_controlador.dart';
 import '../widget/tarjeta_historial.dart';
 
-class HistorialPantalla extends StatelessWidget {
+class HistorialPantalla extends GetView<HistorialControlador> {
   const HistorialPantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controlador = Get.find<HistorialControlador>();
 
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
@@ -62,45 +61,44 @@ class HistorialPantalla extends StatelessWidget {
                 const SizedBox(height: 22),
 
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: controlador.analisis.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == controlador.analisis.length) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 30),
-                          child: Center(
-                            child: SizedBox(
-                              width: 240,
-                              height: 52,
-                              child: OutlinedButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                label: const Text('Cargar más análisis'),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: ColoresApp.primario,
-                                  side: BorderSide(
-                                    color: ColoresApp.primario,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
+                  child: controller.cargando.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          itemCount: controller.analisis.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == controller.analisis.length) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 16, bottom: 30),
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 240,
+                                    height: 52,
+                                    child: OutlinedButton.icon(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      label: const Text('Cargar más análisis'),
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor: ColoresApp.primario,
+                                        side: BorderSide(
+                                          color: ColoresApp.primario,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
+                              );
+                            }
 
-                      final item = controlador.analisis[index];
+                            final item = controller.analisis[index];
 
-                      return TarjetaHistorial(
-                        titulo: item['titulo']!,
-                        fecha: item['fecha']!,
-                        estado: item['estado']!,
-                        porcentaje: item['porcentaje']!,
-                      );
-                    },
-                  ),
+                            return TarjetaHistorial(
+                              diagnostico: item,
+                            );
+                          },
+                        ),
                 ),
               ],
             ),

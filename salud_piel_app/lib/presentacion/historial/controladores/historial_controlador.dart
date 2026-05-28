@@ -1,44 +1,43 @@
 import 'package:get/get.dart';
 
+import '../../../dominio/casos_uso/diagnostico_caso_uso.dart';
+import '../../../dominio/entidades/diagnostico.dart';
+import '../../../nucleo/utilidades/resultado.dart';
+
 class HistorialControlador extends GetxController {
+  final DiagnosticoCasoUso _casoUso;
 
-  final analisis = <Map<String, String>>[
+  HistorialControlador({required DiagnosticoCasoUso casoUso})
+      : _casoUso = casoUso;
 
-    {
-      'titulo': 'Nevo Melanocítico',
-      'fecha': '12 Oct 2023',
-      'estado': 'ATENCIÓN',
-      'porcentaje': '92%',
-    },
+  final analisis = <Diagnostico>[].obs;
+  final cargando = true.obs;
 
-    {
-      'titulo': 'Dermatitis Atópica',
-      'fecha': '05 Oct 2023',
-      'estado': 'ESTABLE',
-      'porcentaje': '87%',
-    },
+  @override
+  void onInit() {
+    super.onInit();
+    _cargarHistorial();
+  }
 
-    {
-      'titulo': 'Queritosis Seborreica',
-      'fecha': '28 Sep 2023',
-      'estado': 'SEGUIMIENTO',
-      'porcentaje': '95%',
-    },
+  Future<void> _cargarHistorial() async {
+    cargando.value = true;
+    final resultado = await _casoUso.listarDiagnosticos();
+    switch (resultado) {
+      case Exito<List<Diagnostico>>():
+        analisis.value = resultado.data;
+      case Fracaso<List<Diagnostico>>():
+        Get.snackbar('Error', resultado.mensaje, snackPosition: SnackPosition.BOTTOM);
+    }
+    cargando.value = false;
+  }
 
-  ].obs;
-
-  void agregarAnalisis({
-    required String titulo,
-    required String fecha,
-    required String estado,
-    required String porcentaje,
-  }) {
-
-    analisis.insert(0, {
-      'titulo': titulo,
-      'fecha': fecha,
-      'estado': estado,
-      'porcentaje': porcentaje,
-    });
+  Future<void> agregarAnalisis(Diagnostico diagnostico) async {
+    final resultado = await _casoUso.guardarDiagnostico(diagnostico);
+    switch (resultado) {
+      case Exito<int>():
+        analisis.insert(0, diagnostico);
+      case Fracaso<int>():
+        Get.snackbar('Error', resultado.mensaje, snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }

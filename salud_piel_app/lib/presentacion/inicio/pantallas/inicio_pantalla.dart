@@ -19,7 +19,7 @@ class InicioPantalla extends GetView<InicioControlador> {
       const HomePantalla(),
       const RutinasPantalla(),
       const EscaneoPantalla(),
-      const ProductosPantalla(),
+      ProductosPantalla(),
       const PerfilPantalla(),
     ];
 

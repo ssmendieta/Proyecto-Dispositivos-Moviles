@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../../../dominio/entidades/diagnostico.dart';
+import '../../../dominio/enumeraciones/condicion_piel.dart';
 import '../../constantes/colores.dart';
 
+String _derivarEstado(double confianza) {
+  if (confianza >= 0.95) return 'ESTABLE';
+  if (confianza >= 0.80) return 'SEGUIMIENTO';
+  return 'ATENCIÓN';
+}
+
+Color _colorEstado(String estado) {
+  switch (estado) {
+    case 'ESTABLE':
+      return Colors.green;
+    case 'SEGUIMIENTO':
+      return Colors.blue;
+    default:
+      return Colors.orange;
+  }
+}
+
 class TarjetaHistorial extends StatelessWidget {
-  final String titulo;
-  final String fecha;
-  final String estado;
-  final String porcentaje;
+  final Diagnostico diagnostico;
 
   const TarjetaHistorial({
     super.key,
-    required this.titulo,
-    required this.fecha,
-    required this.estado,
-    required this.porcentaje,
+    required this.diagnostico,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color colorEstado = Colors.orange;
-
-    if (estado == 'ESTABLE') colorEstado = Colors.green;
-    if (estado == 'SEGUIMIENTO') colorEstado = Colors.blue;
-
-    final progreso = double.parse(porcentaje.replaceAll('%', '')) / 100;
+    final estado = _derivarEstado(diagnostico.confianza);
+    final colorEstado = _colorEstado(estado);
+    final progreso = diagnostico.confianza;
+    final fechaFormateada = DateFormat('dd MMM yyyy').format(diagnostico.fecha);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
@@ -32,7 +44,7 @@ class TarjetaHistorial extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -51,7 +63,6 @@ class TarjetaHistorial extends StatelessWidget {
                 ),
               ),
             ),
-
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(14),
@@ -64,7 +75,7 @@ class TarjetaHistorial extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                         gradient: LinearGradient(
                           colors: [
-                            colorEstado.withOpacity(.25),
+                            colorEstado.withValues(alpha: 0.25),
                             ColoresApp.fondo,
                           ],
                           begin: Alignment.topLeft,
@@ -76,9 +87,7 @@ class TarjetaHistorial extends StatelessWidget {
                         size: 34,
                       ),
                     ),
-
                     const SizedBox(width: 14),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +96,7 @@ class TarjetaHistorial extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  titulo,
+                                  diagnostico.condicion.displayName,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -103,7 +112,7 @@ class TarjetaHistorial extends StatelessWidget {
                                   vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: colorEstado.withOpacity(.15),
+                                  color: colorEstado.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -117,19 +126,15 @@ class TarjetaHistorial extends StatelessWidget {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 6),
-
                           Text(
-                            fecha,
+                            fechaFormateada,
                             style: TextStyle(
                               color: ColoresApp.textoSecundario,
                               fontSize: 13,
                             ),
                           ),
-
                           const SizedBox(height: 14),
-
                           Row(
                             children: [
                               Expanded(
@@ -147,7 +152,7 @@ class TarjetaHistorial extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                '$porcentaje Confianza',
+                                '${(progreso * 100).round()}% Confianza',
                                 style: TextStyle(
                                   color: ColoresApp.primario,
                                   fontWeight: FontWeight.bold,

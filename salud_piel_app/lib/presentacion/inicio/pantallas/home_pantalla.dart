@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
+import '../../rutinas/controladores/rutinas_controlador.dart';
 import '../controladores/inicio_controlador.dart';
-import '../widgets/tarjeta_producto_pequena.dart';
 import '../widgets/tarjeta_producto_grande.dart';
-import '../../historial/pantallas/historial_pantalla.dart';
-import '../../rutas/app_rutas.dart';
+import '../widgets/tarjeta_producto_pequena.dart';
 
-class HomePantalla extends StatelessWidget {
+class HomePantalla extends GetView<InicioControlador> {
   const HomePantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final inicioControlador = Get.find<InicioControlador>();
+    final rutinasControlador = Get.find<RutinasControlador>();
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -31,7 +30,7 @@ class HomePantalla extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'SkinGPT',
                       style: TextStyle(
                         fontSize: 28,
@@ -40,7 +39,7 @@ class HomePantalla extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'Estado de la piel',
                       style: TextStyle(
                         fontSize: 15,
@@ -72,9 +71,7 @@ class HomePantalla extends StatelessWidget {
                     ),
                   ),
                  TextButton(
-                    onPressed: () {
-                      Get.toNamed(AppRutas.historial);
-                    },
+                    onPressed: controller.irAHistorial,
                     child: const Text('Ver historial'),
                   ),
                 ],
@@ -86,7 +83,7 @@ class HomePantalla extends StatelessWidget {
             InkWell(
               borderRadius: BorderRadius.circular(22),
               onTap: () {
-                inicioControlador.cambiarPagina(2);
+                controller.cambiarPagina(2);
               },
               child: Container(
                 width: double.infinity,
@@ -116,7 +113,7 @@ class HomePantalla extends StatelessWidget {
                       'Escanea tu piel usando inteligencia artificial dermatológica',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(.88),
+                        color: Colors.white.withValues(alpha: 0.88),
                         fontSize: 15,
                       ),
                     ),
@@ -139,7 +136,9 @@ class HomePantalla extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.cambiarPagina(1);
+                  },
                   child: const Text('Ver todo'),
                 ),
               ],
@@ -147,79 +146,87 @@ class HomePantalla extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            Row(
-              children: [
-                Icon(
-                  Icons.wb_sunny_outlined,
-                  color: ColoresApp.primario,
-                  size: 18,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'RUTINA DE MAÑANA',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: ColoresApp.primario,
+            Obx(() {
+              rutinasControlador.rutinas.length;
+              final manana = rutinasControlador.rutinaManana;
+              if (manana.isEmpty) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.wb_sunny_outlined,
+                        color: ColoresApp.primario,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'RUTINA DE MAÑANA',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: ColoresApp.primario,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 14),
-
-            const Row(
-              children: [
-                Expanded(
-                  child: TarjetaProductoPequena(
-                    nombre: 'Limpiador Suave',
-                    marca: 'CeraVe Hydrating',
+                  const SizedBox(height: 14),
+                  Row(
+                    children: manana.take(2).map((rp) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: TarjetaProductoPequena(
+                          nombre: rp.producto.nombre,
+                          marca: rp.producto.marca ?? '',
+                        ),
+                      ),
+                    )).toList(),
                   ),
-                ),
-                SizedBox(width: 14),
-                Expanded(
-                  child: TarjetaProductoPequena(
-                    nombre: 'Protección SPF 50',
-                    marca: 'La Roche-Posay',
+                  const SizedBox(height: 28),
+                ],
+              );
+            }),
+
+            Obx(() {
+              rutinasControlador.rutinas.length;
+              final noche = rutinasControlador.rutinaNoche;
+              if (noche.isEmpty) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.nightlight_round,
+                        color: ColoresApp.primario,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'RUTINA DE NOCHE',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: ColoresApp.primario,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 28),
-
-            Row(
-              children: [
-                Icon(
-                  Icons.nightlight_round,
-                  color: ColoresApp.primario,
-                  size: 18,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'RUTINA DE NOCHE',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: ColoresApp.primario,
+                  const SizedBox(height: 14),
+                  TarjetaProductoGrande(
+                    nombre: noche.first.producto.nombre,
+                    marca: noche.first.producto.marca ?? '',
                   ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 14),
-
-            const TarjetaProductoGrande(
-              nombre: 'Retinol 0.5%',
-              marca: 'The Ordinary',
-            ),
-
-            const SizedBox(height: 28),
+                  const SizedBox(height: 28),
+                ],
+              );
+            }),
 
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: ColoresApp.acento.withOpacity(.15),
+                color: ColoresApp.acento.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(

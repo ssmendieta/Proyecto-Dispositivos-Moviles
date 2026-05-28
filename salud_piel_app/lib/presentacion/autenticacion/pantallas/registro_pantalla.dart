@@ -2,70 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../rutas/app_rutas.dart';
+import '../controladores/registro_controlador.dart';
 
-class RegistroPantalla extends StatelessWidget {
-  RegistroPantalla({super.key});
-
-  final nombreController = TextEditingController();
-  final correoController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-
-  final verPassword = false.obs;
-  final verConfirmPassword = false.obs;
-
-  void _validarRegistro() {
-    final nombre = nombreController.text.trim();
-    final correo = correoController.text.trim();
-    final password = passwordController.text.trim();
-    final confirmPassword =
-        confirmPasswordController.text.trim();
-
-    if (nombre.isEmpty ||
-        correo.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      Get.snackbar(
-        'Campos incompletos',
-        'Completa todos los campos.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (!correo.contains('@')) {
-      Get.snackbar(
-        'Correo inválido',
-        'Ingresa un correo válido.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (password.length < 6) {
-      Get.snackbar(
-        'Contraseña débil',
-        'La contraseña debe tener mínimo 6 caracteres.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (password != confirmPassword) {
-      Get.snackbar(
-        'Contraseñas diferentes',
-        'Las contraseñas no coinciden.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    Get.offAllNamed(AppRutas.inicio);
-  }
+class RegistroPantalla extends GetView<RegistroControlador> {
+  const RegistroPantalla({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -119,208 +63,156 @@ class RegistroPantalla extends StatelessWidget {
 
                   const SizedBox(height: 28),
 
-                  Obx(
-                    () => Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black
-                                .withOpacity(.06),
-                            blurRadius: 20,
-                            offset: const Offset(
-                              0,
-                              10,
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.circular(22),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black
+                              .withValues(alpha: 0.06),
+                          blurRadius: 20,
+                          offset: const Offset(
+                            0,
+                            10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Crear Cuenta',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight:
+                                  FontWeight.bold,
+                              color: ColoresApp
+                                  .textoPrincipal,
                             ),
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        _label('Nombre Completo'),
+
+                        _campo(
+                          controller:
+                              controller.nombreController,
+                          hint: 'Ej. Juan Pérez',
+                          icono:
+                              Icons.person_outline,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        _label(
+                          'Correo electrónico',
+                        ),
+
+                        _campo(
+                          controller:
+                              controller.correoController,
+                          hint:
+                              'usuario@ejemplo.com',
+                          icono:
+                              Icons.email_outlined,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        _buildRegPasswordField(),
+
+                        const SizedBox(height: 16),
+
+                        _buildRegConfirmPasswordField(),
+
+                        const SizedBox(height: 24),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child:
+                              ElevatedButton.icon(
+                            onPressed:
+                                () => controller.registrar(),
+                            icon: const Icon(
+                              Icons.arrow_forward,
+                            ),
+                            label: const Text(
                               'Crear Cuenta',
-                              style: TextStyle(
-                                fontSize: 24,
+                            ),
+                            style:
+                                ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  ColoresApp
+                                      .primario,
+                              foregroundColor:
+                                  Colors.white,
+                              textStyle:
+                                  const TextStyle(
+                                fontSize: 17,
                                 fontWeight:
-                                    FontWeight.bold,
-                                color: ColoresApp
-                                    .textoPrincipal,
+                                    FontWeight
+                                        .bold,
                               ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          _label('Nombre Completo'),
-
-                          _campo(
-                            controller:
-                                nombreController,
-                            hint: 'Ej. Juan Pérez',
-                            icono:
-                                Icons.person_outline,
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          _label(
-                            'Correo electrónico',
-                          ),
-
-                          _campo(
-                            controller:
-                                correoController,
-                            hint:
-                                'usuario@ejemplo.com',
-                            icono:
-                                Icons.email_outlined,
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          _label('Contraseña'),
-
-                          _campo(
-                            controller:
-                                passwordController,
-                            hint: '••••••••',
-                            icono:
-                                Icons.lock_outline,
-                            obscure:
-                                !verPassword.value,
-                            suffix:
-                                verPassword.value
-                                    ? Icons
-                                        .visibility_off_outlined
-                                    : Icons
-                                        .visibility_outlined,
-                            onSuffixTap: () {
-                              verPassword.value =
-                                  !verPassword.value;
-                            },
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          _label(
-                            'Confirmar Contraseña',
-                          ),
-
-                          _campo(
-                            controller:
-                                confirmPasswordController,
-                            hint: '••••••••',
-                            icono:
-                                Icons.shield_outlined,
-                            obscure:
-                                !verConfirmPassword
-                                    .value,
-                            suffix:
-                                verConfirmPassword
-                                        .value
-                                    ? Icons
-                                        .visibility_off_outlined
-                                    : Icons
-                                        .visibility_outlined,
-                            onSuffixTap: () {
-                              verConfirmPassword
-                                      .value =
-                                  !verConfirmPassword
-                                      .value;
-                            },
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child:
-                                ElevatedButton.icon(
-                              onPressed:
-                                  _validarRegistro,
-                              icon: const Icon(
-                                Icons.arrow_forward,
-                              ),
-                              label: const Text(
-                                'Crear Cuenta',
-                              ),
-                              style:
-                                  ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    ColoresApp
-                                        .primario,
-                                foregroundColor:
-                                    Colors.white,
-                                textStyle:
-                                    const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight:
-                                      FontWeight
-                                          .bold,
-                                ),
-                                shape:
-                                    RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(
+                              shape:
+                                  RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(
                                     14,
-                                  ),
                                 ),
                               ),
                             ),
                           ),
+                        ),
 
-                          const SizedBox(height: 22),
+                        const SizedBox(height: 22),
 
-                          Divider(
-                            color:
-                                Colors.grey.shade300,
-                          ),
+                        Divider(
+                          color:
+                              Colors.grey.shade300,
+                        ),
 
-                          const SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                Get.toNamed(
-                                  AppRutas.login,
-                                );
-                              },
-                              child: Text.rich(
-                                TextSpan(
-                                  text:
-                                      '¿Ya tienes una cuenta? ',
-                                  style: TextStyle(
-                                    color: ColoresApp
-                                        .textoPrincipal,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          'Iniciar Sesión',
-                                      style:
-                                          TextStyle(
-                                        color:
-                                            ColoresApp
-                                                .primario,
-                                        fontWeight:
-                                            FontWeight
-                                                .bold,
-                                      ),
+                        Center(
+                          child: TextButton(
+                              onPressed: controller.irALogin,
+                            child: Text.rich(
+                              TextSpan(
+                                text:
+                                    '¿Ya tienes una cuenta? ',
+                                style: TextStyle(
+                                  color: ColoresApp
+                                      .textoPrincipal,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        'Iniciar Sesión',
+                                    style:
+                                        TextStyle(
+                                      color:
+                                          ColoresApp
+                                              .primario,
+                                      fontWeight:
+                                          FontWeight
+                                              .bold,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -330,6 +222,50 @@ class RegistroPantalla extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildRegPasswordField() {
+    return Obx(() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _label('Contraseña'),
+        _campo(
+          controller: controller.passwordController,
+          hint: '••••••••',
+          icono: Icons.lock_outline,
+          obscure: !controller.verPassword.value,
+          suffix: controller.verPassword.value
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            controller.verPassword.value =
+                !controller.verPassword.value;
+          },
+        ),
+      ],
+    ));
+  }
+
+  Widget _buildRegConfirmPasswordField() {
+    return Obx(() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _label('Confirmar Contraseña'),
+        _campo(
+          controller: controller.confirmPasswordController,
+          hint: '••••••••',
+          icono: Icons.shield_outlined,
+          obscure: !controller.verConfirmPassword.value,
+          suffix: controller.verConfirmPassword.value
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            controller.verConfirmPassword.value =
+                !controller.verConfirmPassword.value;
+          },
+        ),
+      ],
+    ));
   }
 
   Widget _label(String texto) {

@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import '../../dominio/entidades/usuario.dart';
 import '../../dominio/repositorios/i_auth_repositorio.dart';
+import '../../nucleo/utilidades/resultado.dart';
 import '../datos/app_database.dart';
+import '../modelos/usuario_dto.dart';
 
 class AuthRepositorio implements IAuthRepositorio {
   final AppDatabase _db;
   AuthRepositorio(this._db);
 
   @override
-  Future<Usuario?> registrar(String username, String password) async {
+  Future<Resultado<Usuario>> registrar(String username, String password) async {
     final hash = sha256.convert(utf8.encode(password)).toString();
     final now = DateTime.now().toIso8601String();
     try {
@@ -18,40 +20,36 @@ class AuthRepositorio implements IAuthRepositorio {
         'password_hash': hash,
         'fecha_creacion': now,
       });
-      return Usuario(
+      return Exito(Usuario(
         id: id,
         username: username,
         passwordHash: hash,
         fechaCreacion: DateTime.parse(now),
-      );
+      ));
     } catch (e) {
-      return null;
+      return Fracaso('Error al registrar usuario: ${e.toString()}', e is Exception ? e : null);
     }
   }
 
   @override
-  Future<Usuario?> login(String username, String password) async {
+  Future<Resultado<Usuario>> login(String username, String password) async {
     final hash = sha256.convert(utf8.encode(password)).toString();
     final maps = await _db.db.query(
       'usuarios',
       where: 'username = ? AND password_hash = ?',
       whereArgs: [username, hash],
     );
-    if (maps.isEmpty) return null;
-    return _mapear(maps.first);
+    if (maps.isEmpty) return Fracaso('Credenciales incorrectas');
+    return Exito(_mapear(maps.first));
   }
 
   @override
-  Future<Usuario?> obtenerUsuarioActual() async {
+  Future<Resultado<Usuario>> obtenerUsuarioActual() async {
     final maps = await _db.db.query('usuarios', limit: 1);
-    if (maps.isEmpty) return null;
-    return _mapear(maps.first);
+    if (maps.isEmpty) return Fracaso('No hay sesión activa');
+    return Exito(_mapear(maps.first));
   }
 
-  Usuario _mapear(Map<String, dynamic> m) => Usuario(
-        id: m['id'] as int,
-        username: m['username'] as String,
-        passwordHash: m['password_hash'] as String,
-        fechaCreacion: DateTime.parse(m['fecha_creacion'] as String),
-      );
+  Usuario _mapear(Map<String, dynamic> m) =>
+      UsuarioDto.fromMap(m).toEntity();
 }

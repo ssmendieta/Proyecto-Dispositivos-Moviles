@@ -1,71 +1,78 @@
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
-import '../../dominio/enumeraciones/condicion_piel.dart';
-import '../../dominio/enumeraciones/tipo_piel.dart';
 import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
+import '../../nucleo/utilidades/resultado.dart';
 import '../datos/app_database.dart';
+import '../modelos/diagnostico_dto.dart';
+import '../modelos/producto_dto.dart';
 
 class DiagnosticoRepositorio implements IDiagnosticoRepositorio {
   final AppDatabase _db;
   DiagnosticoRepositorio(this._db);
 
   @override
-  Future<int> guardar(Diagnostico diagnostico) async {
-    final id = await _db.db.insert('diagnosticos', {
-      'imagen_path': diagnostico.imagenPath,
-      'condicion': diagnostico.condicion.name,
-      'confianza': diagnostico.confianza,
-      'fecha': diagnostico.fecha.toIso8601String(),
-      'descripcion': diagnostico.descripcion,
-    });
-
-    for (final p in diagnostico.productosRecomendados) {
-      await _db.db.insert('diagnosticos_productos', {
-        'diagnostico_id': id,
-        'producto_id': p.id,
+  Future<Resultado<int>> guardar(Diagnostico diagnostico) async {
+    try {
+      final id = await _db.db.insert('diagnosticos', {
+        'imagen_path': diagnostico.imagenPath,
+        'condicion': diagnostico.condicion.name,
+        'confianza': diagnostico.confianza,
+        'fecha': diagnostico.fecha.toIso8601String(),
+        'descripcion': diagnostico.descripcion,
       });
-    }
 
-    return id;
+      for (final p in diagnostico.productosRecomendados) {
+        await _db.db.insert('diagnosticos_productos', {
+          'diagnostico_id': id,
+          'producto_id': p.id,
+        });
+      }
+
+      return Exito(id);
+    } catch (e) {
+      return Fracaso('Error al guardar diagnóstico: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<Diagnostico?> obtenerPorId(int id) async {
+  Future<Resultado<Diagnostico>> obtenerPorId(int id) async {
     final maps = await _db.db.query(
       'diagnosticos',
       where: 'id = ?',
       whereArgs: [id],
     );
-    if (maps.isEmpty) return null;
-    return _mapear(maps.first);
+    if (maps.isEmpty) return Fracaso('Diagnóstico no encontrado');
+    return Exito(await _mapear(maps.first));
   }
 
   @override
-  Future<List<Diagnostico>> listarTodos() async {
-    final maps = await _db.db.query(
-      'diagnosticos',
-      orderBy: 'fecha DESC',
-    );
-    return Future.wait(maps.map(_mapear));
+  Future<Resultado<List<Diagnostico>>> listarTodos() async {
+    try {
+      final maps = await _db.db.query(
+        'diagnosticos',
+        orderBy: 'fecha DESC',
+      );
+      final lista = await Future.wait(maps.map(_mapear));
+      return Exito(lista);
+    } catch (e) {
+      return Fracaso('Error al listar diagnósticos: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   @override
-  Future<void> eliminar(int id) async {
-    await _db.db.delete('diagnosticos_productos', where: 'diagnostico_id = ?', whereArgs: [id]);
-    await _db.db.delete('diagnosticos', where: 'id = ?', whereArgs: [id]);
+  Future<Resultado<Null>> eliminar(int id) async {
+    try {
+      await _db.db.delete('diagnosticos_productos', where: 'diagnostico_id = ?', whereArgs: [id]);
+      await _db.db.delete('diagnosticos', where: 'id = ?', whereArgs: [id]);
+      return const Exito(null);
+    } catch (e) {
+      return Fracaso('Error al eliminar diagnóstico: ${e.toString()}', e is Exception ? e : null);
+    }
   }
 
   Future<Diagnostico> _mapear(Map<String, dynamic> m) async {
     final productos = await _obtenerProductos(m['id'] as int);
-    return Diagnostico(
-      id: m['id'] as int,
-      imagenPath: m['imagen_path'] as String,
-      condicion: CondicionPiel.values.firstWhere((c) => c.name == m['condicion']),
-      confianza: m['confianza'] as double,
-      fecha: DateTime.parse(m['fecha'] as String),
-      descripcion: m['descripcion'] as String?,
-      productosRecomendados: productos,
-    );
+    return DiagnosticoDto.fromMap(m).toEntity(productosRecomendados: productos);
   }
 
   Future<List<Producto>> _obtenerProductos(int diagnosticoId) async {
@@ -77,21 +84,6 @@ class DiagnosticoRepositorio implements IDiagnosticoRepositorio {
     return maps.map((m) => _mapearProducto(m)).toList();
   }
 
-  Producto _mapearProducto(Map<String, dynamic> m) => Producto(
-        id: m['id'] as int,
-        nombre: m['nombre'] as String,
-        marca: m['marca'] as String?,
-        categoria: m['categoria'] as String?,
-        compatibilidad: m['compatibilidad'] as String?,
-        descripcion: m['descripcion'] as String?,
-        ingredientes: m['ingredientes'] as String?,
-        tipoPiel: m['tipo_piel'] != null
-            ? TipoPiel.values.firstWhere((t) => t.name == m['tipo_piel'])
-            : null,
-        condicion: m['condicion'] != null
-            ? CondicionPiel.values.firstWhere((c) => c.name == m['condicion'])
-            : null,
-        imagenPath: m['imagen_path'] as String?,
-        comoUsar: m['como_usar'] as String?,
-      );
+  Producto _mapearProducto(Map<String, dynamic> m) =>
+      ProductoDto.fromMap(m).toEntity();
 }
