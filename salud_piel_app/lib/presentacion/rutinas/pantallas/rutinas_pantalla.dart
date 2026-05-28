@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
 import '../../../dominio/entidades/rutina.dart';
+import '../../inicio/controladores/inicio_controlador.dart';
 import '../../rutas/app_rutas.dart';
 import '../controladores/rutinas_controlador.dart';
 
@@ -16,7 +17,7 @@ class RutinasPantalla extends GetView<RutinasControlador> {
         backgroundColor: ColoresApp.fondo,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            controller.inicioControlador.cambiarPagina(3);
+            Get.find<InicioControlador>().cambiarPagina(3);
           },
           backgroundColor: ColoresApp.primario,
           child: const Icon(Icons.add, color: Colors.white),

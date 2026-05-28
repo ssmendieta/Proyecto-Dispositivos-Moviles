@@ -4,16 +4,13 @@ import '../../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../../dominio/entidades/diagnostico.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/enumeraciones/condicion_piel.dart';
-import '../../../nucleo/utilidades/resultado.dart';
-import '../../inicio/controladores/inicio_controlador.dart';
+import '../../../dominio/utilidades/resultado.dart';
 
 class DiagnosticoControlador extends GetxController {
   final DiagnosticoCasoUso _casoUso;
-  final InicioControlador inicioControlador;
 
   DiagnosticoControlador({
     required DiagnosticoCasoUso casoUso,
-    required this.inicioControlador,
   }) : _casoUso = casoUso;
 
   @override

@@ -1,4 +1,4 @@
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../entidades/producto.dart';
 import '../enumeraciones/condicion_piel.dart';
 import '../enumeraciones/tipo_piel.dart';

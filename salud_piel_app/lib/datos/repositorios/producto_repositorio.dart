@@ -4,7 +4,7 @@ import '../../dominio/entidades/producto.dart';
 import '../../dominio/enumeraciones/condicion_piel.dart';
 import '../../dominio/enumeraciones/tipo_piel.dart';
 import '../../dominio/repositorios/i_producto_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../datos/app_database.dart';
 import '../modelos/producto_dto.dart';
 

@@ -1,4 +1,4 @@
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../enumeraciones/momento_rutina.dart';
 import '../entidades/rutina.dart';
 

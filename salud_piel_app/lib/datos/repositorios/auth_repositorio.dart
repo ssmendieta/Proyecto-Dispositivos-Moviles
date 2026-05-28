@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import '../../dominio/entidades/usuario.dart';
 import '../../dominio/repositorios/i_auth_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../datos/app_database.dart';
 import '../modelos/usuario_dto.dart';
 

@@ -2,24 +2,19 @@ import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../inicio/controladores/inicio_controlador.dart';
 import '../../rutas/app_rutas.dart';
 
 class EscaneoControlador extends GetxController {
-  final InicioControlador inicioControlador;
   CameraController? cameraController;
-
-  EscaneoControlador({required this.inicioControlador});
   final inicializando = true.obs;
   final camaraDisponible = false.obs;
+  bool _iniciado = false;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _initCamera();
-  }
+  EscaneoControlador();
 
-  Future<void> _initCamera() async {
+  Future<void> iniciarCamara() async {
+    if (_iniciado) return;
+    _iniciado = true;
     try {
       final cameras = await availableCameras();
       if (cameras.isEmpty) {

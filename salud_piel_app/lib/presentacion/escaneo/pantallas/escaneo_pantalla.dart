@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
+import '../../inicio/controladores/inicio_controlador.dart';
 import '../controladores/escaneo_controlador.dart';
 
 class EscaneoPantalla extends GetView<EscaneoControlador> {
@@ -9,6 +10,7 @@ class EscaneoPantalla extends GetView<EscaneoControlador> {
 
   @override
   Widget build(BuildContext context) {
+    controller.iniciarCamara();
     return Scaffold(
       backgroundColor: const Color(0xFF050505),
       body: Obx(() {
@@ -42,7 +44,7 @@ class EscaneoPantalla extends GetView<EscaneoControlador> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => controller.inicioControlador.cambiarPagina(0),
+                onTap: () => Get.find<InicioControlador>().cambiarPagina(0),
                 child: const Icon(Icons.close, color: Colors.white, size: 28),
               ),
               const Text(
@@ -158,7 +160,7 @@ class EscaneoPantalla extends GetView<EscaneoControlador> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => controller.inicioControlador.cambiarPagina(0),
+                onTap: () => Get.find<InicioControlador>().cambiarPagina(0),
                 child: const Icon(Icons.close, color: Colors.white, size: 28),
               ),
               const Text(

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../../dominio/entidades/diagnostico.dart';
-import '../../../nucleo/utilidades/resultado.dart';
+import '../../../dominio/utilidades/resultado.dart';
 
 class HistorialControlador extends GetxController {
   final DiagnosticoCasoUso _casoUso;

@@ -1,6 +1,6 @@
 import '../entidades/diagnostico.dart';
 import '../repositorios/i_diagnostico_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 
 class DiagnosticoCasoUso {
   final IDiagnosticoRepositorio _repositorio;

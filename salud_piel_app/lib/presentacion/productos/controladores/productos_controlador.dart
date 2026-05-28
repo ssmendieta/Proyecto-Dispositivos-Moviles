@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../../../dominio/casos_uso/producto_caso_uso.dart';
 import '../../../dominio/entidades/producto.dart';
-import '../../../nucleo/utilidades/resultado.dart';
+import '../../../dominio/utilidades/resultado.dart';
 
 class ProductosControlador extends GetxController {
   final ProductoCasoUso _casoUso;

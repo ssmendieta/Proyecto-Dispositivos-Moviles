@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
 import '../../../dominio/entidades/rutina.dart';
+import '../../inicio/controladores/inicio_controlador.dart';
 import '../controladores/rutinas_controlador.dart';
 
 class GestionarRutinaPantalla extends GetView<RutinasControlador> {
@@ -53,7 +54,7 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
                       onEliminar: controller.eliminarManana,
                       onAgregar: () {
                         Get.back();
-                        controller.inicioControlador.cambiarPagina(3);
+                        Get.find<InicioControlador>().cambiarPagina(3);
                       },
                     ),
                     _listaGestion(
@@ -63,7 +64,7 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
                       onEliminar: controller.eliminarNoche,
                       onAgregar: () {
                         Get.back();
-                        controller.inicioControlador.cambiarPagina(3);
+                        Get.find<InicioControlador>().cambiarPagina(3);
                       },
                     ),
                   ],

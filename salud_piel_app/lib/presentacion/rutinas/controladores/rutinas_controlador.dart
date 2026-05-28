@@ -4,16 +4,13 @@ import '../../../dominio/casos_uso/rutina_caso_uso.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/entidades/rutina.dart';
 import '../../../dominio/enumeraciones/momento_rutina.dart';
-import '../../../nucleo/utilidades/resultado.dart';
-import '../../inicio/controladores/inicio_controlador.dart';
+import '../../../dominio/utilidades/resultado.dart';
 
 class RutinasControlador extends GetxController {
   final RutinaCasoUso _casoUso;
-  final InicioControlador inicioControlador;
 
   RutinasControlador({
     required RutinaCasoUso casoUso,
-    required this.inicioControlador,
   }) : _casoUso = casoUso;
 
   final rutinas = <Rutina>[].obs;

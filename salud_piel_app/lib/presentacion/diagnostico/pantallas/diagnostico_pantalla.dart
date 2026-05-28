@@ -5,6 +5,7 @@ import 'dart:io';
 
 import '../../../dominio/enumeraciones/condicion_piel.dart';
 import '../../constantes/colores.dart';
+import '../../inicio/controladores/inicio_controlador.dart';
 import '../../rutas/app_rutas.dart';
 import '../controladores/diagnostico_controlador.dart';
 
@@ -142,7 +143,7 @@ class DiagnosticoPantalla extends GetView<DiagnosticoControlador> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   Get.back();
-                    controller.inicioControlador.cambiarPagina(3);
+                    Get.find<InicioControlador>().cambiarPagina(3);
                 },
                 icon: const Icon(Icons.shopping_bag_outlined),
                 label: const Text('Ver Productos Sugeridos'),

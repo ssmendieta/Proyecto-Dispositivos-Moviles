@@ -1,7 +1,7 @@
 import '../../dominio/entidades/rutina.dart';
 import '../../dominio/enumeraciones/momento_rutina.dart';
 import '../../dominio/repositorios/i_rutina_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../datos/app_database.dart';
 import '../modelos/producto_dto.dart';
 import '../modelos/rutina_dto.dart';

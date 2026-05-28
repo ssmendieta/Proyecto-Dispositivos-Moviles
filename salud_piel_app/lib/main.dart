@@ -1,9 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'nucleo/servicios/dependencias.dart';
 import 'presentacion/rutas/app_paginas.dart';
 import 'presentacion/rutas/app_rutas.dart';
-import 'presentacion/rutas/inicial_binding.dart';
+import 'presentacion/rutas/app_binding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       title: 'Salud Piel',
       debugShowCheckedModeBanner: false,
-      initialBinding: InicialBinding(),
+      initialBinding: AppBinding(),
       getPages: AppPaginas.paginas,
       initialRoute: AppRutas.carga,
     );

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../dominio/casos_uso/autenticacion_caso_uso.dart';
 import '../../../dominio/entidades/usuario.dart';
-import '../../../nucleo/utilidades/resultado.dart';
+import '../../../dominio/utilidades/resultado.dart';
 import '../../rutas/app_rutas.dart';
 
 class SesionControlador extends GetxController {

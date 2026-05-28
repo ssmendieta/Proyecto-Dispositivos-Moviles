@@ -1,7 +1,7 @@
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
 import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../datos/app_database.dart';
 import '../modelos/diagnostico_dto.dart';
 import '../modelos/producto_dto.dart';

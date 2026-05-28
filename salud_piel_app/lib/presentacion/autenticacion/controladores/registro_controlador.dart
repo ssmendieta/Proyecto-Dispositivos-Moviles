@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../dominio/casos_uso/autenticacion_caso_uso.dart';
+import '../../../dominio/entidades/usuario.dart';
+import '../../../dominio/utilidades/resultado.dart';
 import 'sesion_controlador.dart';
 import '../../rutas/app_rutas.dart';
 
 class RegistroControlador extends GetxController {
-  final SesionControlador _sesionControlador;
+  final AutenticacionCasoUso _casoUso;
 
-  RegistroControlador({required SesionControlador sesionControlador})
-      : _sesionControlador = sesionControlador;
+  RegistroControlador({required AutenticacionCasoUso casoUso})
+      : _casoUso = casoUso;
 
   final nombreController = TextEditingController();
   final correoController = TextEditingController();
@@ -35,36 +38,6 @@ class RegistroControlador extends GetxController {
     final password = passwordController.text.trim();
     final confirmPassword = confirmPasswordController.text.trim();
 
-    if (nombre.isEmpty ||
-        correo.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      Get.snackbar(
-        'Campos incompletos',
-        'Completa todos los campos.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (!correo.contains('@')) {
-      Get.snackbar(
-        'Correo inválido',
-        'Ingresa un correo válido.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    if (password.length < 6) {
-      Get.snackbar(
-        'Contraseña débil',
-        'La contraseña debe tener mínimo 6 caracteres.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
     if (password != confirmPassword) {
       Get.snackbar(
         'Contraseñas diferentes',
@@ -75,17 +48,20 @@ class RegistroControlador extends GetxController {
     }
 
     cargando.value = true;
-    final exito = await _sesionControlador.registrar(nombre, correo, password);
+    final resultado = await _casoUso.registrar(nombre, correo, password);
     cargando.value = false;
 
-    if (exito) {
-      Get.offAllNamed(AppRutas.inicio);
-    } else {
-      Get.snackbar(
-        'Error',
-        'El usuario ya existe o hubo un problema.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+    switch (resultado) {
+      case Exito<Usuario>():
+        Get.find<SesionControlador>().usuarioActual.value = resultado.data;
+        Get.find<SesionControlador>().sesionIniciada.value = true;
+        Get.offAllNamed(AppRutas.inicio);
+      case Fracaso<Usuario>():
+        Get.snackbar(
+          'Error',
+          resultado.mensaje,
+          snackPosition: SnackPosition.BOTTOM,
+        );
     }
   }
 }

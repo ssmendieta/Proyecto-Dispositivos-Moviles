@@ -2,7 +2,7 @@ import '../entidades/producto.dart';
 import '../entidades/rutina.dart';
 import '../enumeraciones/momento_rutina.dart';
 import '../repositorios/i_rutina_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 
 class RutinaCasoUso {
   final IRutinaRepositorio _repositorio;

@@ -1,4 +1,4 @@
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 import '../entidades/diagnostico.dart';
 
 abstract class IDiagnosticoRepositorio {

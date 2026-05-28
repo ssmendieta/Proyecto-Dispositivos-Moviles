@@ -1,6 +1,6 @@
 import '../entidades/producto.dart';
 import '../repositorios/i_producto_repositorio.dart';
-import '../../nucleo/utilidades/resultado.dart';
+import '../../dominio/utilidades/resultado.dart';
 
 class ProductoCasoUso {
   final IProductoRepositorio _repositorio;

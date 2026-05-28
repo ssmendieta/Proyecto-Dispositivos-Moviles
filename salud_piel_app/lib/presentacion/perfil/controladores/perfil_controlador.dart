@@ -2,25 +2,22 @@ import 'package:get/get.dart';
 
 import '../../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../../dominio/entidades/diagnostico.dart';
+import '../../../dominio/utilidades/resultado.dart';
 import '../../autenticacion/controladores/sesion_controlador.dart';
-import '../../../nucleo/utilidades/resultado.dart';
 import '../../rutas/app_rutas.dart';
 
 class PerfilControlador extends GetxController {
-  final SesionControlador _sesionControlador;
   final DiagnosticoCasoUso _casoUso;
 
   PerfilControlador({
-    required SesionControlador sesionControlador,
     required DiagnosticoCasoUso casoUso,
-  })  : _sesionControlador = sesionControlador,
-        _casoUso = casoUso;
+  }) : _casoUso = casoUso;
 
   final totalScans = 0.obs;
   final healthScore = 0.0.obs;
 
   String get nombreUsuario =>
-      _sesionControlador.nombreUsuario;
+      Get.find<SesionControlador>().nombreUsuario;
 
   @override
   void onInit() {
@@ -53,6 +50,6 @@ class PerfilControlador extends GetxController {
   void irAHistorial() => Get.toNamed(AppRutas.historial);
 
   void cerrarSesion() {
-    _sesionControlador.cerrarSesion();
+    Get.find<SesionControlador>().cerrarSesion();
   }
 }
