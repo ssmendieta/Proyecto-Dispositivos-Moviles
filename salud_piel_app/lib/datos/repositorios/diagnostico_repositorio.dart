@@ -80,6 +80,9 @@ class DiagnosticoRepositorio implements IDiagnosticoRepositorio {
   Producto _mapearProducto(Map<String, dynamic> m) => Producto(
         id: m['id'] as int,
         nombre: m['nombre'] as String,
+        marca: m['marca'] as String?,
+        categoria: m['categoria'] as String?,
+        compatibilidad: m['compatibilidad'] as String?,
         descripcion: m['descripcion'] as String?,
         ingredientes: m['ingredientes'] as String?,
         tipoPiel: m['tipo_piel'] != null

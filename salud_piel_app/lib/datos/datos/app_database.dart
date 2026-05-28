@@ -50,6 +50,9 @@ class AppDatabase {
           CREATE TABLE productos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
+            marca TEXT,
+            categoria TEXT,
+            compatibilidad TEXT,
             descripcion TEXT,
             ingredientes TEXT,
             tipo_piel TEXT,

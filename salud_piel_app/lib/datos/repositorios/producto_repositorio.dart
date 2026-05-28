@@ -56,6 +56,9 @@ class ProductoRepositorio implements IProductoRepositorio {
     for (final item in lista) {
       await _db.db.insert('productos', {
         'nombre': item['nombre'],
+        'marca': item['marca'],
+        'categoria': item['categoria'],
+        'compatibilidad': item['compatibilidad'],
         'descripcion': item['descripcion'],
         'ingredientes': item['ingredientes'],
         'tipo_piel': item['tipo_piel'],
@@ -69,6 +72,9 @@ class ProductoRepositorio implements IProductoRepositorio {
   Producto _mapear(Map<String, dynamic> m) => Producto(
         id: m['id'] as int,
         nombre: m['nombre'] as String,
+        marca: m['marca'] as String?,
+        categoria: m['categoria'] as String?,
+        compatibilidad: m['compatibilidad'] as String?,
         descripcion: m['descripcion'] as String?,
         ingredientes: m['ingredientes'] as String?,
         tipoPiel: m['tipo_piel'] != null
