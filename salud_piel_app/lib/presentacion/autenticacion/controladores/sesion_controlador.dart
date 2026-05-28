@@ -18,9 +18,9 @@ class SesionControlador extends GetxController {
   String get nombreUsuario =>
       usuarioActual.value?.username ?? 'Usuario';
 
-  Future<bool> registrar(String username, String password) async {
+  Future<bool> registrar(String username, String email, String password) async {
     cargando.value = true;
-    final resultado = await _casoUso.registrar(username, password);
+    final resultado = await _casoUso.registrar(username, email, password);
     switch (resultado) {
       case Exito<Usuario>():
         usuarioActual.value = resultado.data;
@@ -33,9 +33,9 @@ class SesionControlador extends GetxController {
     }
   }
 
-  Future<bool> login(String username, String password) async {
+  Future<bool> login(String email, String password) async {
     cargando.value = true;
-    final resultado = await _casoUso.login(username, password);
+    final resultado = await _casoUso.login(email, password);
     switch (resultado) {
       case Exito<Usuario>():
         usuarioActual.value = resultado.data;

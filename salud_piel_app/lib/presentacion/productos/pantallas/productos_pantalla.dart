@@ -201,24 +201,6 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: ColoresApp.acento.withValues(alpha: 0.18),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              '${producto.compatibilidad ?? ''} compatible',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: ColoresApp.primario,
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
           SizedBox(
             width: double.infinity,
             height: 34,

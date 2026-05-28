@@ -72,7 +72,6 @@ class ProductoRepositorio implements IProductoRepositorio {
         'nombre': item['nombre'],
         'marca': item['marca'],
         'categoria': item['categoria'],
-        'compatibilidad': item['compatibilidad'],
         'descripcion': item['descripcion'],
         'ingredientes': item['ingredientes'],
         'tipo_piel': item['tipo_piel'],

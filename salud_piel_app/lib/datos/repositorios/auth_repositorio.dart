@@ -11,18 +11,26 @@ class AuthRepositorio implements IAuthRepositorio {
   AuthRepositorio(this._db);
 
   @override
-  Future<Resultado<Usuario>> registrar(String username, String password) async {
+  Future<Resultado<Usuario>> registrar(String username, String email, String password) async {
     final hash = sha256.convert(utf8.encode(password)).toString();
     final now = DateTime.now().toIso8601String();
+
+    final existente = await _db.db.query('usuarios', where: 'email = ?', whereArgs: [email]);
+    if (existente.isNotEmpty) {
+      return Fracaso('El correo electrónico ya está registrado');
+    }
+
     try {
       final id = await _db.db.insert('usuarios', {
         'username': username,
+        'email': email,
         'password_hash': hash,
         'fecha_creacion': now,
       });
       return Exito(Usuario(
         id: id,
         username: username,
+        email: email,
         passwordHash: hash,
         fechaCreacion: DateTime.parse(now),
       ));
@@ -32,12 +40,12 @@ class AuthRepositorio implements IAuthRepositorio {
   }
 
   @override
-  Future<Resultado<Usuario>> login(String username, String password) async {
+  Future<Resultado<Usuario>> login(String email, String password) async {
     final hash = sha256.convert(utf8.encode(password)).toString();
     final maps = await _db.db.query(
       'usuarios',
-      where: 'username = ? AND password_hash = ?',
-      whereArgs: [username, hash],
+      where: 'email = ? AND password_hash = ?',
+      whereArgs: [email, hash],
     );
     if (maps.isEmpty) return Fracaso('Credenciales incorrectas');
     return Exito(_mapear(maps.first));

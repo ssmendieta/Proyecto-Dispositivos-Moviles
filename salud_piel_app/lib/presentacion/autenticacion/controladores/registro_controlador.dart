@@ -75,7 +75,7 @@ class RegistroControlador extends GetxController {
     }
 
     cargando.value = true;
-    final exito = await _sesionControlador.registrar(correo, password);
+    final exito = await _sesionControlador.registrar(nombre, correo, password);
     cargando.value = false;
 
     if (exito) {

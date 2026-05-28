@@ -21,9 +21,9 @@ class InicialBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<InicioControlador>(() => InicioControlador(), fenix: true);
 
-    Get.lazyPut<AutenticacionCasoUso>(() => AutenticacionCasoUso(
+    Get.put<AutenticacionCasoUso>(AutenticacionCasoUso(
           repositorio: Get.find<IAuthRepositorio>(),
-        ), fenix: true);
+        ));
 
     Get.lazyPut<DiagnosticoCasoUso>(() => DiagnosticoCasoUso(
           repositorio: Get.find<IDiagnosticoRepositorio>(),
@@ -37,9 +37,9 @@ class InicialBinding extends Bindings {
           repositorio: Get.find<IProductoRepositorio>(),
         ), fenix: true);
 
-    Get.lazyPut<SesionControlador>(() => SesionControlador(
+    Get.put<SesionControlador>(SesionControlador(
           casoUso: Get.find<AutenticacionCasoUso>(),
-        ), fenix: true);
+        ));
 
     Get.lazyPut<HistorialControlador>(() => HistorialControlador(
           casoUso: Get.find<DiagnosticoCasoUso>(),

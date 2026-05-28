@@ -7,7 +7,6 @@ class ProductoDto {
   final String nombre;
   final String? marca;
   final String? categoria;
-  final String? compatibilidad;
   final String? descripcion;
   final String? ingredientes;
   final String? tipoPiel;
@@ -20,7 +19,6 @@ class ProductoDto {
     required this.nombre,
     this.marca,
     this.categoria,
-    this.compatibilidad,
     this.descripcion,
     this.ingredientes,
     this.tipoPiel,
@@ -34,7 +32,6 @@ class ProductoDto {
         nombre: m['nombre'] as String,
         marca: m['marca'] as String?,
         categoria: m['categoria'] as String?,
-        compatibilidad: m['compatibilidad'] as String?,
         descripcion: m['descripcion'] as String?,
         ingredientes: m['ingredientes'] as String?,
         tipoPiel: m['tipo_piel'] as String?,
@@ -48,7 +45,6 @@ class ProductoDto {
         nombre: e.nombre,
         marca: e.marca,
         categoria: e.categoria,
-        compatibilidad: e.compatibilidad,
         descripcion: e.descripcion,
         ingredientes: e.ingredientes,
         tipoPiel: e.tipoPiel?.name,
@@ -62,7 +58,6 @@ class ProductoDto {
         'nombre': nombre,
         'marca': marca,
         'categoria': categoria,
-        'compatibilidad': compatibilidad,
         'descripcion': descripcion,
         'ingredientes': ingredientes,
         'tipo_piel': tipoPiel,
@@ -76,7 +71,6 @@ class ProductoDto {
         nombre: nombre,
         marca: marca,
         categoria: categoria,
-        compatibilidad: compatibilidad,
         descripcion: descripcion,
         ingredientes: ingredientes,
         tipoPiel: tipoPiel != null

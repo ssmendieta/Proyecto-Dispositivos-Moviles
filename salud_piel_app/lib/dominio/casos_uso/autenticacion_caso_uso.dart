@@ -8,12 +8,12 @@ class AutenticacionCasoUso {
   AutenticacionCasoUso({required IAuthRepositorio repositorio})
       : _repositorio = repositorio;
 
-  Future<Resultado<Usuario>> registrar(String username, String password) {
-    return _repositorio.registrar(username, password);
+  Future<Resultado<Usuario>> registrar(String username, String email, String password) {
+    return _repositorio.registrar(username, email, password);
   }
 
-  Future<Resultado<Usuario>> login(String username, String password) {
-    return _repositorio.login(username, password);
+  Future<Resultado<Usuario>> login(String email, String password) {
+    return _repositorio.login(email, password);
   }
 
   Future<Resultado<Usuario>> verificarSesion() {

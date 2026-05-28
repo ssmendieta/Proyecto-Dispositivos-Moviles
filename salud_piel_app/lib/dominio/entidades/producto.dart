@@ -6,7 +6,6 @@ class Producto {
   final String nombre;
   final String? marca;
   final String? categoria;
-  final String? compatibilidad;
   final String? descripcion;
   final String? ingredientes;
   final TipoPiel? tipoPiel;
@@ -19,7 +18,6 @@ class Producto {
     required this.nombre,
     this.marca,
     this.categoria,
-    this.compatibilidad,
     this.descripcion,
     this.ingredientes,
     this.tipoPiel,
