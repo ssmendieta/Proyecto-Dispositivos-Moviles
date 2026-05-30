@@ -1,4 +1,4 @@
-﻿name: salud_piel_app
+name: salud_piel_app
 description: "A new Flutter project."
 publish_to: 'none'
 version: 1.0.0+1
@@ -10,15 +10,18 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  get: ^4.7.0
+  get: ^4.7.3
   sqflite_common_ffi: ^2.3.0
   sqflite_common_ffi_web: ^1.0.0
   path: ^1.9.0
   crypto: ^3.0.0
   camera: ^0.11.0
-  image_picker: ^1.1.0
-  tflite_flutter: ^0.11.0
+  image_picker: ^1.2.2
+  tflite_flutter: ^0.12.1
   intl: ^0.19.0
+  image: ^4.8.0
+  shared_preferences: ^2.5.5
+  permission_handler: ^12.0.2
 
 dev_dependencies:
   flutter_test:

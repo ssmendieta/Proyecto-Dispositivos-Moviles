@@ -1,63 +1,78 @@
-import 'package:camera/camera.dart';
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../rutas/app_rutas.dart';
+//import '../../../dominio/entidades/resultado_analisis.dart';
+import '../../../nucleo/servicios/ml_servicio.dart';
 
-class EscaneoControlador extends GetxController {
-  CameraController? cameraController;
-  final inicializando = true.obs;
-  final camaraDisponible = false.obs;
-  bool _iniciado = false;
+class EscaneoControlador extends ChangeNotifier {
+  final ImagePicker _picker = ImagePicker();
+  final MlServicio _mlServicio = MlServicio();
 
-  EscaneoControlador();
+  bool cargando = false;
+  String? mensajeError;
+  ResultadoAnalisis? resultado;
 
-  Future<void> iniciarCamara() async {
-    if (_iniciado) return;
-    _iniciado = true;
+  Future<void> seleccionarYAnalizar(ImageSource source) async {
     try {
-      final cameras = await availableCameras();
-      if (cameras.isEmpty) {
-        camaraDisponible.value = false;
-        inicializando.value = false;
+      cargando = true;
+      mensajeError = null;
+      resultado = null;
+      notifyListeners();
+
+      final XFile? imagen = await _picker.pickImage(
+        source: source,
+        imageQuality: 75,
+        maxWidth: 640,
+        maxHeight: 640,
+        preferredCameraDevice: CameraDevice.front,
+      );
+
+      if (imagen == null) {
+        cargando = false;
+        notifyListeners();
         return;
       }
-      camaraDisponible.value = true;
-      final controller = CameraController(cameras.first, ResolutionPreset.high);
-      cameraController = controller;
-      await controller.initialize();
-      inicializando.value = false;
-    } catch (_) {
-      camaraDisponible.value = false;
-      inicializando.value = false;
+
+      debugPrint('Imagen seleccionada: ${imagen.path}');
+
+      final File archivoImagen = File(imagen.path);
+
+      final ResultadoAnalisis resultadoTemporal =
+          await _mlServicio.analizarImagen(archivoImagen).timeout(
+        const Duration(seconds: 45),
+        onTimeout: () {
+          throw TimeoutException(
+            'El análisis tardó demasiado. Prueba con una imagen más clara o más liviana.',
+          );
+        },
+      );
+
+      resultado = resultadoTemporal;
+      cargando = false;
+      notifyListeners();
+    } catch (e) {
+      cargando = false;
+      mensajeError = 'Error en el análisis: $e';
+      debugPrint(mensajeError);
+      notifyListeners();
     }
   }
 
-  Future<void> tomarFoto() async {
-    final cam = cameraController;
-    if (cam == null || !cam.value.isInitialized) return;
-    try {
-      final XFile foto = await cam.takePicture();
-      Get.toNamed(AppRutas.diagnostico, arguments: foto.path);
-    } catch (_) {
-      Get.snackbar('Error', 'No se pudo tomar la foto.');
-    }
+  Future<void> analizarDesdeGaleria() async {
+    await seleccionarYAnalizar(ImageSource.gallery);
   }
 
-  Future<void> seleccionarDeGaleria() async {
-    try {
-      final XFile? imagen = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (imagen != null) {
-        Get.toNamed(AppRutas.diagnostico, arguments: imagen.path);
-      }
-    } catch (_) {
-      Get.snackbar('Error', 'No se pudo acceder a la galería.');
-    }
+  Future<void> analizarDesdeCamara() async {
+    await seleccionarYAnalizar(ImageSource.camera);
   }
 
-  @override
-  void onClose() {
-    cameraController?.dispose();
-    super.onClose();
+  void limpiarResultado() {
+    resultado = null;
+    mensajeError = null;
+    cargando = false;
+    notifyListeners();
   }
 }
