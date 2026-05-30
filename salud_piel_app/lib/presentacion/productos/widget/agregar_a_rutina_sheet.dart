@@ -79,6 +79,19 @@ class AgregarARutinaSheet extends StatelessWidget {
                 onPressed: () async {
                   Get.back();
 
+                  if (!controlador.mananaSeleccionada.value &&
+    !controlador.nocheSeleccionada.value) {
+
+                  Get.snackbar(
+                    'Selecciona una rutina',
+                    'Debes elegir mañana o noche',
+                    snackPosition: SnackPosition.TOP,
+                    backgroundColor: Colors.orange,
+                    colorText: Colors.white,
+                  );
+
+                  return;
+                }
                   await controlador.agregarProducto(
                     producto: producto,
                     manana: controlador.mananaSeleccionada.value,
@@ -88,7 +101,12 @@ class AgregarARutinaSheet extends StatelessWidget {
                   Get.snackbar(
                     'Producto añadido',
                     '${producto.nombre} fue añadido correctamente',
-                    snackPosition: SnackPosition.BOTTOM,
+                    snackPosition: SnackPosition.TOP,
+                    backgroundColor: Colors.green,
+                    colorText: Colors.white,
+                    margin: const EdgeInsets.all(12),
+                    borderRadius: 12,
+                    duration: const Duration(seconds: 2),
                   );
                 },
                 style: ElevatedButton.styleFrom(

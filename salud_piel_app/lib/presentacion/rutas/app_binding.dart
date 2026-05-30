@@ -20,6 +20,7 @@ import '../inicio/controladores/inicio_controlador.dart';
 import '../perfil/controladores/perfil_controlador.dart';
 import '../productos/controladores/productos_controlador.dart';
 import '../rutinas/controladores/rutinas_controlador.dart';
+import '../informacion_personal/controladores/informacion_personal_controlador.dart';
 
 class AppBinding extends Bindings {
   @override
@@ -71,5 +72,8 @@ class AppBinding extends Bindings {
     Get.put<HistorialControlador>(HistorialControlador(
       casoUso: Get.find<DiagnosticoCasoUso>(),
     ));
+    Get.put<InformacionPersonalControlador>(
+  InformacionPersonalControlador(),
+);
   }
 }

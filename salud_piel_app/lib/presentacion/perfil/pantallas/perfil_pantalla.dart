@@ -38,8 +38,8 @@ class PerfilPantalla extends GetView<PerfilControlador> {
 
             const SizedBox(height: 8),
 
-            const Text(
-              'Próximamente',
+           const Text(
+              'Perfil de usuario',
               style: TextStyle(
                 color: ColoresApp.textoSecundario,
                 fontSize: 15,
@@ -47,25 +47,10 @@ class PerfilPantalla extends GetView<PerfilControlador> {
             ),
 
             const SizedBox(height: 30),
-
-            Obx(() => Row(
-              children: [
-                Expanded(
-                  child: _infoCard(
-                    icono: Icons.camera_alt_outlined,
-                    titulo: 'Total scans',
-                    valor: '${controller.totalScans}',
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: _infoCard(
-                    icono: Icons.favorite,
-                    titulo: 'Health score',
-                    valor: '${controller.healthScore}/100',
-                  ),
-                ),
-              ],
+            Obx(() => _infoCard(
+              icono: Icons.camera_alt_outlined,
+              titulo: 'Análisis realizados',
+              valor: '${controller.totalScans}',
             )),
 
             const SizedBox(height: 24),
@@ -80,7 +65,7 @@ class PerfilPantalla extends GetView<PerfilControlador> {
 
             _opcionPerfil(
               icono: Icons.logout,
-              texto: 'Logout',
+              texto: 'Cerrar sesión',
               color: ColoresApp.peligro,
               onTap: () => controller.cerrarSesion(),
             ),

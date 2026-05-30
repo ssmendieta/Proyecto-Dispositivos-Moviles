@@ -25,17 +25,17 @@ class BarraInferior extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Inicio',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.auto_graph_outlined),
           activeIcon: Icon(Icons.auto_graph),
-          label: 'Journey',
+          label: 'Rutina',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.center_focus_strong_outlined),
           activeIcon: Icon(Icons.center_focus_strong),
-          label: 'Scan',
+          label: 'Escanear',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_bag_outlined),
@@ -45,7 +45,7 @@ class BarraInferior extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Perfil',
         ),
       ],
     );
