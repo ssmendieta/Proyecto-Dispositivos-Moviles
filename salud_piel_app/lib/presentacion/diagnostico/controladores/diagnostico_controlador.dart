@@ -5,6 +5,7 @@ import '../../../dominio/entidades/diagnostico.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/enumeraciones/condicion_piel.dart';
 import '../../../dominio/utilidades/resultado.dart';
+import '../../../nucleo/servicios/gemini_servicio.dart';
 import '../../../nucleo/servicios/ml_servicio.dart';
 
 class DiagnosticoControlador extends GetxController {
@@ -13,17 +14,6 @@ class DiagnosticoControlador extends GetxController {
   DiagnosticoControlador({
     required DiagnosticoCasoUso casoUso,
   }) : _casoUso = casoUso;
-
-  @override
-  void onInit() {
-    super.onInit();
-    final args = Get.arguments;
-    if (args is ResultadoAnalisis) {
-      _cargarDesdeResultadoML(args);
-    } else if (args is String && args.isNotEmpty) {
-      imagenPath.value = args;
-    }
-  }
 
   final condicion = CondicionPiel.normal.obs;
   final confianza = 0.0.obs;
@@ -34,7 +24,10 @@ class DiagnosticoControlador extends GetxController {
   final guardando = false.obs;
   final deteccionesResumen = <String, int>{}.obs;
 
-  void _cargarDesdeResultadoML(ResultadoAnalisis r) {
+  final informacionCondicion = Rxn<InformacionCondicion>();
+  final cargandoInfoIA = false.obs;
+
+  void cargarDesdeResultadoML(ResultadoAnalisis r) {
     condicion.value = _mapearCondicion(r.tipoPiel);
     confianza.value = r.confianzaTipoPiel;
     severidad.value = r.severidadGeneral;
@@ -55,6 +48,19 @@ class DiagnosticoControlador extends GetxController {
       partes.add('\n${r.aclaraciones.join('\n')}');
     }
     descripcion.value = partes.join('\n');
+  }
+
+  Future<void> cargarInformacionIA() async {
+    if (condicion.value == CondicionPiel.normal) return;
+    cargandoInfoIA.value = true;
+    informacionCondicion.value = null;
+    final gemini = GeminiServicio();
+    final info = await gemini.informacionCondicion(
+      condicion: condicion.value,
+      confianza: confianza.value,
+    );
+    informacionCondicion.value = info;
+    cargandoInfoIA.value = false;
   }
 
   CondicionPiel _mapearCondicion(String tipoPiel) {

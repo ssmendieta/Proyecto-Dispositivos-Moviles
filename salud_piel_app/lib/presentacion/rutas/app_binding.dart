@@ -13,7 +13,6 @@ import '../autenticacion/controladores/registro_controlador.dart';
 import '../autenticacion/controladores/sesion_controlador.dart';
 import '../bienvenida/controladores/bienvenida_controlador.dart';
 import '../carga/controladores/carga_controlador.dart';
-import '../diagnostico/controladores/diagnostico_controlador.dart';
 import '../escaneo/controladores/escaneo_controlador.dart';
 import '../historial/controladores/historial_controlador.dart';
 import '../inicio/controladores/inicio_controlador.dart';
@@ -57,9 +56,6 @@ class AppBinding extends Bindings {
       casoUso: Get.find<AutenticacionCasoUso>(),
     ));
     Get.put<EscaneoControlador>(EscaneoControlador());
-    Get.put<DiagnosticoControlador>(DiagnosticoControlador(
-      casoUso: Get.find<DiagnosticoCasoUso>(),
-    ));
     Get.put<ProductosControlador>(ProductosControlador(
       casoUso: Get.find<ProductoCasoUso>(),
     ));

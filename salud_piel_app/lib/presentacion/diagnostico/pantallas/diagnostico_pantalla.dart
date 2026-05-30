@@ -8,8 +8,13 @@ import '../../constantes/colores.dart';
 import '../../rutas/app_rutas.dart';
 import '../controladores/diagnostico_controlador.dart';
 
-class DiagnosticoPantalla extends GetView<DiagnosticoControlador> {
-  const DiagnosticoPantalla({super.key});
+class DiagnosticoPantalla extends StatelessWidget {
+  final DiagnosticoControlador controller;
+
+  const DiagnosticoPantalla({
+    super.key,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -123,132 +128,11 @@ class DiagnosticoPantalla extends GetView<DiagnosticoControlador> {
 
             const SizedBox(height: 20),
 
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Sobre esta condición',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Obx(
-                    () => Text(
-                      controller.descripcion.value.isNotEmpty
-                          ? controller.descripcion.value
-                          : 'La ${controller.condicion.value.displayName.toLowerCase()} es una afección de la piel. Se recomienda seguir una rutina adecuada y consultar a un profesional si los síntomas persisten.',
-                      style: TextStyle(
-                        color: ColoresApp.textoSecundario,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _seccionCondicion(),
 
             const SizedBox(height: 20),
 
-            Obx(() {
-              final detecciones = controller.deteccionesResumen;
-              final severidadText = controller.severidad.value;
-
-              return Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.smart_toy_outlined,
-                          color: ColoresApp.primario,
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'Resultados del análisis',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    if (severidadText.isNotEmpty) ...[
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              size: 18, color: ColoresApp.primario),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Severidad: ${severidadText.toUpperCase()}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: ColoresApp.textoPrincipal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-
-                    if (detecciones.isNotEmpty) ...[
-                      const SizedBox(height: 14),
-                      ...detecciones.entries.map((e) => Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Row(
-                              children: [
-                                Icon(Icons.circle,
-                                    size: 8,
-                                    color: ColoresApp.primario),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    '${e.key}: ${e.value}',
-                                    style: TextStyle(
-                                      color: ColoresApp.textoSecundario,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ],
-
-                    const SizedBox(height: 14),
-
-                    Text(
-                      controller.descripcion.value.isNotEmpty
-                          ? controller.descripcion.value
-                          : 'Análisis completado. No se detectaron condiciones significativas.',
-                      style: TextStyle(
-                        color: ColoresApp.textoSecundario,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+            _seccionResultados(),
 
             const SizedBox(height: 12),
 
@@ -280,5 +164,265 @@ class DiagnosticoPantalla extends GetView<DiagnosticoControlador> {
         ),
       ),
     );
+  }
+
+  Widget _seccionCondicion() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.info_outline, color: Color(0xFF7B5EA7)),
+              SizedBox(width: 8),
+              Text(
+                'Sobre esta condición',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Obx(() {
+            if (controller.cargandoInfoIA.value) {
+              return const Row(
+                children: [
+                  SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Consultando con IA...',
+                    style: TextStyle(
+                      color: Color(0xFF888888),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              );
+            }
+
+            final info = controller.informacionCondicion.value;
+            if (info != null) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    info.descripcion,
+                    style: const TextStyle(
+                      color: Color(0xFF555555),
+                      height: 1.5,
+                    ),
+                  ),
+                  if (info.causas.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Posibles causas',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...info.causas.map(
+                      (c) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('• ', style: TextStyle(color: Color(0xFF7B5EA7))),
+                            Expanded(
+                              child: Text(
+                                c,
+                                style: const TextStyle(
+                                  color: Color(0xFF555555),
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (info.recomendacionDermatologo != null &&
+                      info.recomendacionDermatologo!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF7B5EA7).withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.medical_services_outlined,
+                              size: 20, color: Color(0xFF7B5EA7)),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              info.recomendacionDermatologo!,
+                              style: const TextStyle(
+                                color: Color(0xFF444444),
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (info.consejosCuidado.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Consejos de cuidado',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...info.consejosCuidado.map(
+                      (c) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(Icons.check_circle_outline,
+                                size: 16, color: Color(0xFF7B5EA7)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                c,
+                                style: const TextStyle(
+                                  color: Color(0xFF555555),
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            }
+
+            return Text(
+              controller.descripcion.value.isNotEmpty
+                  ? controller.descripcion.value
+                  : 'La ${controller.condicion.value.displayName.toLowerCase()} es una afección de la piel. Se recomienda seguir una rutina adecuada y consultar a un profesional si los síntomas persisten.',
+              style: const TextStyle(
+                color: Color(0xFF555555),
+                height: 1.5,
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _seccionResultados() {
+    return Obx(() {
+      final detecciones = controller.deteccionesResumen;
+      final severidadText = controller.severidad.value;
+
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.smart_toy_outlined,
+                  color: ColoresApp.primario,
+                ),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'Resultados del análisis',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            if (severidadText.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Icon(Icons.info_outline,
+                      size: 18, color: ColoresApp.primario),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Severidad: ${severidadText.toUpperCase()}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: ColoresApp.textoPrincipal,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+
+            if (detecciones.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              ...detecciones.entries.map((e) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle,
+                            size: 8, color: ColoresApp.primario),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            '${e.key}: ${e.value}',
+                            style: TextStyle(
+                              color: ColoresApp.textoSecundario,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
+
+            const SizedBox(height: 14),
+
+            Text(
+              controller.descripcion.value.isNotEmpty
+                  ? controller.descripcion.value
+                  : 'Análisis completado. No se detectaron condiciones significativas.',
+              style: TextStyle(
+                color: ColoresApp.textoSecundario,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

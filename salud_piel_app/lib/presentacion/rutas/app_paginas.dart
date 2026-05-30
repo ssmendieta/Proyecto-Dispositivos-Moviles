@@ -1,11 +1,14 @@
 import 'package:get/get.dart';
 
+import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
+import '../../nucleo/servicios/ml_servicio.dart';
 import '../autenticacion/pantallas/login_pantalla.dart';
 import '../autenticacion/pantallas/registro_pantalla.dart';
 import '../bienvenida/pantallas/bienvenida_pantalla.dart';
 import '../carga/pantallas/carga_pantalla.dart';
+import '../diagnostico/controladores/diagnostico_controlador.dart';
 import '../diagnostico/pantallas/diagnostico_pantalla.dart';
 import '../escaneo/pantallas/escaneo_pantalla.dart';
 import '../historial/pantallas/detalle_historial_pantalla.dart';
@@ -51,7 +54,19 @@ class AppPaginas {
     ),
     GetPage(
       name: AppRutas.diagnostico,
-      page: () => const DiagnosticoPantalla(),
+      page: () {
+        final args = Get.arguments;
+        final controller = DiagnosticoControlador(
+          casoUso: Get.find<DiagnosticoCasoUso>(),
+        );
+        if (args is ResultadoAnalisis) {
+          controller.cargarDesdeResultadoML(args);
+          controller.cargarInformacionIA();
+        } else if (args is String && args.isNotEmpty) {
+          controller.imagenPath.value = args;
+        }
+        return DiagnosticoPantalla(controller: controller);
+      },
     ),
     GetPage(
       name: AppRutas.productos,
