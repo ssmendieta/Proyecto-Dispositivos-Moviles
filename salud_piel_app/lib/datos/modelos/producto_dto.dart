@@ -13,6 +13,8 @@ class ProductoDto {
   final String? condicion;
   final String? imagenPath;
   final String? comoUsar;
+  final String? instruccionesIA;
+  final int esIA;
 
   const ProductoDto({
     required this.id,
@@ -25,6 +27,8 @@ class ProductoDto {
     this.condicion,
     this.imagenPath,
     this.comoUsar,
+    this.instruccionesIA,
+    this.esIA = 0,
   });
 
   factory ProductoDto.fromMap(Map<String, dynamic> m) => ProductoDto(
@@ -38,6 +42,8 @@ class ProductoDto {
         condicion: m['condicion'] as String?,
         imagenPath: m['imagen_path'] as String?,
         comoUsar: m['como_usar'] as String?,
+        instruccionesIA: m['instrucciones_ia'] as String?,
+        esIA: m['es_ia'] as int? ?? 0,
       );
 
   factory ProductoDto.fromEntity(Producto e) => ProductoDto(
@@ -51,10 +57,12 @@ class ProductoDto {
         condicion: e.condicion?.name,
         imagenPath: e.imagenPath,
         comoUsar: e.comoUsar,
+        instruccionesIA: e.instruccionesIA,
+        esIA: e.esIA ? 1 : 0,
       );
 
   Map<String, dynamic> toMap() => {
-        'id': id,
+        if (id != 0) 'id': id,
         'nombre': nombre,
         'marca': marca,
         'categoria': categoria,
@@ -64,6 +72,8 @@ class ProductoDto {
         'condicion': condicion,
         'imagen_path': imagenPath,
         'como_usar': comoUsar,
+        'instrucciones_ia': instruccionesIA,
+        'es_ia': esIA,
       };
 
   Producto toEntity() => Producto(
@@ -81,5 +91,7 @@ class ProductoDto {
             : null,
         imagenPath: imagenPath,
         comoUsar: comoUsar,
+        instruccionesIA: instruccionesIA,
+        esIA: esIA == 1,
       );
 }

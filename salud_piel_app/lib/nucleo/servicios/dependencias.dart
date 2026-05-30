@@ -8,6 +8,7 @@ import '../../dominio/repositorios/i_auth_repositorio.dart';
 import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
 import '../../dominio/repositorios/i_producto_repositorio.dart';
 import '../../dominio/repositorios/i_rutina_repositorio.dart';
+import 'gemini_servicio.dart';
 import 'ml_servicio.dart';
 
 class Dependencias {
@@ -25,5 +26,6 @@ class Dependencias {
     await productoRepo.precargarSemilla();
 
     await Get.putAsync(() => MlServicio().init());
+    Get.put(GeminiServicio());
   }
 }

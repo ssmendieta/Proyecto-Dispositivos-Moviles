@@ -11,7 +11,15 @@ class AuthRepositorio implements IAuthRepositorio {
   AuthRepositorio(this._db);
 
   @override
-  Future<Resultado<Usuario>> registrar(String username, String email, String password) async {
+  Future<Resultado<Usuario>> registrar(
+    String username,
+    String email,
+    String password, {
+    int? edad,
+    String? sexo,
+    String? tipoPiel,
+    String? condicionesMedicas,
+  }) async {
     final hash = sha256.convert(utf8.encode(password)).toString();
     final now = DateTime.now().toIso8601String();
 
@@ -26,6 +34,10 @@ class AuthRepositorio implements IAuthRepositorio {
         'email': email,
         'password_hash': hash,
         'fecha_creacion': now,
+        if (edad != null) 'edad': edad,
+        if (sexo != null) 'sexo': sexo,
+        if (tipoPiel != null) 'tipo_piel': tipoPiel,
+        if (condicionesMedicas != null) 'condiciones_medicas': condicionesMedicas,
       });
       return Exito(Usuario(
         id: id,
@@ -33,6 +45,10 @@ class AuthRepositorio implements IAuthRepositorio {
         email: email,
         passwordHash: hash,
         fechaCreacion: DateTime.parse(now),
+        edad: edad,
+        sexo: sexo,
+        tipoPiel: tipoPiel,
+        condicionesMedicas: condicionesMedicas,
       ));
     } catch (e) {
       return Fracaso('Error al registrar usuario: ${e.toString()}', e is Exception ? e : null);

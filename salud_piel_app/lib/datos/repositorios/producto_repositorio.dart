@@ -60,6 +60,34 @@ class ProductoRepositorio implements IProductoRepositorio {
     }
   }
 
+  @override
+  Future<Resultado<Producto>> buscarPorNombre(String nombre) async {
+    try {
+      final maps = await _db.db.query(
+        'productos',
+        where: 'nombre LIKE ?',
+        whereArgs: [nombre],
+      );
+      if (maps.isEmpty) return Fracaso('Producto no encontrado');
+      return Exito(_mapear(maps.first));
+    } catch (e) {
+      return Fracaso('Error al buscar producto: ${e.toString()}', e is Exception ? e : null);
+    }
+  }
+
+  @override
+  Future<Resultado<Producto>> insertar(Producto producto) async {
+    try {
+      final dto = ProductoDto.fromEntity(producto);
+      final map = dto.toMap();
+      map.remove('id');
+      final id = await _db.db.insert('productos', map);
+      return obtenerPorId(id);
+    } catch (e) {
+      return Fracaso('Error al insertar producto: ${e.toString()}', e is Exception ? e : null);
+    }
+  }
+
   Future<void> precargarSemilla() async {
     final count = _db.db.query('productos', limit: 1);
     if ((await count).isNotEmpty) return;

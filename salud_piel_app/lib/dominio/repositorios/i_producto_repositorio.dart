@@ -7,4 +7,6 @@ abstract class IProductoRepositorio {
   Future<Resultado<List<Producto>>> listar({TipoPiel? tipoPiel, CondicionPiel? condicion});
   Future<Resultado<Producto>> obtenerPorId(int id);
   Future<Resultado<List<Producto>>> buscar(String query);
+  Future<Resultado<Producto>> buscarPorNombre(String nombre);
+  Future<Resultado<Producto>> insertar(Producto producto);
 }

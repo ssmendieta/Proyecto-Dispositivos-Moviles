@@ -27,7 +27,7 @@ class AppDatabase {
     _db = await _factory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 2,
+        version: 3,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE usuarios (
@@ -35,7 +35,11 @@ class AppDatabase {
               username TEXT NOT NULL,
               email TEXT UNIQUE NOT NULL,
               password_hash TEXT NOT NULL,
-              fecha_creacion TEXT NOT NULL
+              fecha_creacion TEXT NOT NULL,
+              edad INTEGER,
+              sexo TEXT,
+              tipo_piel TEXT,
+              condiciones_medicas TEXT
             )
           ''');
           await _crearTablasRestantes(db);
@@ -44,6 +48,14 @@ class AppDatabase {
           if (oldVersion < 2) {
             await db.execute('ALTER TABLE usuarios ADD COLUMN email TEXT');
             await db.execute('UPDATE usuarios SET email = username WHERE email IS NULL');
+          }
+          if (oldVersion < 3) {
+            await db.execute('ALTER TABLE usuarios ADD COLUMN edad INTEGER');
+            await db.execute('ALTER TABLE usuarios ADD COLUMN sexo TEXT');
+            await db.execute('ALTER TABLE usuarios ADD COLUMN tipo_piel TEXT');
+            await db.execute('ALTER TABLE usuarios ADD COLUMN condiciones_medicas TEXT');
+            await db.execute('ALTER TABLE productos ADD COLUMN instrucciones_ia TEXT');
+            await db.execute('ALTER TABLE productos ADD COLUMN es_ia INTEGER NOT NULL DEFAULT 0');
           }
         },
       ),
@@ -83,7 +95,9 @@ class AppDatabase {
         tipo_piel TEXT,
         condicion TEXT,
         imagen_path TEXT,
-        como_usar TEXT
+        como_usar TEXT,
+        instrucciones_ia TEXT,
+        es_ia INTEGER NOT NULL DEFAULT 0
       )
     ''');
 
