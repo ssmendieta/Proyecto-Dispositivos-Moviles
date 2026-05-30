@@ -6,8 +6,6 @@ import '../../rutinas/controladores/rutinas_controlador.dart';
 import '../controladores/inicio_controlador.dart';
 import '../widgets/tarjeta_producto_grande.dart';
 import '../widgets/tarjeta_producto_pequena.dart';
-import '../widgets/tarjeta_producto_grande.dart';
-import '../../rutas/app_rutas.dart';
 
 class HomePantalla extends GetView<InicioControlador> {
   const HomePantalla({super.key});

@@ -9,7 +9,6 @@ class RegistroPantalla extends GetView<RegistroControlador> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -17,9 +16,7 @@ class RegistroPantalla extends GetView<RegistroControlador> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 520,
-              ),
+              constraints: const BoxConstraints(maxWidth: 520),
               child: Column(
                 children: [
                   Container(
@@ -27,8 +24,7 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                     height: 76,
                     decoration: BoxDecoration(
                       color: ColoresApp.primario,
-                      borderRadius:
-                          BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(18),
                     ),
                     child: const Icon(
                       Icons.biotech,
@@ -51,11 +47,10 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                   const SizedBox(height: 10),
 
                   Text(
-                    'Tu asistente inteligente para el cuidado clínico de la piel.',
+                    'Crea tu cuenta para recibir recomendaciones personalizadas para tu piel.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color:
-                          ColoresApp.textoSecundario,
+                      color: ColoresApp.textoSecundario,
                       fontSize: 15,
                       height: 1.4,
                     ),
@@ -67,62 +62,47 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(22),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black
-                              .withValues(alpha: 0.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 20,
-                          offset: const Offset(
-                            0,
-                            10,
-                          ),
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
                           child: Text(
-                            'Crear Cuenta',
+                            'Crear cuenta',
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight:
-                                  FontWeight.bold,
-                              color: ColoresApp
-                                  .textoPrincipal,
+                              fontWeight: FontWeight.bold,
+                              color: ColoresApp.textoPrincipal,
                             ),
                           ),
                         ),
 
                         const SizedBox(height: 24),
 
-                        _label('Nombre Completo'),
+                        _label('Nombre completo'),
 
                         _campo(
-                          controller:
-                              controller.nombreController,
+                          controller: controller.nombreController,
                           hint: 'Ej. Juan Pérez',
-                          icono:
-                              Icons.person_outline,
+                          icono: Icons.person_outline,
                         ),
 
                         const SizedBox(height: 16),
 
-                        _label(
-                          'Correo electrónico',
-                        ),
+                        _label('Correo electrónico'),
 
                         _campo(
-                          controller:
-                              controller.correoController,
-                          hint:
-                              'usuario@ejemplo.com',
-                          icono:
-                              Icons.email_outlined,
+                          controller: controller.correoController,
+                          hint: 'usuario@ejemplo.com',
+                          icono: Icons.email_outlined,
                         ),
 
                         const SizedBox(height: 16),
@@ -138,36 +118,19 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child:
-                              ElevatedButton.icon(
-                            onPressed:
-                                () => controller.registrar(),
-                            icon: const Icon(
-                              Icons.arrow_forward,
-                            ),
-                            label: const Text(
-                              'Crear Cuenta',
-                            ),
-                            style:
-                                ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  ColoresApp
-                                      .primario,
-                              foregroundColor:
-                                  Colors.white,
-                              textStyle:
-                                  const TextStyle(
+                          child: ElevatedButton.icon(
+                            onPressed: () => controller.registrar(),
+                            icon: const Icon(Icons.arrow_forward),
+                            label: const Text('Crear cuenta'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ColoresApp.primario,
+                              foregroundColor: Colors.white,
+                              textStyle: const TextStyle(
                                 fontSize: 17,
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
+                                fontWeight: FontWeight.bold,
                               ),
-                              shape:
-                                  RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(
-                                    14,
-                                ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
                               ),
                             ),
                           ),
@@ -175,36 +138,25 @@ class RegistroPantalla extends GetView<RegistroControlador> {
 
                         const SizedBox(height: 22),
 
-                        Divider(
-                          color:
-                              Colors.grey.shade300,
-                        ),
+                        Divider(color: Colors.grey.shade300),
 
                         const SizedBox(height: 16),
 
                         Center(
                           child: TextButton(
-                              onPressed: controller.irALogin,
+                            onPressed: controller.irALogin,
                             child: Text.rich(
                               TextSpan(
-                                text:
-                                    '¿Ya tienes una cuenta? ',
+                                text: '¿Ya tienes una cuenta? ',
                                 style: TextStyle(
-                                  color: ColoresApp
-                                      .textoPrincipal,
+                                  color: ColoresApp.textoPrincipal,
                                 ),
                                 children: [
                                   TextSpan(
-                                    text:
-                                        'Iniciar Sesión',
-                                    style:
-                                        TextStyle(
-                                      color:
-                                          ColoresApp
-                                              .primario,
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
+                                    text: 'Iniciar sesión',
+                                    style: TextStyle(
+                                      color: ColoresApp.primario,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
@@ -225,47 +177,50 @@ class RegistroPantalla extends GetView<RegistroControlador> {
   }
 
   Widget _buildRegPasswordField() {
-    return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _label('Contraseña'),
-        _campo(
-          controller: controller.passwordController,
-          hint: '••••••••',
-          icono: Icons.lock_outline,
-          obscure: !controller.verPassword.value,
-          suffix: controller.verPassword.value
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-          onSuffixTap: () {
-            controller.verPassword.value =
-                !controller.verPassword.value;
-          },
-        ),
-      ],
-    ));
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _label('Contraseña'),
+          _campo(
+            controller: controller.passwordController,
+            hint: '••••••••',
+            icono: Icons.lock_outline,
+            obscure: !controller.verPassword.value,
+            suffix: controller.verPassword.value
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+            onSuffixTap: () {
+              controller.verPassword.value = !controller.verPassword.value;
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildRegConfirmPasswordField() {
-    return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _label('Confirmar Contraseña'),
-        _campo(
-          controller: controller.confirmPasswordController,
-          hint: '••••••••',
-          icono: Icons.shield_outlined,
-          obscure: !controller.verConfirmPassword.value,
-          suffix: controller.verConfirmPassword.value
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-          onSuffixTap: () {
-            controller.verConfirmPassword.value =
-                !controller.verConfirmPassword.value;
-          },
-        ),
-      ],
-    ));
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _label('Confirmar contraseña'),
+          _campo(
+            controller: controller.confirmPasswordController,
+            hint: '••••••••',
+            icono: Icons.shield_outlined,
+            obscure: !controller.verConfirmPassword.value,
+            suffix: controller.verConfirmPassword.value
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+            onSuffixTap: () {
+              controller.verConfirmPassword.value =
+                  !controller.verConfirmPassword.value;
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _label(String texto) {
@@ -304,18 +259,12 @@ class RegistroPantalla extends GetView<RegistroControlador> {
         filled: true,
         fillColor: ColoresApp.fondo,
         border: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: ColoresApp.borde,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: ColoresApp.borde),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: ColoresApp.borde,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: ColoresApp.borde),
         ),
       ),
     );

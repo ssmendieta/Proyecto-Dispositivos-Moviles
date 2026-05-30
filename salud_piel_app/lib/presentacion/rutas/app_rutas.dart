@@ -3,6 +3,7 @@ abstract class AppRutas {
   static const bienvenida = '/bienvenida';
   static const login = '/login';
   static const registro = '/registro';
+  static const informacionPersonal = '/informacion-personal';
 
   static const inicio = '/inicio';
   static const escaneo = '/escaneo';

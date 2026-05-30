@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../constantes/colores.dart';
 import '../../../dominio/entidades/producto.dart';
+import '../../constantes/colores.dart';
 import '../controladores/productos_controlador.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
+import 'detalle_producto_pantalla.dart';
 
 class ProductosPantalla extends GetView<ProductosControlador> {
   ProductosPantalla({super.key});
@@ -13,7 +14,6 @@ class ProductosPantalla extends GetView<ProductosControlador> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -71,36 +71,37 @@ class ProductosPantalla extends GetView<ProductosControlador> {
   Widget _buildCategoryChips() {
     return Obx(() {
       final seleccionado = controller.categoriaSeleccionada.value;
-      return SizedBox(
-      height: 42,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.categorias.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 10),
-        itemBuilder: (context, index) {
-          final categoria = controller.categorias[index];
-          final chipSeleccionado = seleccionado == categoria;
 
-          return ChoiceChip(
-            label: Text(categoria),
-            selected: chipSeleccionado,
-            onSelected: (_) {
-              controller.cambiarCategoria(categoria);
-            },
-            selectedColor: ColoresApp.primario,
-            backgroundColor: Colors.white,
-            side: BorderSide.none,
-            labelStyle: TextStyle(
-              color: chipSeleccionado
-                  ? Colors.white
-                  : ColoresApp.textoPrincipal,
-              fontWeight: FontWeight.w600,
-            ),
-          );
-        },
-      ),
-    );
-  });
+      return SizedBox(
+        height: 42,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.categorias.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 10),
+          itemBuilder: (context, index) {
+            final categoria = controller.categorias[index];
+            final chipSeleccionado = seleccionado == categoria;
+
+            return ChoiceChip(
+              label: Text(categoria),
+              selected: chipSeleccionado,
+              onSelected: (_) {
+                controller.cambiarCategoria(categoria);
+              },
+              selectedColor: ColoresApp.primario,
+              backgroundColor: Colors.white,
+              side: BorderSide.none,
+              labelStyle: TextStyle(
+                color: chipSeleccionado
+                    ? Colors.white
+                    : ColoresApp.textoPrincipal,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _buildProductGrid() {
@@ -152,72 +153,82 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: () {
+        Get.to(
+          () => DetalleProductoPantalla(
+            producto: producto,
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: ColoresApp.fondo,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.spa_outlined,
+                  size: 42,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Text(
+              producto.nombre,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: ColoresApp.textoPrincipal,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            Text(
+              producto.marca ?? '',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                color: ColoresApp.textoSecundario,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: ColoresApp.fondo,
-                borderRadius: BorderRadius.circular(14),
+              height: 34,
+              child: OutlinedButton(
+                onPressed: () {
+                  Get.bottomSheet(
+                    AgregarARutinaSheet(
+                      producto: producto,
+                    ),
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                  );
+                },
+                child: const Text('+ Rutina'),
               ),
-              child: const Icon(
-                Icons.spa_outlined,
-                size: 42,
-              ),
             ),
-          ),
-
-          const SizedBox(height: 10),
-
-          Text(
-            producto.nombre,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: ColoresApp.textoPrincipal,
-            ),
-          ),
-
-          const SizedBox(height: 4),
-
-          Text(
-            producto.marca ?? '',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 12,
-              color: ColoresApp.textoSecundario,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          SizedBox(
-            width: double.infinity,
-            height: 34,
-            child: OutlinedButton(
-              onPressed: () {
-                Get.bottomSheet(
-                  AgregarARutinaSheet(
-                    producto: producto,
-                  ),
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                );
-              },
-              child: const Text('+ Rutina'),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

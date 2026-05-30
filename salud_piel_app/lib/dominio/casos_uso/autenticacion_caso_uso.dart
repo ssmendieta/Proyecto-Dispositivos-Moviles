@@ -8,15 +8,7 @@ class AutenticacionCasoUso {
   AutenticacionCasoUso({required IAuthRepositorio repositorio})
       : _repositorio = repositorio;
 
-  Future<Resultado<Usuario>> registrar(
-    String username,
-    String email,
-    String password, {
-    int? edad,
-    String? sexo,
-    String? tipoPiel,
-    String? condicionesMedicas,
-  }) async {
+  Future<Resultado<Usuario>> registrar(String username, String email, String password) async {
     if (username.isEmpty || email.isEmpty || password.isEmpty) {
       return const Fracaso('Todos los campos son obligatorios');
     }
@@ -26,12 +18,7 @@ class AutenticacionCasoUso {
     if (password.length < 6) {
       return const Fracaso('La contraseña debe tener al menos 6 caracteres');
     }
-    return _repositorio.registrar(username, email, password,
-      edad: edad,
-      sexo: sexo,
-      tipoPiel: tipoPiel,
-      condicionesMedicas: condicionesMedicas,
-    );
+    return _repositorio.registrar(username, email, password);
   }
 
   Future<Resultado<Usuario>> login(String email, String password) async {

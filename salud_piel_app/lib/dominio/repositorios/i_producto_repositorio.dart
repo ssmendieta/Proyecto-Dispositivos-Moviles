@@ -9,4 +9,5 @@ abstract class IProductoRepositorio {
   Future<Resultado<List<Producto>>> buscar(String query);
   Future<Resultado<Producto>> buscarPorNombre(String nombre);
   Future<Resultado<Producto>> insertar(Producto producto);
+  Future<Resultado<Producto>> actualizar(Producto producto);
 }

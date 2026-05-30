@@ -88,6 +88,18 @@ class ProductoRepositorio implements IProductoRepositorio {
     }
   }
 
+  @override
+  Future<Resultado<Producto>> actualizar(Producto producto) async {
+    try {
+      final dto = ProductoDto.fromEntity(producto);
+      final map = dto.toMap();
+      await _db.db.update('productos', map, where: 'id = ?', whereArgs: [producto.id]);
+      return Exito(producto);
+    } catch (e) {
+      return Fracaso('Error al actualizar producto: ${e.toString()}', e is Exception ? e : null);
+    }
+  }
+
   Future<void> precargarSemilla() async {
     final count = _db.db.query('productos', limit: 1);
     if ((await count).isNotEmpty) return;

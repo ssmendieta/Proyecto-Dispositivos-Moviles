@@ -5,6 +5,7 @@ import '../../../dominio/entidades/diagnostico.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/enumeraciones/condicion_piel.dart';
 import '../../../dominio/utilidades/resultado.dart';
+import '../../../nucleo/servicios/ml_servicio.dart';
 
 class DiagnosticoControlador extends GetxController {
   final DiagnosticoCasoUso _casoUso;
@@ -17,7 +18,9 @@ class DiagnosticoControlador extends GetxController {
   void onInit() {
     super.onInit();
     final args = Get.arguments;
-    if (args is String && args.isNotEmpty) {
+    if (args is ResultadoAnalisis) {
+      _cargarDesdeResultadoML(args);
+    } else if (args is String && args.isNotEmpty) {
       imagenPath.value = args;
     }
   }
@@ -26,8 +29,46 @@ class DiagnosticoControlador extends GetxController {
   final confianza = 0.0.obs;
   final descripcion = ''.obs;
   final imagenPath = ''.obs;
+  final severidad = ''.obs;
   final productosRecomendados = <Producto>[].obs;
   final guardando = false.obs;
+  final deteccionesResumen = <String, int>{}.obs;
+
+  void _cargarDesdeResultadoML(ResultadoAnalisis r) {
+    condicion.value = _mapearCondicion(r.tipoPiel);
+    confianza.value = r.confianzaTipoPiel;
+    severidad.value = r.severidadGeneral;
+    imagenPath.value = r.imagenPath;
+    deteccionesResumen.value = r.conteoPorCondicion;
+
+    final partes = <String>[];
+    if (r.severidadGeneral.isNotEmpty) {
+      partes.add('Severidad: ${r.severidadGeneral}');
+    }
+    if (r.recomendacionesDia.isNotEmpty) {
+      partes.add('\n--- Rutina Día ---\n${r.recomendacionesDia.join('\n')}');
+    }
+    if (r.recomendacionesNoche.isNotEmpty) {
+      partes.add('\n--- Rutina Noche ---\n${r.recomendacionesNoche.join('\n')}');
+    }
+    if (r.aclaraciones.isNotEmpty) {
+      partes.add('\n${r.aclaraciones.join('\n')}');
+    }
+    descripcion.value = partes.join('\n');
+  }
+
+  CondicionPiel _mapearCondicion(String tipoPiel) {
+    switch (tipoPiel.toLowerCase()) {
+      case 'grasa':
+        return CondicionPiel.acne;
+      case 'seca':
+        return CondicionPiel.eczema;
+      case 'mixta':
+        return CondicionPiel.dermatitis;
+      default:
+        return CondicionPiel.normal;
+    }
+  }
 
   void cargarResultado({
     required CondicionPiel cond,
@@ -59,9 +100,11 @@ class DiagnosticoControlador extends GetxController {
     final resultado = await _casoUso.guardarDiagnostico(diagnostico);
     switch (resultado) {
       case Exito<int>():
-        Get.snackbar('Guardado', 'Diagnóstico guardado en historial.', snackPosition: SnackPosition.BOTTOM);
+        Get.snackbar('Guardado', 'Diagnóstico guardado en historial.',
+            snackPosition: SnackPosition.BOTTOM);
       case Fracaso<int>():
-        Get.snackbar('Error', resultado.mensaje, snackPosition: SnackPosition.BOTTOM);
+        Get.snackbar('Error', resultado.mensaje,
+            snackPosition: SnackPosition.BOTTOM);
     }
     guardando.value = false;
   }

@@ -1,78 +1,94 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-//import '../../../dominio/entidades/resultado_analisis.dart';
 import '../../../nucleo/servicios/ml_servicio.dart';
+import '../../rutas/app_rutas.dart';
 
-class EscaneoControlador extends ChangeNotifier {
-  final ImagePicker _picker = ImagePicker();
-  final MlServicio _mlServicio = MlServicio();
+class EscaneoControlador extends GetxController {
+  CameraController? cameraController;
+  final inicializando = true.obs;
+  final camaraDisponible = false.obs;
+  final analizando = false.obs;
+  bool _iniciado = false;
 
-  bool cargando = false;
-  String? mensajeError;
-  ResultadoAnalisis? resultado;
+  EscaneoControlador();
 
-  Future<void> seleccionarYAnalizar(ImageSource source) async {
+  Future<void> iniciarCamara() async {
+    if (_iniciado) return;
+    _iniciado = true;
     try {
-      cargando = true;
-      mensajeError = null;
-      resultado = null;
-      notifyListeners();
-
-      final XFile? imagen = await _picker.pickImage(
-        source: source,
-        imageQuality: 75,
-        maxWidth: 640,
-        maxHeight: 640,
-        preferredCameraDevice: CameraDevice.front,
-      );
-
-      if (imagen == null) {
-        cargando = false;
-        notifyListeners();
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        camaraDisponible.value = false;
+        inicializando.value = false;
         return;
       }
-
-      debugPrint('Imagen seleccionada: ${imagen.path}');
-
-      final File archivoImagen = File(imagen.path);
-
-      final ResultadoAnalisis resultadoTemporal =
-          await _mlServicio.analizarImagen(archivoImagen).timeout(
-        const Duration(seconds: 45),
-        onTimeout: () {
-          throw TimeoutException(
-            'El análisis tardó demasiado. Prueba con una imagen más clara o más liviana.',
-          );
-        },
-      );
-
-      resultado = resultadoTemporal;
-      cargando = false;
-      notifyListeners();
-    } catch (e) {
-      cargando = false;
-      mensajeError = 'Error en el análisis: $e';
-      debugPrint(mensajeError);
-      notifyListeners();
+      camaraDisponible.value = true;
+      final controller = CameraController(cameras.first, ResolutionPreset.high);
+      cameraController = controller;
+      await controller.initialize();
+      inicializando.value = false;
+    } catch (_) {
+      camaraDisponible.value = false;
+      inicializando.value = false;
     }
   }
 
-  Future<void> analizarDesdeGaleria() async {
-    await seleccionarYAnalizar(ImageSource.gallery);
+  Future<void> tomarFoto() async {
+    final cam = cameraController;
+    if (cam == null || !cam.value.isInitialized) return;
+    try {
+      final XFile foto = await cam.takePicture();
+      await _analizarYNavigar(foto.path);
+    } catch (_) {
+      Get.snackbar('Error', 'No se pudo tomar la foto.');
+    }
   }
 
-  Future<void> analizarDesdeCamara() async {
-    await seleccionarYAnalizar(ImageSource.camera);
+  Future<void> seleccionarDeGaleria() async {
+    try {
+      final XFile? imagen =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (imagen != null) {
+        await _analizarYNavigar(imagen.path);
+      }
+    } catch (_) {
+      Get.snackbar('Error', 'No se pudo acceder a la galería.');
+    }
   }
 
-  void limpiarResultado() {
-    resultado = null;
-    mensajeError = null;
-    cargando = false;
-    notifyListeners();
+  Future<void> _analizarYNavigar(String path) async {
+    analizando.value = true;
+    try {
+      final archivo = File(path);
+      final resultado = await MlServicio()
+          .analizarImagen(archivo)
+          .timeout(const Duration(seconds: 45));
+      Get.toNamed(AppRutas.diagnostico, arguments: resultado);
+    } on TimeoutException {
+      Get.snackbar(
+        'Tiempo agotado',
+        'El análisis tardó demasiado. Prueba con una imagen más clara.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error en análisis',
+        'No se pudo analizar la imagen: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      analizando.value = false;
+    }
+  }
+
+  @override
+  void onClose() {
+    cameraController?.dispose();
+    super.onClose();
   }
 }

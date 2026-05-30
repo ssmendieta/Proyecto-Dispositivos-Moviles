@@ -9,7 +9,6 @@ class LoginPantalla extends GetView<LoginControlador> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -53,7 +52,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                   const SizedBox(height: 24),
 
                   Text(
-                    'Welcome Back',
+                    'Bienvenido',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -64,7 +63,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                   const SizedBox(height: 8),
 
                   Text(
-                    'Sign in to continue your personalized skin journey.',
+                    'Inicia sesión para continuar con tu cuidado de la piel.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: ColoresApp.textoSecundario,
@@ -90,11 +89,11 @@ class LoginPantalla extends GetView<LoginControlador> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _label('Username or Email'),
+                        _label('Correo electrónico'),
 
                         _campo(
                           controller: controller.correoController,
-                          hint: 'name@example.com',
+                          hint: 'correo@ejemplo.com',
                           icono: Icons.alternate_email,
                         ),
 
@@ -114,7 +113,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                           child: ElevatedButton.icon(
                             onPressed: () => controller.iniciarSesion(),
                             icon: const Icon(Icons.arrow_forward),
-                            label: const Text('Log In'),
+                            label: const Text('Iniciar sesión'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: ColoresApp.primario,
                               foregroundColor: Colors.white,
@@ -142,13 +141,13 @@ class LoginPantalla extends GetView<LoginControlador> {
                     onPressed: controller.irARegistro,
                     child: Text.rich(
                       TextSpan(
-                        text: "Don't have an account? ",
+                        text: '¿No tienes una cuenta? ',
                         style: TextStyle(
                           color: ColoresApp.textoPrincipal,
                         ),
                         children: [
                           TextSpan(
-                            text: 'Sign up for SkinGPT',
+                            text: 'Crear cuenta',
                             style: TextStyle(
                               color: ColoresApp.primario,
                               fontWeight: FontWeight.bold,
@@ -162,7 +161,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                   const SizedBox(height: 28),
 
                   Text(
-                    'Privacy Policy   •   Terms of Service   •   Help Center',
+                    'Política de Privacidad • Términos de Servicio • Ayuda',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: ColoresApp.textoSecundario,
@@ -173,7 +172,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                   const SizedBox(height: 8),
 
                   Text(
-                    '© 2024 SkinGPT. Clinical Accuracy Guaranteed.',
+                    '© 2024 SkinGPT. Asistencia dermatológica inteligente.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: ColoresApp.textoSecundario.withValues(alpha: 0.6),
@@ -203,62 +202,65 @@ class LoginPantalla extends GetView<LoginControlador> {
   }
 
   Widget _buildPasswordField() {
-    return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _label('Password'),
-            Text(
-              'Forgot Password?',
-              style: TextStyle(
-                color: ColoresApp.primario,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _label('Contraseña'),
+              Text(
+                '¿Olvidaste tu contraseña?',
+                style: TextStyle(
+                  color: ColoresApp.primario,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
-            ),
-          ],
-        ),
-        _campo(
-          controller: controller.passwordController,
-          hint: '••••••••',
-          icono: Icons.lock_outline,
-          obscure: !controller.verPassword.value,
-          suffix: controller.verPassword.value
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-          onSuffixTap: () {
-            controller.verPassword.value = !controller.verPassword.value;
-          },
-        ),
-      ],
-    ));
+            ],
+          ),
+          _campo(
+            controller: controller.passwordController,
+            hint: '••••••••',
+            icono: Icons.lock_outline,
+            obscure: !controller.verPassword.value,
+            suffix: controller.verPassword.value
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+            onSuffixTap: () {
+              controller.verPassword.value = !controller.verPassword.value;
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildRememberMe() {
-    return Obx(() => Row(
-      children: [
-        Checkbox(
-          value: controller.recordarSesion.value,
-          onChanged: (valor) {
-            controller.recordarSesion.value = valor ?? false;
-          },
-        ),
-        InkWell(
-          onTap: () {
-            controller.recordarSesion.value =
-                !controller.recordarSesion.value;
-          },
-          child: Text(
-            'Keep me logged in',
-            style: TextStyle(
-              color: ColoresApp.textoSecundario,
+    return Obx(
+      () => Row(
+        children: [
+          Checkbox(
+            value: controller.recordarSesion.value,
+            onChanged: (valor) {
+              controller.recordarSesion.value = valor ?? false;
+            },
+          ),
+          InkWell(
+            onTap: () {
+              controller.recordarSesion.value = !controller.recordarSesion.value;
+            },
+            child: Text(
+              'Mantener sesión iniciada',
+              style: TextStyle(
+                color: ColoresApp.textoSecundario,
+              ),
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 
   Widget _campo({

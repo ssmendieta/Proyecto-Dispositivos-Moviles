@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../../dominio/casos_uso/autenticacion_caso_uso.dart';
 import '../../../dominio/entidades/usuario.dart';
 import '../../../dominio/utilidades/resultado.dart';
-import 'sesion_controlador.dart';
 import '../../rutas/app_rutas.dart';
+import 'sesion_controlador.dart';
 
 class LoginControlador extends GetxController {
   final AutenticacionCasoUso _casoUso;
@@ -15,6 +15,7 @@ class LoginControlador extends GetxController {
 
   final correoController = TextEditingController();
   final passwordController = TextEditingController();
+
   final verPassword = false.obs;
   final recordarSesion = false.obs;
   final cargando = false.obs;
@@ -32,6 +33,24 @@ class LoginControlador extends GetxController {
     final correo = correoController.text.trim();
     final password = passwordController.text.trim();
 
+    if (correo.isEmpty || password.isEmpty) {
+      Get.snackbar(
+        'Campos incompletos',
+        'Ingresa tu correo y contraseña.',
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    if (!correo.contains('@')) {
+      Get.snackbar(
+        'Correo inválido',
+        'Ingresa un correo electrónico válido.',
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
     cargando.value = true;
     final resultado = await _casoUso.login(correo, password);
     cargando.value = false;
@@ -40,12 +59,14 @@ class LoginControlador extends GetxController {
       case Exito<Usuario>():
         Get.find<SesionControlador>().usuarioActual.value = resultado.data;
         Get.find<SesionControlador>().sesionIniciada.value = true;
-        Get.offAllNamed(AppRutas.inicio);
+
+        Get.offAllNamed(AppRutas.informacionPersonal);
+
       case Fracaso<Usuario>():
         Get.snackbar(
           'Error',
           resultado.mensaje,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
     }
   }
