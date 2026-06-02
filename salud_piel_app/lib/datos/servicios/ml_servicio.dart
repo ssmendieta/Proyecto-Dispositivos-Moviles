@@ -5,19 +5,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-/// Carga 3 modelos:
-/// 1) skin_type_classifier.tflite -> clasifica tipo de piel
-/// 2) acne_yolov8n.tflite -> detecta acné
-/// 3) skin_conditions_yolov8n.tflite -> detecta condiciones: poros, puntos negros, rojeces, etc.
+import '../../dominio/repositorios/i_ml_servicio.dart';
 
-/// Este archivo asume que tienes estos assets:
-/// assets/modelos/skin_type_classifier.tflite
-/// assets/modelos/skin_type_labels.txt
-/// assets/modelos/acne_yolov8n.tflite
-/// assets/modelos/acne_labels.txt
-/// assets/modelos/skin_conditions_yolov8n.tflite
-/// assets/modelos/skin_conditions_labels.txt
-class MlServicio {
+class MlServicio implements IMlServicio {
   static final MlServicio _instancia = MlServicio._interno();
   factory MlServicio() => _instancia;
   MlServicio._interno();
@@ -50,11 +40,13 @@ class MlServicio {
   final double _umbralYoloGeneral = 0.08;
   final double _umbralNms = 0.45;
 
-  Future<MlServicio> init() async {
+  @override
+  Future<IMlServicio> init() async {
     await cargarModelos();
     return this;
   }
 
+  @override
   Future<void> cargarModelos() async {
     if (_modelosCargados) return;
 
@@ -69,6 +61,7 @@ class MlServicio {
     _modelosCargados = true;
   }
 
+  @override
   Future<ResultadoAnalisis> analizarImagen(File imagenPath) async {
     await cargarModelos();
 
@@ -294,7 +287,6 @@ class MlServicio {
     return _aplicarNms(detecciones, _umbralNms);
   }
 
-  /// Umbral por clase
   double _umbralParaClase(String label) {
     final key = _normalizar(label);
 
@@ -327,30 +319,23 @@ class MlServicio {
     String tipo = inicial.tipoPiel;
     double confianza = inicial.confianza;
 
-    // Si el clasificador está bajo 60%, no es muy confiable.
     final bool clasificadorDudoso = confianza < 0.60;
 
-    // si YOLO ve grasa/poros/puntos negros y el clasificador está dudoso,
-    // priorizamos la evidencia visual.
     if (clasificadorDudoso && (hayGrasa || hayPoros || hayPuntosNegros)) {
       tipo = 'grasa';
       confianza = math.max(confianza, 0.62);
     }
 
-    // si YOLO ve piel seca y el clasificador está dudoso, corregimos a seca.
     if (clasificadorDudoso && haySeca && !hayGrasa) {
       tipo = 'seca';
       confianza = math.max(confianza, 0.62);
     }
 
-    // si hay señales mixtas, se muestra mixta/combinada.
     if ((hayGrasa || hayPoros || hayPuntosNegros || hayPuntosBlancos) && haySeca) {
       tipo = 'mixta';
       confianza = math.max(confianza, 0.65);
     }
 
-    // si el clasificador dice seca pero YOLO detecta grasa/poros,
-    // y la confianza no es alta, se corrige a mixta.
     if (inicial.tipoPiel == 'seca' &&
         confianza < 0.75 &&
         (hayGrasa || hayPoros || hayPuntosNegros)) {
@@ -358,8 +343,6 @@ class MlServicio {
       confianza = math.max(confianza, 0.64);
     }
 
-    // si el clasificador dice normal pero hay varias condiciones,
-    // evitamos venderlo como 100% normal.
     if (inicial.tipoPiel == 'normal' && detecciones.length >= 3) {
       if (hayGrasa || hayPoros || hayPuntosNegros) {
         tipo = 'grasa';
@@ -833,6 +816,7 @@ class MlServicio {
     return false;
   }
 
+  @override
   void cerrar() {
     _tipoPielInterpreter?.close();
     _acneInterpreter?.close();

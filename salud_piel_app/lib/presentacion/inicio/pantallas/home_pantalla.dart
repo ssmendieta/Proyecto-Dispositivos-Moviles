@@ -62,12 +62,15 @@ class HomePantalla extends GetView<InicioControlador> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'ESTADO DE LA PIEL',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: ColoresApp.textoSecundario,
-                      letterSpacing: 1,
+                  Flexible(
+                    child: Text(
+                      'ESTADO DE LA PIEL',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: ColoresApp.textoSecundario,
+                        letterSpacing: 1,
+                      ),
                     ),
                   ),
                  TextButton(
@@ -179,6 +182,7 @@ class HomePantalla extends GetView<InicioControlador> {
                         child: TarjetaProductoPequena(
                           nombre: rp.producto.nombre,
                           marca: rp.producto.marca ?? '',
+                          imagenPath: rp.producto.imagenPath,
                         ),
                       ),
                     )).toList(),
@@ -217,6 +221,7 @@ class HomePantalla extends GetView<InicioControlador> {
                   TarjetaProductoGrande(
                     nombre: noche.first.producto.nombre,
                     marca: noche.first.producto.marca ?? '',
+                    imagenPath: noche.first.producto.imagenPath,
                   ),
                   const SizedBox(height: 28),
                 ],

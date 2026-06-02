@@ -8,6 +8,7 @@ class Diagnostico {
   final double confianza;
   final DateTime fecha;
   final String? descripcion;
+  final String? contextoIA;
   final List<Producto> productosRecomendados;
 
   Diagnostico({
@@ -17,6 +18,7 @@ class Diagnostico {
     required this.confianza,
     required this.fecha,
     this.descripcion,
+    this.contextoIA,
     this.productosRecomendados = const [],
   });
 }

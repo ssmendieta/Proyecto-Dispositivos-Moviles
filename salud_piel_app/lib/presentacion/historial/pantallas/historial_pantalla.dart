@@ -27,12 +27,15 @@ class HistorialPantalla extends GetView<HistorialControlador> {
                       icon: const Icon(Icons.arrow_back),
                     ),
                     const SizedBox(width: 6),
-                    Text(
-                      'Historial de Análisis',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: ColoresApp.textoPrincipal,
+                    Flexible(
+                      child: Text(
+                        'Historial de Análisis',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: ColoresApp.textoPrincipal,
+                        ),
                       ),
                     ),
                   ],

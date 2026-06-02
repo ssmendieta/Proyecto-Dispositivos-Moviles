@@ -60,7 +60,7 @@ class LoginControlador extends GetxController {
         Get.find<SesionControlador>().usuarioActual.value = resultado.data;
         Get.find<SesionControlador>().sesionIniciada.value = true;
 
-        Get.offAllNamed(AppRutas.informacionPersonal);
+        Get.offAllNamed(AppRutas.inicio);
 
       case Fracaso<Usuario>():
         Get.snackbar(

@@ -101,25 +101,35 @@ class ProductoRepositorio implements IProductoRepositorio {
   }
 
   Future<void> precargarSemilla() async {
-    final count = _db.db.query('productos', limit: 1);
-    if ((await count).isNotEmpty) return;
-
     final json = await rootBundle.loadString('assets/productos/catalogo.json');
     final lista = jsonDecode(json) as List<dynamic>;
 
-    for (final item in lista) {
-      await _db.db.insert('productos', {
-        'nombre': item['nombre'],
-        'marca': item['marca'],
-        'categoria': item['categoria'],
-        'descripcion': item['descripcion'],
-        'ingredientes': item['ingredientes'],
-        'tipo_piel': item['tipo_piel'],
-        'condicion': item['condicion'],
-        'imagen_path': item['imagen_path'],
-        'como_usar': item['como_usar'],
-      });
-    }
+    await _db.db.transaction((txn) async {
+      txn.delete('productos');
+      for (final item in lista) {
+        txn.insert('productos', {
+          'nombre': item['nombre'],
+          'marca': item['marca'],
+          'categoria': item['categoria'],
+          'descripcion': item['descripcion'],
+          'ingredientes': item['ingredientes'],
+          'tipo_piel': item['tipo_piel'],
+          'condicion': item['condicion'],
+          'imagen_path': item['imagen_path'],
+          'como_usar': item['como_usar'],
+        });
+      }
+    });
+  }
+
+  @override
+  Future<void> actualizarImagenPath(int productoId, String imagenPath) async {
+    await _db.db.update(
+      'productos',
+      {'imagen_path': imagenPath},
+      where: 'id = ?',
+      whereArgs: [productoId],
+    );
   }
 
   Producto _mapear(Map<String, dynamic> m) =>

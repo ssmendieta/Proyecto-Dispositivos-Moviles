@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
+import '../../datos/servicios/ml_servicio.dart';
 import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
-import '../../nucleo/servicios/ml_servicio.dart';
 import '../autenticacion/pantallas/login_pantalla.dart';
 import '../autenticacion/pantallas/registro_pantalla.dart';
 import '../bienvenida/pantallas/bienvenida_pantalla.dart';
@@ -21,8 +21,11 @@ import '../productos/pantallas/productos_pantalla.dart';
 import '../rutinas/pantallas/gestionar_rutina_pantalla.dart';
 import '../rutinas/pantallas/rutinas_pantalla.dart';
 import 'app_rutas.dart';
+import 'auth_middleware.dart';
 
 class AppPaginas {
+  static final _middleware = [AuthMiddleware()];
+
   static final paginas = [
     GetPage(
       name: AppRutas.carga,
@@ -47,13 +50,16 @@ class AppPaginas {
     GetPage(
       name: AppRutas.inicio,
       page: () => const InicioPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.escaneo,
       page: () => const EscaneoPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.diagnostico,
+      middlewares: _middleware,
       page: () {
         final args = Get.arguments;
         final controller = DiagnosticoControlador(
@@ -71,6 +77,7 @@ class AppPaginas {
     GetPage(
       name: AppRutas.productos,
       page: () => ProductosPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.productoDetalle,
@@ -78,22 +85,27 @@ class AppPaginas {
         final producto = Get.arguments as Producto;
         return DetalleProductoPantalla(producto: producto);
       },
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.rutinas,
       page: () => const RutinasPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.gestionarRutina,
       page: () => const GestionarRutinaPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.perfil,
       page: () => const PerfilPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.historial,
       page: () => const HistorialPantalla(),
+      middlewares: _middleware,
     ),
     GetPage(
       name: AppRutas.historialDetalle,
@@ -101,6 +113,7 @@ class AppPaginas {
         final diagnostico = Get.arguments as Diagnostico;
         return DetalleHistorialPantalla(diagnostico: diagnostico);
       },
+      middlewares: _middleware,
     ),
   ];
 }

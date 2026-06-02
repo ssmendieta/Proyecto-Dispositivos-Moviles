@@ -130,9 +130,17 @@ class DiagnosticoPantalla extends StatelessWidget {
 
             _seccionCondicion(),
 
-            const SizedBox(height: 20),
-
-            _seccionResultados(),
+            Obx(() {
+              final info = controller.informacionCondicion.value;
+              final cargando = controller.cargandoInfoIA.value;
+              if (info != null || cargando) return const SizedBox.shrink();
+              return Column(
+                children: [
+                  const SizedBox(height: 20),
+                  _seccionResultados(),
+                ],
+              );
+            }),
 
             const SizedBox(height: 12),
 
@@ -227,7 +235,7 @@ class DiagnosticoPantalla extends StatelessWidget {
                   if (info.causas.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     const Text(
-                      'Posibles causas',
+                      '¿Por qué se produce?',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

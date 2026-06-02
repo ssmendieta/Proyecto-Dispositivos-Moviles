@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,12 +17,22 @@ class DetalleHistorialPantalla extends StatelessWidget {
     required this.diagnostico,
   });
 
+  Map<String, dynamic>? get _contextoIA {
+    if (diagnostico.contextoIA == null) return null;
+    try {
+      return jsonDecode(diagnostico.contextoIA!) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final fecha = DateFormat('dd MMM yyyy - HH:mm').format(diagnostico.fecha);
     final confianza = (diagnostico.confianza * 100).round();
     final imagenPath = diagnostico.imagenPath;
     final descripcion = diagnostico.descripcion ?? '';
+    final contexto = _contextoIA;
 
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
@@ -123,31 +134,54 @@ class DetalleHistorialPantalla extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            _seccion(
-              titulo: 'Descripción del diagnóstico',
-              icono: Icons.info_outline,
-              contenido: descripcion.isNotEmpty
-                  ? descripcion
-                  : 'No se registró una descripción detallada para este análisis.',
-            ),
-
-            const SizedBox(height: 16),
-
-            _seccion(
-              titulo: 'Contexto generado por IA',
-              icono: Icons.smart_toy_outlined,
-              contenido:
-                  'Aquí se mostrará el contexto ampliado del análisis cuando el modelo de IA esté conectado. Incluirá recomendaciones, posibles causas y observaciones importantes.',
-            ),
-
-            const SizedBox(height: 16),
-
-            _seccion(
-              titulo: 'Recomendación inicial',
-              icono: Icons.medical_services_outlined,
-              contenido:
-                  'Mantén una rutina de cuidado adecuada y consulta con un profesional de salud si observas irritación, dolor, cambios rápidos o síntomas persistentes.',
-            ),
+            if (contexto != null) ...[
+              if ((contexto['descripcion'] as String?)?.isNotEmpty == true) ...[
+                const SizedBox(height: 16),
+                _seccion(
+                  titulo: 'Descripción de la condición',
+                  icono: Icons.info_outline,
+                  contenido: contexto['descripcion'] as String,
+                ),
+              ],
+              if ((contexto['causas'] as List?)?.isNotEmpty == true) ...[
+                const SizedBox(height: 16),
+                _seccion(
+                  titulo: 'Posibles causas',
+                  icono: Icons.search_outlined,
+                  contenido: (contexto['causas'] as List)
+                      .map((c) => '• $c')
+                      .join('\n\n'),
+                ),
+              ],
+              if ((contexto['recomendacionDermatologo'] as String?)
+                      ?.isNotEmpty == true) ...[
+                const SizedBox(height: 16),
+                _seccion(
+                  titulo: 'Recomendación del dermatólogo',
+                  icono: Icons.medical_services_outlined,
+                  contenido: contexto['recomendacionDermatologo'] as String,
+                ),
+              ],
+              if ((contexto['consejosCuidado'] as List?)?.isNotEmpty == true) ...[
+                const SizedBox(height: 16),
+                _seccion(
+                  titulo: 'Consejos de cuidado',
+                  icono: Icons.spa_outlined,
+                  contenido: (contexto['consejosCuidado'] as List)
+                      .map((c) => '• $c')
+                      .join('\n'),
+                ),
+              ],
+            ] else ...[
+              const SizedBox(height: 16),
+              _seccion(
+                titulo: 'Descripción del diagnóstico',
+                icono: Icons.info_outline,
+                contenido: descripcion.isNotEmpty
+                    ? descripcion
+                    : 'No se registró una descripción detallada para este análisis.',
+              ),
+            ],
           ],
         ),
       ),

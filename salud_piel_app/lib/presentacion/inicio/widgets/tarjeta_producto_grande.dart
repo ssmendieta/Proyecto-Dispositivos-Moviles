@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 
 class TarjetaProductoGrande extends StatelessWidget {
   final String nombre;
   final String marca;
+  final String? imagenPath;
 
   const TarjetaProductoGrande({
     super.key,
     required this.nombre,
     required this.marca,
+    this.imagenPath,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -23,18 +27,11 @@ class TarjetaProductoGrande extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: 230,
-            decoration: BoxDecoration(
-              color: const Color(0xFF071A25),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.water_drop_outlined,
-                color: Colors.white,
-                size: 70,
-              ),
+            child: ImagenProducto(
+              imagenPath: imagenPath,
+              borderRadius: 14,
             ),
           ),
           const SizedBox(height: 12),

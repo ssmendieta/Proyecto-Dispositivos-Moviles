@@ -33,7 +33,7 @@ class AppDatabase {
     _db = await _factory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 3,
+        version: 4,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE usuarios (
@@ -62,6 +62,9 @@ class AppDatabase {
             await db.execute('ALTER TABLE usuarios ADD COLUMN condiciones_medicas TEXT');
             await db.execute('ALTER TABLE productos ADD COLUMN instrucciones_ia TEXT');
             await db.execute('ALTER TABLE productos ADD COLUMN es_ia INTEGER NOT NULL DEFAULT 0');
+          }
+          if (oldVersion < 4) {
+            await db.execute('ALTER TABLE diagnosticos ADD COLUMN contexto_ia TEXT');
           }
         },
       ),

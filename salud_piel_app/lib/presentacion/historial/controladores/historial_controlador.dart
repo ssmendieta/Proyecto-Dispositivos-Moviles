@@ -16,10 +16,10 @@ class HistorialControlador extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _cargarHistorial();
+    cargarHistorial();
   }
 
-  Future<void> _cargarHistorial() async {
+  Future<void> cargarHistorial() async {
     cargando.value = true;
     final resultado = await _casoUso.listarDiagnosticos();
     switch (resultado) {

@@ -5,17 +5,19 @@ import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../nucleo/servicios/ml_servicio.dart';
+import '../../../dominio/casos_uso/escaneo_caso_uso.dart';
 import '../../rutas/app_rutas.dart';
 
 class EscaneoControlador extends GetxController {
+  final EscaneoCasoUso _casoUso;
   CameraController? cameraController;
   final inicializando = true.obs;
   final camaraDisponible = false.obs;
   final analizando = false.obs;
   bool _iniciado = false;
 
-  EscaneoControlador();
+  EscaneoControlador({required EscaneoCasoUso casoUso})
+      : _casoUso = casoUso;
 
   Future<void> iniciarCamara() async {
     if (_iniciado) return;
@@ -65,8 +67,8 @@ class EscaneoControlador extends GetxController {
     analizando.value = true;
     try {
       final archivo = File(path);
-      final resultado = await MlServicio()
-          .analizarImagen(archivo)
+      final resultado = await _casoUso
+          .analizar(archivo)
           .timeout(const Duration(seconds: 45));
       Get.toNamed(AppRutas.diagnostico, arguments: resultado);
     } on TimeoutException {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 import '../../../dominio/entidades/rutina.dart';
 import '../../inicio/controladores/inicio_controlador.dart';
@@ -134,26 +135,29 @@ class RutinasPantalla extends GetView<RutinasControlador> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              _chipFiltro(
-                texto: 'Todas',
-                seleccionado: filtro == 'Todas',
-                onTap: () => controller.cambiarFiltro('Todas'),
-              ),
-              const SizedBox(width: 10),
-              _chipFiltro(
-                texto: 'Mañana',
-                seleccionado: filtro == 'Mañana',
-                onTap: () => controller.cambiarFiltro('Mañana'),
-              ),
-              const SizedBox(width: 10),
-              _chipFiltro(
-                texto: 'Noche',
-                seleccionado: filtro == 'Noche',
-                onTap: () => controller.cambiarFiltro('Noche'),
-              ),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _chipFiltro(
+                  texto: 'Todas',
+                  seleccionado: filtro == 'Todas',
+                  onTap: () => controller.cambiarFiltro('Todas'),
+                ),
+                const SizedBox(width: 10),
+                _chipFiltro(
+                  texto: 'Mañana',
+                  seleccionado: filtro == 'Mañana',
+                  onTap: () => controller.cambiarFiltro('Mañana'),
+                ),
+                const SizedBox(width: 10),
+                _chipFiltro(
+                  texto: 'Noche',
+                  seleccionado: filtro == 'Noche',
+                  onTap: () => controller.cambiarFiltro('Noche'),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 24),
 
@@ -297,14 +301,10 @@ class RutinasPantalla extends GetView<RutinasControlador> {
             ),
             child: Row(
               children: [
-                Container(
-                  width: 58,
-                  height: 58,
-                  decoration: BoxDecoration(
-                    color: ColoresApp.fondo,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: const Icon(Icons.spa_outlined),
+                ImagenProducto(
+                  imagenPath: rp.producto.imagenPath,
+                  size: 58,
+                  borderRadius: 14,
                 ),
                 const SizedBox(width: 14),
                 Expanded(

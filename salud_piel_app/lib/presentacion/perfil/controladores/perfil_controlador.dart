@@ -47,6 +47,10 @@ class PerfilControlador extends GetxController {
     }
   }
 
+  Future<void> recargarDatos() async {
+    await _cargarDatos();
+  }
+
   void irAHistorial() => Get.toNamed(AppRutas.historial);
 
   void cerrarSesion() {

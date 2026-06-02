@@ -9,6 +9,7 @@ class DiagnosticoDto {
   final double confianza;
   final String fecha;
   final String? descripcion;
+  final String? contextoIA;
 
   const DiagnosticoDto({
     required this.id,
@@ -17,6 +18,7 @@ class DiagnosticoDto {
     required this.confianza,
     required this.fecha,
     this.descripcion,
+    this.contextoIA,
   });
 
   factory DiagnosticoDto.fromMap(Map<String, dynamic> m) => DiagnosticoDto(
@@ -26,6 +28,7 @@ class DiagnosticoDto {
         confianza: m['confianza'] as double,
         fecha: m['fecha'] as String,
         descripcion: m['descripcion'] as String?,
+        contextoIA: m['contexto_ia'] as String?,
       );
 
   factory DiagnosticoDto.fromEntity(Diagnostico e) => DiagnosticoDto(
@@ -35,6 +38,7 @@ class DiagnosticoDto {
         confianza: e.confianza,
         fecha: e.fecha.toIso8601String(),
         descripcion: e.descripcion,
+        contextoIA: e.contextoIA,
       );
 
   Map<String, dynamic> toMap() => {
@@ -44,6 +48,7 @@ class DiagnosticoDto {
         'confianza': confianza,
         'fecha': fecha,
         'descripcion': descripcion,
+        'contexto_ia': contextoIA,
       };
 
   Diagnostico toEntity({List<Producto> productosRecomendados = const []}) =>
@@ -55,6 +60,7 @@ class DiagnosticoDto {
         confianza: confianza,
         fecha: DateTime.parse(fecha),
         descripcion: descripcion,
+        contextoIA: contextoIA,
         productosRecomendados: productosRecomendados,
       );
 }

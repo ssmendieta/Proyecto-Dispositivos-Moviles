@@ -7,7 +7,7 @@
     "ingredientes": "Aqua, Cocamidopropyl Hydroxysultaine, Glycerin, Niacinamide, Ceramide NP, Ceramide AP, Ceramide EOP, Sodium Cocoyl Isethionate, Sodium Lauroyl Sarcosinate",
     "tipo_piel": "grasa",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_0/400/400",
     "como_usar": "Aplicar mañana y noche masajeando suavemente sobre el rostro húmedo y enjuagar con agua tibia"
   },
   {
@@ -18,7 +18,7 @@
     "ingredientes": "Aqua, Glycerin, Niacinamide, Dimethicone, Zinc PCA, LHA, Mannose, Salicylic Acid, Piroctone Olamine",
     "tipo_piel": "mixta",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://i5.walmartimages.com/seo/Effaclar-Duo-Plus-Unifiant-Medium-by-La-Roche-Posay-for-Unisex-1-3-oz-Treatment_fca0e35b-9f74-43ef-ac2b-223e52308ac6.c00d3b086bb505ada79390395645feae.jpeg",
     "como_usar": "Aplicar una capa fina mañana y noche sobre las zonas afectadas después de la limpieza"
   },
   {
@@ -29,7 +29,7 @@
     "ingredientes": "Aqua, Niacinamide, Pentylene Glycol, Zinc PCA, Propanediol, Dimethyl Isosorbide, Glycerin, Xanthan Gum",
     "tipo_piel": "grasa",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_2/400/400",
     "como_usar": "Aplicar unas gotas mañana y noche antes de la crema hidratante, evitar zona de ojos"
   },
   {
@@ -40,7 +40,7 @@
     "ingredientes": "Aqua, Dimethicone, Glycerin, Sodium Hyaluronate, Phenoxyethanol, Dimethiconol, Polyacrylamide",
     "tipo_piel": "grasa",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_3/400/400",
     "como_usar": "Aplicar diariamente sobre la piel limpia, ideal para usar después del sérum"
   },
   {
@@ -51,7 +51,7 @@
     "ingredientes": "Aqua, Butylene Glycol, Salicylic Acid, Camellia Oleifera Leaf Extract, Green Tea Extract, Sodium Hydroxide",
     "tipo_piel": "mixta",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_4/400/400",
     "como_usar": "Aplicar con disco de algodón después de la limpieza, solo por la noche, 2-3 veces por semana"
   },
   {
@@ -62,7 +62,7 @@
     "ingredientes": "Aqua, Cocamidopropyl Betaine, Salicylic Acid, PEG-7 Glyceryl Cocoate, Glycerin, Panthenol",
     "tipo_piel": "grasa",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_5/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel húmeda, masajear y enjuagar"
   },
   {
@@ -73,7 +73,7 @@
     "ingredientes": "Aqua, Zinc Sulfate, Sodium Chloride",
     "tipo_piel": "grasa",
     "condicion": "acne",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_6/400/400",
     "como_usar": "Pulverizar sobre el rostro limpio mañana y noche, dejar secar al aire"
   },
   {
@@ -84,7 +84,7 @@
     "ingredientes": "Aqua, Glycerin, Ceteareth-20, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Sodium Hyaluronate",
     "tipo_piel": "seca",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_7/400/400",
     "como_usar": "Aplicar generosamente sobre la piel limpia y seca, mañana y noche"
   },
   {
@@ -95,7 +95,7 @@
     "ingredientes": "Aqua, Butyrospermum Parkii Butter, Glycerin, Niacinamide, Manose, Shea Butter, Ceramide NP",
     "tipo_piel": "seca",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_8/400/400",
     "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca, especialmente después del baño"
   },
   {
@@ -106,7 +106,7 @@
     "ingredientes": "Aqua, Glycerin, Colloidal Oatmeal, Cetearyl Alcohol, Dimethicone, Petrolatum, Ceramide NP",
     "tipo_piel": "sensible",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_9/400/400",
     "como_usar": "Aplicar diariamente sobre la piel afectada, masajear suavemente hasta absorber"
   },
   {
@@ -117,7 +117,7 @@
     "ingredientes": "Aqua, Urea, Glycerin, Butyrospermum Parkii Butter, Ceramide NP, Lactic Acid, Squalane",
     "tipo_piel": "seca",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_10/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco"
   },
   {
@@ -128,7 +128,7 @@
     "ingredientes": "Aqua, Glycerin, Cetearyl Alcohol, Dimethicone, Tocopheryl Acetate, Panthenol, Almond Oil",
     "tipo_piel": "seca",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_11/400/400",
     "como_usar": "Aplicar diariamente sobre la piel limpia, especialmente después de la ducha"
   },
   {
@@ -139,7 +139,7 @@
     "ingredientes": "Aqua, Glycerin, Canola Oil, Paraffinum Liquidum, Sucrose Ester, Niacinamide, Ceramide NP",
     "tipo_piel": "seca",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_12/400/400",
     "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca"
   },
   {
@@ -150,7 +150,7 @@
     "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Avocado Persea Gratissima Oil, Sunflower Seed Oil, Ceramide NP",
     "tipo_piel": "sensible",
     "condicion": "eczema",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_13/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel limpia, preferiblemente después del baño"
   },
   {
@@ -161,7 +161,7 @@
     "ingredientes": "Aqua, Glycerin, Dimethicone, Ambophenol, Dextran Sulfate, Vitamin CG, Silica, Niacinamide",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_14/400/400",
     "como_usar": "Aplicar mañana y noche sobre las zonas afectadas después de la limpieza"
   },
   {
@@ -172,7 +172,7 @@
     "ingredientes": "Avène Thermal Spring Water, Glycerin, Cetearyl Alcohol, Shea Butter, Safflower Oil, Tocopherol",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_15/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio, evitando el contorno de ojos"
   },
   {
@@ -183,7 +183,7 @@
     "ingredientes": "Aqua, Azelaic Acid, Dimethicone, Isodecyl Neopentanoate, Caprylyl Methicone, Glycerin, Dimethicone Crosspolymer",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_16/400/400",
     "como_usar": "Aplicar una pequeña cantidad mañana y noche después del sérum y antes de la crema hidratante"
   },
   {
@@ -194,7 +194,7 @@
     "ingredientes": "Aqua, Cetyl Alcohol, Propylene Glycol, Sodium Lauryl Sulfate, Methylparaben, Propylparaben",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_17/400/400",
     "como_usar": "Aplicar sobre la piel seca masajeando suavemente, retirar con agua o un paño suave, mañana y noche"
   },
   {
@@ -205,7 +205,7 @@
     "ingredientes": "Aqua, Glycerin, Squalane, Licochalcone A, SymSitive, Ceramide NP, Dimethicone",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_18/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio, como tratamiento diario"
   },
   {
@@ -216,7 +216,7 @@
     "ingredientes": "Aqua, Glycerin, Paraffinum Liquidum, Canola Oil, Sucrose Ester, Niacinamide, Ambophenol",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_19/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco"
   },
   {
@@ -227,7 +227,7 @@
     "ingredientes": "Aqua, Dimethicone, Panthenol, Madecassoside, Zinc Gluconate, Manganese Gluconate, Shea Butter",
     "tipo_piel": "sensible",
     "condicion": "rosacea",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_20/400/400",
     "como_usar": "Aplicar sobre piel limpia y seca, mañana y noche, en las zonas irritadas"
   },
   {
@@ -238,7 +238,7 @@
     "ingredientes": "Ascorbic Acid, Squalane, Glycerin, Lauryl Laurate, Cetearyl Dimethicone Crosspolymer, Sodium Hyaluronate",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_21/400/400",
     "como_usar": "Aplicar una pequeña cantidad por la mañana, evitar zona de ojos, esperar absorción antes de crema hidratante"
   },
   {
@@ -249,7 +249,7 @@
     "ingredientes": "Aqua, Glycerin, Niacinamide, Ascorbyl Glucoside, Dimethicone, Piroctone Olamine, LHA",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_22/400/400",
     "como_usar": "Aplicar 3-4 gotas mañana y noche sobre el rostro limpio antes de la crema hidratante"
   },
   {
@@ -260,7 +260,7 @@
     "ingredientes": "Aqua, Niacinamide, Ascorbyl Tetraisopalmitate, Glycolic Acid, Kojic Acid, Licorice Extract, Shea Butter",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_23/400/400",
     "como_usar": "Aplicar mañana y noche sobre la zona afectada, con protección solar obligatoria durante el día"
   },
   {
@@ -271,7 +271,7 @@
     "ingredientes": "Aqua, Glycerin, Isobutylamido Thiazolyl Resorcinol (Thiamidol), Dimethicone, Cetearyl Alcohol, Shea Butter",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_24/400/400",
     "como_usar": "Aplicar mañana y noche sobre las zonas con manchas, acompañar de protector solar"
   },
   {
@@ -282,7 +282,7 @@
     "ingredientes": "Aqua, Ascorbic Acid, Glycerin, Tocopherol, Ferulic Acid, Sodium Hyaluronate, Laureth-23",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_25/400/400",
     "como_usar": "Aplicar 4-5 gotas por la mañana sobre la piel seca, después de la limpieza facial"
   },
   {
@@ -293,7 +293,7 @@
     "ingredientes": "Aqua, Glycerin, Retinol, Ascorbyl Glucoside, Dimethicone, Propanediol, Vichy Mineralizing Water",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_26/400/400",
     "como_usar": "Aplicar 2-3 gotas por la noche, evitar zona de ojos, usar protección solar al día siguiente"
   },
   {
@@ -304,7 +304,7 @@
     "ingredientes": "Aqua, Zinc Oxide, Titanium Dioxide, Dimethicone, Glycerin, Niacinamide, Fernblock LC",
     "tipo_piel": "normal",
     "condicion": "melasma",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_27/400/400",
     "como_usar": "Aplicar generosamente cada mañana como última capa de la rutina facial, reaplicar cada 2 horas"
   },
   {
@@ -315,7 +315,7 @@
     "ingredientes": "Aqua, Salicylic Acid, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Niacinamide",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_28/400/400",
     "como_usar": "Aplicar sobre las zonas afectadas 1-2 veces al día, masajear suavemente"
   },
   {
@@ -326,7 +326,7 @@
     "ingredientes": "Aqua, Urea, Glycerin, Ceramide NP, Lactic Acid, Shea Butter, Squalane, Lanolin Alcohol",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_29/400/400",
     "como_usar": "Aplicar diariamente sobre la piel limpia, preferiblemente después de la ducha"
   },
   {
@@ -337,7 +337,7 @@
     "ingredientes": "Aqua, Glycerin, Niacinamide, Coco-Glucoside, Shea Butter, Sodium Cocoamphoacetate, Manosa",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_30/400/400",
     "como_usar": "Aplicar sobre la piel húmeda durante la ducha, masajear y enjuagar"
   },
   {
@@ -348,7 +348,7 @@
     "ingredientes": "Aqua, Glycerin, Sunflower Seed Oil, Cetearyl Alcohol, Niacinamide, Panthenol, Ceramide NP, Vitamin E",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_31/400/400",
     "como_usar": "Aplicar diariamente sobre la piel limpia y seca, 2 veces al día si es necesario"
   },
   {
@@ -359,7 +359,7 @@
     "ingredientes": "Aqua, Cannabis Sativa Seed Oil, Glycerin, Avena Sativa Kernel Flour, Dimethicone, Cetearyl Alcohol",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_32/400/400",
     "como_usar": "Aplicar generosamente sobre las zonas afectadas, masajear hasta su absorción"
   },
   {
@@ -370,7 +370,7 @@
     "ingredientes": "Aqua, Glycerin, Canola Oil, Paraffinum Liquidum, Sucrose Ester, Niacinamide, Ceramide NP",
     "tipo_piel": "seca",
     "condicion": "psoriasis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_33/400/400",
     "como_usar": "Aplicar 1-2 veces al día sobre la piel limpia y seca"
   },
   {
@@ -381,7 +381,7 @@
     "ingredientes": "Aqua, Glycerin, Squalane, Dimethicone, Niacinamide, Ceramide NP, Allantoin, Vitamin CG",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_34/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco"
   },
   {
@@ -392,7 +392,7 @@
     "ingredientes": "Aqua, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Dimethicone, Sodium Hyaluronate, Niacinamide",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_35/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio, antes del protector solar si es de día"
   },
   {
@@ -403,7 +403,7 @@
     "ingredientes": "Aqua, Sodium Hyaluronate, Panthenol, Glycerin, Pentylene Glycol, Propanediol, Urea",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_36/400/400",
     "como_usar": "Aplicar unas gotas mañana y noche sobre la piel húmeda antes de la crema hidratante"
   },
   {
@@ -414,7 +414,7 @@
     "ingredientes": "Aqua, Glycerin, Dimethicone, Cetearyl Alcohol, Tocopheryl Acetate, Panthenol, Almond Oil",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_37/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel limpia y seca"
   },
   {
@@ -425,7 +425,7 @@
     "ingredientes": "Aqua, Glycerin, Dimethicone, Cetyl Alcohol, Glyceryl Stearate, PEG-100 Stearate, Phenoxyethanol",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_38/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel limpia con movimientos ascendentes"
   },
   {
@@ -436,7 +436,7 @@
     "ingredientes": "Aqua, Glycerin, Sodium Hyaluronate, Vichy Mineralizing Water, Carbomer, Phenoxyethanol",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_39/400/400",
     "como_usar": "Aplicar 2-3 gotas mañana y noche sobre el rostro limpio antes de la crema hidratante"
   },
   {
@@ -447,7 +447,7 @@
     "ingredientes": "Aqua, Cucumber Extract, Glycerin, Caprylyl Glycol, PEG-7 Glyceryl Cocoate, Sodium Hydroxide",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_40/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel húmeda, masajear suavemente y enjuagar con abundante agua"
   },
   {
@@ -458,7 +458,7 @@
     "ingredientes": "Avène Thermal Spring Water, Glycerin, Safflower Oil, Cetearyl Alcohol, Carbomer, Tocopherol",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_41/400/400",
     "como_usar": "Aplicar mañana y noche sobre el rostro limpio y seco"
   },
   {
@@ -469,7 +469,7 @@
     "ingredientes": "Aqua, Panthenol, Madecassoside, Zinc Gluconate, Manganese Gluconate, Copper Gluconate, Dimethicone",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_42/400/400",
     "como_usar": "Aplicar sobre la piel limpia y seca 1-2 veces al día en las zonas irritadas"
   },
   {
@@ -480,7 +480,7 @@
     "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Ceramide NP, Licochalcone A, Shea Butter, Squalane",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_43/400/400",
     "como_usar": "Aplicar diariamente sobre las zonas afectadas, especialmente después del baño"
   },
   {
@@ -491,7 +491,7 @@
     "ingredientes": "Aqua, Glycerin, Caprylic/Capric Triglyceride, Avocado Oil, Sunflower Oil, Shea Butter, Vitamin E",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_44/400/400",
     "como_usar": "Aplicar mañana y noche sobre la piel limpia con suaves toques"
   },
   {
@@ -502,7 +502,7 @@
     "ingredientes": "Aqua, Glycerin, Dimethicone, Cetearyl Alcohol, Niacinamide, Panthenol, Tocopherol, Ceramide NP",
     "tipo_piel": "sensible",
     "condicion": "dermatitis",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_45/400/400",
     "como_usar": "Aplicar generosamente sobre la piel limpia y seca, 1-2 veces al día"
   },
   {
@@ -513,7 +513,7 @@
     "ingredientes": "Aqua, Octocrylene, Glycerin, Dimethicone, Butyl Methoxydibenzoylmethane, Alcohol Denat, Aloe Vera",
     "tipo_piel": "mixta",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_46/400/400",
     "como_usar": "Aplicar generosamente 15 minutos antes de la exposición solar, reaplicar cada 2 horas"
   },
   {
@@ -524,7 +524,7 @@
     "ingredientes": "Aqua, Glycerin, Dimethicone, Octocrylene, Butyl Methoxydibenzoylmethane, Titanium Dioxide, Niacinamide",
     "tipo_piel": "sensible",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_47/400/400",
     "como_usar": "Aplicar cada mañana como último paso de la rutina facial, reaplicar cada 2 horas si hay exposición solar"
   },
   {
@@ -535,7 +535,7 @@
     "ingredientes": "Aqua, Caffeine, Epigallocatechin Gallatyl Glucoside, Dimethyl Isosorbide, Glycerin, Propanediol",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_48/400/400",
     "como_usar": "Aplicar una pequeña cantidad en el contorno de ojos mañana y noche"
   },
   {
@@ -546,7 +546,7 @@
     "ingredientes": "Aqua, Glycerin, Ceramide NP, Ceramide AP, Ceramide EOP, Niacinamide, Sodium Hyaluronate, Dimethicone",
     "tipo_piel": "normal",
     "condicion": "normal",
-    "imagen_path": "assets/productos/placeholder.png",
+    "imagen_path": "https://picsum.photos/seed/producto_49/400/400",
     "como_usar": "Aplicar una pequeña cantidad con el dedo anular en el contorno de ojos, mañana y noche"
   }
 ]

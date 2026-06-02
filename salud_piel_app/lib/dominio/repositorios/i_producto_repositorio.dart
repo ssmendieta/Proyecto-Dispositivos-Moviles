@@ -10,4 +10,5 @@ abstract class IProductoRepositorio {
   Future<Resultado<Producto>> buscarPorNombre(String nombre);
   Future<Resultado<Producto>> insertar(Producto producto);
   Future<Resultado<Producto>> actualizar(Producto producto);
+  Future<void> actualizarImagenPath(int productoId, String imagenPath);
 }

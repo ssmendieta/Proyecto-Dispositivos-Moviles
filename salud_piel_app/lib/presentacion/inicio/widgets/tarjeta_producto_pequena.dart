@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 
 class TarjetaProductoPequena extends StatelessWidget {
   final String nombre;
   final String marca;
+  final String? imagenPath;
 
   const TarjetaProductoPequena({
     super.key,
     required this.nombre,
     required this.marca,
+    this.imagenPath,
   });
 
   @override
@@ -23,14 +26,11 @@ class TarjetaProductoPequena extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: 120,
-            decoration: BoxDecoration(
-              color: ColoresApp.fondo,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Center(
-              child: Icon(Icons.spa_outlined, size: 42),
+            child: ImagenProducto(
+              imagenPath: imagenPath,
+              borderRadius: 14,
             ),
           ),
 

@@ -2,10 +2,12 @@ import 'package:get/get.dart';
 
 import '../../dominio/casos_uso/autenticacion_caso_uso.dart';
 import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
+import '../../dominio/casos_uso/escaneo_caso_uso.dart';
 import '../../dominio/casos_uso/producto_caso_uso.dart';
 import '../../dominio/casos_uso/rutina_caso_uso.dart';
 import '../../dominio/repositorios/i_auth_repositorio.dart';
 import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
+import '../../dominio/repositorios/i_ml_servicio.dart';
 import '../../dominio/repositorios/i_producto_repositorio.dart';
 import '../../dominio/repositorios/i_rutina_repositorio.dart';
 import '../autenticacion/controladores/login_controlador.dart';
@@ -40,6 +42,10 @@ class AppBinding extends Bindings {
       repositorio: Get.find<IProductoRepositorio>(),
     ));
 
+    Get.put<EscaneoCasoUso>(EscaneoCasoUso(
+      mlServicio: Get.find<IMlServicio>(),
+    ));
+
     Get.put<SesionControlador>(SesionControlador(
       casoUso: Get.find<AutenticacionCasoUso>(),
     ));
@@ -55,7 +61,9 @@ class AppBinding extends Bindings {
     Get.put<RegistroControlador>(RegistroControlador(
       casoUso: Get.find<AutenticacionCasoUso>(),
     ));
-    Get.put<EscaneoControlador>(EscaneoControlador());
+    Get.lazyPut<EscaneoControlador>(() => EscaneoControlador(
+      casoUso: Get.find<EscaneoCasoUso>(),
+    ), fenix: true);
     Get.put<ProductosControlador>(ProductosControlador(
       casoUso: Get.find<ProductoCasoUso>(),
     ));

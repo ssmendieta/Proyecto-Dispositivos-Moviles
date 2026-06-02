@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../dominio/entidades/producto.dart';
+import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 import '../controladores/productos_controlador.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
@@ -172,17 +173,10 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: ColoresApp.fondo,
-                  borderRadius: BorderRadius.circular(14),
+                child: ImagenProducto(
+                  imagenPath: producto.imagenPath,
+                  borderRadius: 14,
                 ),
-                child: const Icon(
-                  Icons.spa_outlined,
-                  size: 42,
-                ),
-              ),
             ),
 
             const SizedBox(height: 10),

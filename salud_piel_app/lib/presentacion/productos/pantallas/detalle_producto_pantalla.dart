@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../dominio/entidades/producto.dart';
-import '../../../nucleo/servicios/gemini_servicio.dart';
+import '../../../datos/servicios/gemini_servicio.dart';
+import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
 
@@ -22,6 +25,7 @@ class DetalleProductoPantalla extends StatefulWidget {
 class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
   DetalleProductoIA? _detalleIA;
   bool _cargando = false;
+  String? _errorIA;
 
   @override
   void initState() {
@@ -51,12 +55,27 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       } catch (_) {}
     }
 
+    _errorIA = null;
     setState(() => _cargando = true);
-    final gemini = GeminiServicio();
-    final detalle = await gemini.detalleProductoIA(producto);
-    if (detalle != null) {
-      _detalleIA = detalle;
+
+    final gemini = Get.find<GeminiServicio>();
+    gemini.ultimoError = null;
+
+    try {
+      final detalle = await gemini.detalleProductoIA(producto).timeout(
+        const Duration(seconds: 20),
+      );
+      if (detalle != null) {
+        _detalleIA = detalle;
+      } else {
+        _errorIA = gemini.ultimoError ?? 'No se pudo obtener información del producto.';
+      }
+    } on TimeoutException {
+      _errorIA = 'La consulta tardó demasiado. Verifica tu conexión e intenta de nuevo.';
+    } catch (e) {
+      _errorIA = 'Error inesperado: $e';
     }
+
     if (mounted) setState(() => _cargando = false);
   }
 
@@ -113,6 +132,9 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
             ] else if (_cargando) ...[
               const SizedBox(height: 20),
               _seccionCargando(),
+            ] else if (_errorIA != null) ...[
+              const SizedBox(height: 20),
+              _seccionError(_errorIA!),
             ],
             const SizedBox(height: 24),
             SizedBox(
@@ -157,18 +179,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       ),
       child: Column(
         children: [
-          Container(
-            height: 120,
-            width: 120,
-            decoration: BoxDecoration(
-              color: ColoresApp.fondo,
-              borderRadius: BorderRadius.circular(22),
-            ),
-            child: Icon(
-              Icons.spa_outlined,
-              size: 60,
-              color: ColoresApp.primario,
-            ),
+          ImagenProducto(
+            imagenPath: producto.imagenPath,
+            size: 120,
+            borderRadius: 22,
           ),
           const SizedBox(height: 24),
           Text(
@@ -359,6 +373,45 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           Text(
             'Analizando producto con IA...',
             style: TextStyle(color: Color(0xFF888888), fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _seccionError(String mensaje) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.cloud_off, size: 40, color: Color(0xFFE85757)),
+          const SizedBox(height: 12),
+          Text(
+            mensaje,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF555555),
+              height: 1.5,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: () => _cargarDetalleIA(),
+            icon: const Icon(Icons.refresh),
+            label: const Text('Reintentar'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: const Color(0xFF7B5EA7),
+              side: const BorderSide(color: Color(0xFF7B5EA7)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           ),
         ],
       ),
