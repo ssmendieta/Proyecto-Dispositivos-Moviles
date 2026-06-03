@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../../datos/servicios/ml_servicio.dart';
 import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
+import '../../dominio/casos_uso/gemini_caso_uso.dart';
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
 import '../autenticacion/pantallas/login_pantalla.dart';
@@ -64,6 +65,7 @@ class AppPaginas {
         final args = Get.arguments;
         final controller = DiagnosticoControlador(
           casoUso: Get.find<DiagnosticoCasoUso>(),
+          geminiCasoUso: Get.find<GeminiCasoUso>(),
         );
         if (args is ResultadoAnalisis) {
           controller.cargarDesdeResultadoML(args);

@@ -7,6 +7,8 @@ import '../../dominio/utilidades/resultado.dart';
 class RutinaCasoUso {
   final IRutinaRepositorio _repositorio;
 
+  static const int _maxProductosPorRutina = 10;
+
   RutinaCasoUso({required IRutinaRepositorio repositorio})
       : _repositorio = repositorio;
 
@@ -18,6 +20,10 @@ class RutinaCasoUso {
     MomentoRutina momento,
     Producto producto,
   ) async {
+    if (producto.nombre.isEmpty) {
+      return const Fracaso('El producto debe tener un nombre');
+    }
+
     final rutinas = await _repositorio.listar();
     if (rutinas case Exito<List<Rutina>>()) {
       var rutina = rutinas.data.where((r) => r.momento == momento).firstOrNull;
@@ -36,6 +42,15 @@ class RutinaCasoUso {
       }
 
       if (rutina != null) {
+        final yaExiste = rutina.productos.any((rp) => rp.producto.id == producto.id);
+        if (yaExiste) {
+          return Fracaso('Este producto ya está en la rutina');
+        }
+
+        if (rutina.productos.length >= _maxProductosPorRutina) {
+          return Fracaso('La rutina ya tiene el máximo de $_maxProductosPorRutina productos');
+        }
+
         final orden = rutina.productos.length;
         return _repositorio.agregarProducto(rutina.id, producto.id, orden);
       }
@@ -47,11 +62,23 @@ class RutinaCasoUso {
     int rutinaId,
     int productoId,
     bool completado,
-  ) {
+  ) async {
+    if (rutinaId <= 0) {
+      return const Fracaso('El identificador de la rutina no es válido');
+    }
+    if (productoId <= 0) {
+      return const Fracaso('El identificador del producto no es válido');
+    }
     return _repositorio.marcarCompletado(rutinaId, productoId, completado);
   }
 
-  Future<Resultado<Null>> quitarProducto(int rutinaId, int productoId) {
+  Future<Resultado<Null>> quitarProducto(int rutinaId, int productoId) async {
+    if (rutinaId <= 0) {
+      return const Fracaso('El identificador de la rutina no es válido');
+    }
+    if (productoId <= 0) {
+      return const Fracaso('El identificador del producto no es válido');
+    }
     return _repositorio.quitarProducto(rutinaId, productoId);
   }
 
@@ -59,6 +86,12 @@ class RutinaCasoUso {
     int rutinaId,
     List<RutinaProducto> productos,
   ) async {
+    if (rutinaId <= 0) {
+      return const Fracaso('El identificador de la rutina no es válido');
+    }
+    if (productos.isEmpty) {
+      return const Fracaso('No hay productos para reordenar');
+    }
     for (var i = 0; i < productos.length; i++) {
       final rp = productos[i];
       if (rp.orden != i) {

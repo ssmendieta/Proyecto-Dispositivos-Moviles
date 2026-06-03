@@ -12,11 +12,17 @@ class AutenticacionCasoUso {
     if (username.isEmpty || email.isEmpty || password.isEmpty) {
       return const Fracaso('Todos los campos son obligatorios');
     }
-    if (!email.contains('@')) {
+    if (username.trim().length < 3) {
+      return const Fracaso('El nombre de usuario debe tener al menos 3 caracteres');
+    }
+    if (email.trim().isEmpty || !email.contains('@') || !email.contains('.')) {
       return const Fracaso('Correo electrónico inválido');
     }
-    if (password.length < 6) {
+    if (password.trim().length < 6) {
       return const Fracaso('La contraseña debe tener al menos 6 caracteres');
+    }
+    if (password == username || password == email) {
+      return const Fracaso('La contraseña no puede ser igual al usuario o correo');
     }
     return _repositorio.registrar(username, email, password);
   }
@@ -25,7 +31,7 @@ class AutenticacionCasoUso {
     if (email.isEmpty || password.isEmpty) {
       return const Fracaso('Ingresa tu correo y contraseña');
     }
-    if (!email.contains('@')) {
+    if (email.trim().isEmpty || !email.contains('@')) {
       return const Fracaso('Correo electrónico inválido');
     }
     return _repositorio.login(email, password);

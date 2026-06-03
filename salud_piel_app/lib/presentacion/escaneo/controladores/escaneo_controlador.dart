@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../dominio/casos_uso/escaneo_caso_uso.dart';
+import '../../../dominio/utilidades/resultado.dart';
+import '../../../datos/servicios/ml_servicio.dart';
 import '../../rutas/app_rutas.dart';
 
 class EscaneoControlador extends GetxController {
@@ -70,17 +72,21 @@ class EscaneoControlador extends GetxController {
       final resultado = await _casoUso
           .analizar(archivo)
           .timeout(const Duration(seconds: 45));
-      Get.toNamed(AppRutas.diagnostico, arguments: resultado);
+
+      switch (resultado) {
+        case Exito<ResultadoAnalisis>():
+          Get.toNamed(AppRutas.diagnostico, arguments: resultado.data);
+        case Fracaso<ResultadoAnalisis>():
+          Get.snackbar(
+            'Error',
+            resultado.mensaje,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+      }
     } on TimeoutException {
       Get.snackbar(
         'Tiempo agotado',
         'El análisis tardó demasiado. Prueba con una imagen más clara.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } catch (e) {
-      Get.snackbar(
-        'Error en análisis',
-        'No se pudo analizar la imagen: $e',
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {

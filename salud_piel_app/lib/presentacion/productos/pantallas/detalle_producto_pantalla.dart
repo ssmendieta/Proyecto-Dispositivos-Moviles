@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../dominio/casos_uso/gemini_caso_uso.dart';
+import '../../../dominio/entidades/detalle_producto_ia.dart';
 import '../../../dominio/entidades/producto.dart';
-import '../../../datos/servicios/gemini_servicio.dart';
 import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
@@ -58,17 +59,16 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
     _errorIA = null;
     setState(() => _cargando = true);
 
-    final gemini = Get.find<GeminiServicio>();
-    gemini.ultimoError = null;
+    final geminiCasoUso = Get.find<GeminiCasoUso>();
 
     try {
-      final detalle = await gemini.detalleProductoIA(producto).timeout(
+      final detalle = await geminiCasoUso.analizarProducto(producto).timeout(
         const Duration(seconds: 20),
       );
       if (detalle != null) {
         _detalleIA = detalle;
       } else {
-        _errorIA = gemini.ultimoError ?? 'No se pudo obtener información del producto.';
+        _errorIA = geminiCasoUso.ultimoError ?? 'No se pudo obtener información del producto.';
       }
     } on TimeoutException {
       _errorIA = 'La consulta tardó demasiado. Verifica tu conexión e intenta de nuevo.';

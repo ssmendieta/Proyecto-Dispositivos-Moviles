@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../dominio/casos_uso/autenticacion_caso_uso.dart';
 import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../dominio/casos_uso/escaneo_caso_uso.dart';
+import '../../dominio/casos_uso/gemini_caso_uso.dart';
 import '../../dominio/casos_uso/producto_caso_uso.dart';
 import '../../dominio/casos_uso/rutina_caso_uso.dart';
 import '../../dominio/repositorios/i_auth_repositorio.dart';
 import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
+import '../../dominio/repositorios/i_gemini_servicio.dart';
 import '../../dominio/repositorios/i_ml_servicio.dart';
 import '../../dominio/repositorios/i_producto_repositorio.dart';
 import '../../dominio/repositorios/i_rutina_repositorio.dart';
@@ -44,6 +46,10 @@ class AppBinding extends Bindings {
 
     Get.put<EscaneoCasoUso>(EscaneoCasoUso(
       mlServicio: Get.find<IMlServicio>(),
+    ));
+
+    Get.put<GeminiCasoUso>(GeminiCasoUso(
+      servicio: Get.find<IGeminiServicio>(),
     ));
 
     Get.put<SesionControlador>(SesionControlador(

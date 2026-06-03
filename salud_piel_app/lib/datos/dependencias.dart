@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import '../../datos/datos/app_database.dart';
-import '../../datos/repositorios/auth_repositorio.dart';
-import '../../datos/repositorios/diagnostico_repositorio.dart';
-import '../../datos/repositorios/producto_repositorio.dart';
-import '../../datos/repositorios/rutina_repositorio.dart';
-import '../../datos/servicios/gemini_servicio.dart';
-import '../../datos/servicios/ml_servicio.dart';
-import '../../datos/servicios/unsplash_servicio.dart';
-import '../../dominio/repositorios/i_auth_repositorio.dart';
-import '../../dominio/repositorios/i_diagnostico_repositorio.dart';
-import '../../dominio/repositorios/i_ml_servicio.dart';
-import '../../dominio/repositorios/i_producto_repositorio.dart';
-import '../../dominio/repositorios/i_rutina_repositorio.dart';
-import '../../dominio/utilidades/resultado.dart';
+import 'datos/app_database.dart';
+import 'repositorios/auth_repositorio.dart';
+import 'repositorios/diagnostico_repositorio.dart';
+import 'repositorios/producto_repositorio.dart';
+import 'repositorios/rutina_repositorio.dart';
+import 'servicios/gemini_servicio.dart';
+import 'servicios/ml_servicio.dart';
+import 'servicios/unsplash_servicio.dart';
+import '../dominio/repositorios/i_auth_repositorio.dart';
+import '../dominio/repositorios/i_diagnostico_repositorio.dart';
+import '../dominio/repositorios/i_gemini_servicio.dart';
+import '../dominio/repositorios/i_ml_servicio.dart';
+import '../dominio/repositorios/i_producto_repositorio.dart';
+import '../dominio/repositorios/i_rutina_repositorio.dart';
+import '../dominio/utilidades/resultado.dart';
 
 class Dependencias {
   static Future<void> init() async {
@@ -35,7 +36,7 @@ class Dependencias {
     await mlServicio.init();
     Get.put<IMlServicio>(mlServicio);
 
-    Get.put<GeminiServicio>(GeminiServicio(
+    Get.put<IGeminiServicio>(GeminiServicio(
       repositorio: Get.find<IProductoRepositorio>(),
     ));
   }
