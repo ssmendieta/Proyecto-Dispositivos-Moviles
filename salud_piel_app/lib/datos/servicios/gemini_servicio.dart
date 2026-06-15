@@ -32,7 +32,7 @@ class GeminiServicio implements IGeminiServicio {
     _cargarKeys();
   }
 
-  void _cargarKeys() {
+  /*void _cargarKeys() {
     for (int i = 1;; i++) {
       final key = dotenv.env['GEMINI_API_KEY${i == 1 ? '' : '_$i'}'];
       if (key == null || key.isEmpty || key == 'tu_api_key_de_gemini_aqui') break;
@@ -44,7 +44,7 @@ class GeminiServicio implements IGeminiServicio {
         _apiKeys.add(key);
       }
     }
-  }
+  }*/
 
   void _rotarKey() {
     _model = null;
@@ -135,7 +135,7 @@ class GeminiServicio implements IGeminiServicio {
     }
 
     final prompt = '''
-Eres un dermatólogo virtual. Dada la condición de piel "${condicion.displayName}" con ${(confianza * 100).round()}% de confianza, proporciona información útil.
+Eres un asistente educativo de cuidado de la piel. Dada la condición visual orientativa "${condicion.displayName}", proporciona información útil sin afirmar un diagnóstico médico definitivo.
 
 Responde SOLO con JSON sin markdown ni caracteres de escape:
 {

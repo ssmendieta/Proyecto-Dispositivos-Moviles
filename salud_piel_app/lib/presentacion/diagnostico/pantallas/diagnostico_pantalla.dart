@@ -68,7 +68,9 @@ class DiagnosticoPantalla extends StatelessWidget {
 
                   Obx(
                     () => Text(
-                      controller.condicion.value.displayName,
+                      controller.tituloResultado.value.isNotEmpty
+                        ? controller.tituloResultado.value
+                        : controller.condicion.value.displayName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: ColoresApp.textoPrincipal,
@@ -78,15 +80,13 @@ class DiagnosticoPantalla extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 10),
-
-                  Obx(
-                    () => Text(
-                      '${(controller.confianza.value * 100).round()}% Confianza',
-                      style: TextStyle(
-                        color: ColoresApp.primario,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  const SizedBox(height: 6),
+                  
+                  Text(
+                    'Resultado orientativo',
+                    style: TextStyle(
+                      color: ColoresApp.textoSecundario,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

@@ -76,12 +76,13 @@ class MlServicio implements IMlServicio {
 
     final tipoInicial = await _predecirTipoPiel(imagen);
 
-    final deteccionesAcne = await _detectarConYolo(
+    /* deteccionesAcne = await _detectarConYolo(
       imagenOriginal: imagen,
       interpreter: _acneInterpreter!,
       labels: _acneLabels,
       origenModelo: 'acne_yolo',
-    );
+    );*/
+    final deteccionesAcne = <DeteccionPiel>[];
 
     final deteccionesCondiciones = await _detectarConYolo(
       imagenOriginal: imagen,

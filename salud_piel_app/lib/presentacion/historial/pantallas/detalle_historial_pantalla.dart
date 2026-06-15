@@ -29,7 +29,6 @@ class DetalleHistorialPantalla extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fecha = DateFormat('dd MMM yyyy - HH:mm').format(diagnostico.fecha);
-    final confianza = (diagnostico.confianza * 100).round();
     final imagenPath = diagnostico.imagenPath;
     final descripcion = diagnostico.descripcion ?? '';
     final contexto = _contextoIA;
@@ -92,7 +91,7 @@ class DetalleHistorialPantalla extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      '$confianza% de confianza',
+                      'Análisis visual orientativo',
                       style: TextStyle(
                         color: ColoresApp.primario,
                         fontWeight: FontWeight.bold,

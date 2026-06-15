@@ -153,34 +153,14 @@ class TarjetaHistorial extends StatelessWidget {
                             ),
 
                             const SizedBox(height: 14),
-
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: LinearProgressIndicator(
-                                      value: progreso,
-                                      minHeight: 7,
-                                      backgroundColor: Colors.grey.shade200,
-                                      valueColor: AlwaysStoppedAnimation(
-                                        ColoresApp.primario,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                const SizedBox(width: 10),
-
-                                Text(
-                                  '${(progreso * 100).round()}% Confianza',
-                                  style: TextStyle(
-                                    color: ColoresApp.primario,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
+                            
+                            Text(
+                              'Resultado guardado',
+                              style: TextStyle(
+                                color: ColoresApp.primario,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
                             ),
 
                             const SizedBox(height: 6),

@@ -34,9 +34,20 @@ class DiagnosticoControlador extends GetxController {
   final informacionCondicion = Rxn<InformacionCondicion>();
   final cargandoInfoIA = false.obs;
 
+  final tituloResultado = ''.obs;
+
   void cargarDesdeResultadoML(ResultadoAnalisis r) {
-    condicion.value = _mapearCondicion(r.tipoPiel);
-    confianza.value = r.confianzaTipoPiel;
+    final tieneDetecciones = r.detecciones.isNotEmpty;
+    
+    tituloResultado.value = tieneDetecciones
+      ? r.condicionPrincipal
+      : 'Sin condición visible';
+
+    confianza.value = tieneDetecciones
+      ? r.confianzaCondicionPrincipal
+      : r.confianzaTipoPiel;
+
+    condicion.value = _mapearCondicionPorTexto(tituloResultado.value);
     severidad.value = r.severidadGeneral;
     imagenPath.value = r.imagenPath;
     deteccionesResumen.value = r.conteoPorCondicion;
@@ -57,6 +68,9 @@ class DiagnosticoControlador extends GetxController {
       partes.add('\n${r.aclaraciones.join('\n')}');
     }
     descripcion.value = partes.join('\n');
+    partes.add(
+      'Tipo de piel estimado: ${_capitalizar(r.tipoPiel)} (${(r.confianzaTipoPiel * 100).round()}%).',
+    );
   }
 
   Future<void> cargarInformacionIA() async {
@@ -212,18 +226,34 @@ class DiagnosticoControlador extends GetxController {
     }
   }
 
-  CondicionPiel _mapearCondicion(String tipoPiel) {
-    switch (tipoPiel.toLowerCase()) {
-      case 'grasa':
-        return CondicionPiel.acne;
-      case 'seca':
-        return CondicionPiel.eczema;
-      case 'mixta':
-        return CondicionPiel.dermatitis;
-      default:
-        return CondicionPiel.normal;
-    }
+  String _capitalizar(String texto) {
+  if (texto.isEmpty) return texto;
+  return texto[0].toUpperCase() + texto.substring(1).toLowerCase();
+}
+
+CondicionPiel _mapearCondicionPorTexto(String texto) {
+  final t = texto.toLowerCase();
+
+  if (t.contains('acn') || t.contains('acne')) {
+    return CondicionPiel.acne;
   }
+
+  if (t.contains('mancha') || t.contains('dark') || t.contains('spot')) {
+    return CondicionPiel.melasma;
+  }
+
+  if (t.contains('rojez') ||
+      t.contains('redness') ||
+      t.contains('enrojecimiento')) {
+    return CondicionPiel.rosacea;
+  }
+
+  if (t.contains('sin condición') || t.contains('normal')) {
+    return CondicionPiel.normal;
+  }
+
+  return CondicionPiel.otro;
+}
 
   void cargarResultado({
     required CondicionPiel cond,
