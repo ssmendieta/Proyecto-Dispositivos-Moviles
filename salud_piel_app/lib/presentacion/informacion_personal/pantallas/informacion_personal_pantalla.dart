@@ -1,15 +1,111 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constantes/colores.dart';
-import '../controladores/informacion_personal_controlador.dart';
+import '../../rutas/app_rutas.dart';
+import '../controladores/informacion_personal_provider.dart';
 
-class InformacionPersonalPantalla
-    extends GetView<InformacionPersonalControlador> {
+class InformacionPersonalPantalla extends ConsumerStatefulWidget {
   const InformacionPersonalPantalla({super.key});
 
   @override
+  ConsumerState<InformacionPersonalPantalla> createState() =>
+      _InformacionPersonalPantallaState();
+}
+
+class _InformacionPersonalPantallaState
+    extends ConsumerState<InformacionPersonalPantalla> {
+  final edadController = TextEditingController();
+  final horaDormirController = TextEditingController();
+  final alergiasController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarDatosGuardados();
+  }
+
+  @override
+  void dispose() {
+    edadController.dispose();
+    horaDormirController.dispose();
+    alergiasController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _cargarDatosGuardados() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final edad = prefs.getString('info_edad') ?? '';
+    final hora = prefs.getString('info_hora_dormir') ?? '';
+    final alergias = prefs.getString('info_alergias') ?? '';
+    final piel = prefs.getString('info_tipo_piel') ?? '';
+
+    if (!mounted) return;
+
+    edadController.text = edad;
+    horaDormirController.text = hora;
+    alergiasController.text = alergias;
+
+    final tiposPiel = ref.read(tiposPielInformacionProvider);
+
+    if (piel.isNotEmpty && tiposPiel.contains(piel)) {
+      ref.read(tipoPielInformacionProvider.notifier).state = piel;
+    }
+  }
+
+  void _mostrarMensaje(String titulo, String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$titulo\n$mensaje'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _continuar() async {
+    final edad = edadController.text.trim();
+    final horaDormir = horaDormirController.text.trim();
+    final tipoPiel = ref.read(tipoPielInformacionProvider);
+
+    if (edad.isEmpty || horaDormir.isEmpty) {
+      _mostrarMensaje(
+        'Campos incompletos',
+        'Ingresa tu edad y hora aproximada de dormir.',
+      );
+      return;
+    }
+
+    ref.read(cargandoInformacionPersonalProvider.notifier).state = true;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('info_edad', edad);
+    await prefs.setString('info_hora_dormir', horaDormir);
+    await prefs.setString(
+      'info_alergias',
+      alergiasController.text.trim(),
+    );
+    await prefs.setString('info_tipo_piel', tipoPiel);
+
+    if (!mounted) return;
+
+    ref.read(cargandoInformacionPersonalProvider.notifier).state = false;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRutas.inicio,
+      (route) => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final tipoPiel = ref.watch(tipoPielInformacionProvider);
+    final tiposPiel = ref.watch(tiposPielInformacionProvider);
+    final cargando = ref.watch(cargandoInformacionPersonalProvider);
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -63,93 +159,116 @@ class InformacionPersonalPantalla
                         ),
                       ],
                     ),
-                    child: Obx(
-                      () => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _label('Edad'),
-                          _campo(
-                            controller: controller.edadController,
-                            hint: 'Ej. 22',
-                            icono: Icons.cake_outlined,
-                            keyboardType: TextInputType.number,
-                          ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _label('Edad'),
 
-                          const SizedBox(height: 16),
+                        _campo(
+                          controller: edadController,
+                          hint: 'Ej. 22',
+                          icono: Icons.cake_outlined,
+                          keyboardType: TextInputType.number,
+                        ),
 
-                          _label('Tipo de piel'),
-                          DropdownButtonFormField<String>(
-                            value: controller.tipoPiel.value,
-                            items: controller.tiposPiel
-                                .map(
-                                  (tipo) => DropdownMenuItem(
-                                    value: tipo,
-                                    child: Text(tipo),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (valor) {
-                              if (valor != null) {
-                                controller.cambiarTipoPiel(valor);
-                              }
-                            },
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.face_retouching_natural),
-                              filled: true,
-                              fillColor: ColoresApp.fondo,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: ColoresApp.borde),
+                        const SizedBox(height: 16),
+
+                        _label('Tipo de piel'),
+
+                        DropdownButtonFormField<String>(
+                          initialValue: tipoPiel,
+                          items: tiposPiel
+                              .map(
+                                (tipo) => DropdownMenuItem(
+                                  value: tipo,
+                                  child: Text(tipo),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (valor) {
+                            if (valor != null) {
+                              ref
+                                  .read(
+                                    tipoPielInformacionProvider.notifier,
+                                  )
+                                  .state = valor;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
+                              Icons.face_retouching_natural,
+                            ),
+                            filled: true,
+                            fillColor: ColoresApp.fondo,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: ColoresApp.borde,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: ColoresApp.borde),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: ColoresApp.borde,
                               ),
                             ),
                           ),
+                        ),
 
-                          const SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
-                          _label('Hora aproximada de dormir'),
-                          _campo(
-                            controller: controller.horaDormirController,
-                            hint: 'Ej. 23:00',
-                            icono: Icons.nightlight_round,
-                          ),
+                        _label('Hora aproximada de dormir'),
 
-                          const SizedBox(height: 16),
+                        _campo(
+                          controller: horaDormirController,
+                          hint: 'Ej. 23:00',
+                          icono: Icons.nightlight_round,
+                        ),
 
-                          _label('Alergias o sensibilidad'),
-                          _campo(
-                            controller: controller.alergiasController,
-                            hint: 'Ej. fragancias, alcohol, ninguno',
-                            icono: Icons.warning_amber_outlined,
-                          ),
+                        const SizedBox(height: 16),
 
-                          const SizedBox(height: 26),
+                        _label('Alergias o sensibilidad'),
 
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton.icon(
-                              onPressed: controller.continuar,
-                              icon: const Icon(Icons.arrow_forward),
-                              label: const Text('Continuar'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ColoresApp.primario,
-                                foregroundColor: Colors.white,
-                                textStyle: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
+                        _campo(
+                          controller: alergiasController,
+                          hint: 'Ej. fragancias, alcohol, ninguno',
+                          icono: Icons.warning_amber_outlined,
+                        ),
+
+                        const SizedBox(height: 26),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton.icon(
+                            onPressed: cargando ? null : _continuar,
+                            icon: cargando
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(Icons.arrow_forward),
+                            label: Text(
+                              cargando ? 'Guardando...' : 'Continuar',
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ColoresApp.primario,
+                              foregroundColor: Colors.white,
+                              textStyle: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -190,11 +309,15 @@ class InformacionPersonalPantalla
         fillColor: ColoresApp.fondo,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
       ),
     );
