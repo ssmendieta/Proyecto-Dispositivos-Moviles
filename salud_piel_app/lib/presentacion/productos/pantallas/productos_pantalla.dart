@@ -1,20 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../dominio/entidades/producto.dart';
 import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
-import '../controladores/productos_controlador.dart';
+import '../controladores/productos_provider.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
 import 'detalle_producto_pantalla.dart';
 
-class ProductosPantalla extends GetView<ProductosControlador> {
-  ProductosPantalla({super.key});
+class ProductosPantalla extends ConsumerStatefulWidget {
+  const ProductosPantalla({super.key});
 
-  final TextEditingController _buscadorCtrl = TextEditingController();
+  @override
+  ConsumerState<ProductosPantalla> createState() =>
+      _ProductosPantallaState();
+}
+
+class _ProductosPantallaState extends ConsumerState<ProductosPantalla> {
+  final TextEditingController buscadorCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    buscadorCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final estado = ref.watch(productosProvider);
+    final notifier = ref.read(productosProvider.notifier);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -42,8 +57,8 @@ class ProductosPantalla extends GetView<ProductosControlador> {
             const SizedBox(height: 20),
 
             TextField(
-              controller: _buscadorCtrl,
-              onChanged: controller.cambiarBusqueda,
+              controller: buscadorCtrl,
+              onChanged: notifier.cambiarBusqueda,
               decoration: InputDecoration(
                 hintText: 'Buscar producto...',
                 prefixIcon: const Icon(Icons.search),
@@ -58,90 +73,124 @@ class ProductosPantalla extends GetView<ProductosControlador> {
 
             const SizedBox(height: 18),
 
-            _buildCategoryChips(),
+            _buildCategoryChips(
+              estado: estado,
+              notifier: notifier,
+            ),
 
             const SizedBox(height: 20),
 
-            _buildProductGrid(),
+            if (estado.cargando)
+              const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            else if (estado.error != null)
+              Expanded(
+                child: Center(
+                  child: Text(
+                    estado.error!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: ColoresApp.textoSecundario,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: _buildProductGrid(
+                  productos: estado.productosFiltrados,
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCategoryChips() {
-    return Obx(() {
-      final seleccionado = controller.categoriaSeleccionada.value;
+  Widget _buildCategoryChips({
+    required ProductosEstado estado,
+    required ProductosNotifier notifier,
+  }) {
+    final seleccionado = estado.categoriaSeleccionada;
 
-      return SizedBox(
-        height: 42,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemCount: controller.categorias.length,
-          separatorBuilder: (_, _) => const SizedBox(width: 10),
-          itemBuilder: (context, index) {
-            final categoria = controller.categorias[index];
-            final chipSeleccionado = seleccionado == categoria;
+    return SizedBox(
+      height: 42,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: estado.categorias.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final categoria = estado.categorias[index];
+          final chipSeleccionado = seleccionado == categoria;
 
-            return ChoiceChip(
-              label: Text(categoria),
-              selected: chipSeleccionado,
-              onSelected: (_) {
-                controller.cambiarCategoria(categoria);
-              },
-              selectedColor: ColoresApp.primario,
-              backgroundColor: Colors.white,
-              side: BorderSide.none,
-              labelStyle: TextStyle(
-                color: chipSeleccionado
-                    ? Colors.white
-                    : ColoresApp.textoPrincipal,
-                fontWeight: FontWeight.w600,
-              ),
-            );
-          },
-        ),
-      );
-    });
+          return ChoiceChip(
+            label: Text(categoria),
+            selected: chipSeleccionado,
+            onSelected: (_) {
+              notifier.cambiarCategoria(categoria);
+            },
+            selectedColor: ColoresApp.primario,
+            backgroundColor: Colors.white,
+            side: BorderSide.none,
+            labelStyle: TextStyle(
+              color: chipSeleccionado
+                  ? Colors.white
+                  : ColoresApp.textoPrincipal,
+              fontWeight: FontWeight.w600,
+            ),
+          );
+        },
+      ),
+    );
   }
 
-  Widget _buildProductGrid() {
-    return Obx(() {
-      final productosFiltrados = controller.productosFiltrados;
-
-      return Expanded(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            int columnas = 2;
-
-            if (constraints.maxWidth > 1200) {
-              columnas = 5;
-            } else if (constraints.maxWidth > 900) {
-              columnas = 4;
-            } else if (constraints.maxWidth > 600) {
-              columnas = 3;
-            }
-
-            return GridView.builder(
-              itemCount: productosFiltrados.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columnas,
-                mainAxisSpacing: 14,
-                crossAxisSpacing: 14,
-                childAspectRatio: .78,
-              ),
-              itemBuilder: (context, index) {
-                final producto = productosFiltrados[index];
-
-                return _TarjetaProductoCatalogo(
-                  producto: producto,
-                );
-              },
-            );
-          },
+  Widget _buildProductGrid({
+    required List<Producto> productos,
+  }) {
+    if (productos.isEmpty) {
+      return Center(
+        child: Text(
+          'No se encontraron productos.',
+          style: TextStyle(
+            color: ColoresApp.textoSecundario,
+          ),
         ),
       );
-    });
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int columnas = 2;
+
+        if (constraints.maxWidth > 1200) {
+          columnas = 5;
+        } else if (constraints.maxWidth > 900) {
+          columnas = 4;
+        } else if (constraints.maxWidth > 600) {
+          columnas = 3;
+        }
+
+        return GridView.builder(
+          itemCount: productos.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columnas,
+            mainAxisSpacing: 14,
+            crossAxisSpacing: 14,
+            childAspectRatio: .78,
+          ),
+          itemBuilder: (context, index) {
+            final producto = productos[index];
+
+            return _TarjetaProductoCatalogo(
+              producto: producto,
+            );
+          },
+        );
+      },
+    );
   }
 }
 

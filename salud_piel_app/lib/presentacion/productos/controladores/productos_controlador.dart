@@ -1,20 +1,28 @@
-import 'package:get/get.dart';
 import '../../../dominio/casos_uso/producto_caso_uso.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/utilidades/resultado.dart';
 
-class ProductosControlador extends GetxController {
+class ValorCompat<T> {
+  T value;
+
+  ValorCompat(this.value);
+}
+
+class ProductosControlador {
   final ProductoCasoUso _casoUso;
 
-  ProductosControlador({required ProductoCasoUso casoUso})
-      : _casoUso = casoUso;
+  ProductosControlador({
+    required ProductoCasoUso casoUso,
+  }) : _casoUso = casoUso {
+    cargarProductos();
+  }
 
-  final productos = <Producto>[].obs;
-  final busqueda = ''.obs;
-  final categoriaSeleccionada = 'Todos'.obs;
-  final cargando = true.obs;
+  final productos = <Producto>[];
+  final busqueda = ValorCompat<String>('');
+  final categoriaSeleccionada = ValorCompat<String>('Todos');
+  final cargando = ValorCompat<bool>(true);
 
-  final categorias = [
+  final categorias = const [
     'Todos',
     'Limpiadores',
     'Sérums',
@@ -22,32 +30,33 @@ class ProductosControlador extends GetxController {
     'Protector solar',
   ];
 
-  @override
-  void onInit() {
-    super.onInit();
-    _cargarProductos();
-  }
-
-  Future<void> _cargarProductos() async {
+  Future<void> cargarProductos() async {
     cargando.value = true;
+
     final resultado = await _casoUso.listarProductos();
+
     switch (resultado) {
       case Exito<List<Producto>>():
-        productos.value = resultado.data;
+        productos
+          ..clear()
+          ..addAll(resultado.data);
+
       case Fracaso<List<Producto>>():
-        Get.snackbar('Error', resultado.mensaje, snackPosition: SnackPosition.BOTTOM);
+        break;
     }
+
     cargando.value = false;
   }
 
   List<Producto> get productosFiltrados {
-    return productos.where((p) {
-      final nombre = p.nombre.toLowerCase();
+    return productos.where((producto) {
+      final nombre = producto.nombre.toLowerCase();
       final query = busqueda.value.toLowerCase();
+
       final coincideBusqueda = nombre.contains(query);
 
       final coincideCategoria = categoriaSeleccionada.value == 'Todos' ||
-          p.categoria == categoriaSeleccionada.value;
+          producto.categoria == categoriaSeleccionada.value;
 
       return coincideBusqueda && coincideCategoria;
     }).toList();
