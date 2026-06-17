@@ -1,14 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constantes/colores.dart';
-import '../controladores/login_controlador.dart';
+import '../../rutas/app_rutas.dart';
+import '../controladores/auth_provider.dart';
 
-class LoginPantalla extends GetView<LoginControlador> {
+class LoginPantalla extends ConsumerStatefulWidget {
   const LoginPantalla({super.key});
 
   @override
+  ConsumerState<LoginPantalla> createState() => _LoginPantallaState();
+}
+
+class _LoginPantallaState extends ConsumerState<LoginPantalla> {
+  final correoController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  bool verPassword = false;
+  bool recordarSesion = false;
+
+  @override
+  void dispose() {
+    correoController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void _mostrarMensaje(String titulo, String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$titulo\n$mensaje'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _iniciarSesion() async {
+    final correo = correoController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (correo.isEmpty || password.isEmpty) {
+      _mostrarMensaje(
+        'Campos incompletos',
+        'Ingresa tu correo y contraseña.',
+      );
+      return;
+    }
+
+    if (!correo.contains('@')) {
+      _mostrarMensaje(
+        'Correo inválido',
+        'Ingresa un correo electrónico válido.',
+      );
+      return;
+    }
+
+    final error = await ref.read(sesionProvider.notifier).login(
+          correo,
+          password,
+        );
+
+    if (!mounted) return;
+
+    if (error != null) {
+      _mostrarMensaje(
+        'Error',
+        error,
+      );
+      return;
+    }
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRutas.inicio,
+      (route) => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cargando = ref.watch(
+      sesionProvider.select((estado) => estado.cargando),
+    );
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -92,7 +166,7 @@ class LoginPantalla extends GetView<LoginControlador> {
                         _label('Correo electrónico'),
 
                         _campo(
-                          controller: controller.correoController,
+                          controller: correoController,
                           hint: 'correo@ejemplo.com',
                           icono: Icons.alternate_email,
                         ),
@@ -111,9 +185,20 @@ class LoginPantalla extends GetView<LoginControlador> {
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton.icon(
-                            onPressed: () => controller.iniciarSesion(),
-                            icon: const Icon(Icons.arrow_forward),
-                            label: const Text('Iniciar sesión'),
+                            onPressed: cargando ? null : _iniciarSesion,
+                            icon: cargando
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(Icons.arrow_forward),
+                            label: Text(
+                              cargando ? 'Ingresando...' : 'Iniciar sesión',
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: ColoresApp.primario,
                               foregroundColor: Colors.white,
@@ -138,7 +223,12 @@ class LoginPantalla extends GetView<LoginControlador> {
                   const SizedBox(height: 28),
 
                   TextButton(
-                    onPressed: controller.irARegistro,
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRutas.registro,
+                      );
+                    },
                     child: Text.rich(
                       TextSpan(
                         text: '¿No tienes una cuenta? ',
@@ -175,7 +265,9 @@ class LoginPantalla extends GetView<LoginControlador> {
                     '© 2024 SkinGPT. Asistencia dermatológica inteligente.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: ColoresApp.textoSecundario.withValues(alpha: 0.6),
+                      color: ColoresApp.textoSecundario.withValues(
+                        alpha: 0.6,
+                      ),
                       fontSize: 12,
                     ),
                   ),
@@ -202,64 +294,66 @@ class LoginPantalla extends GetView<LoginControlador> {
   }
 
   Widget _buildPasswordField() {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _label('Contraseña'),
-              Text(
-                '¿Olvidaste tu contraseña?',
-                style: TextStyle(
-                  color: ColoresApp.primario,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _label('Contraseña'),
+            Text(
+              '¿Olvidaste tu contraseña?',
+              style: TextStyle(
+                color: ColoresApp.primario,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
-            ],
-          ),
-          _campo(
-            controller: controller.passwordController,
-            hint: '••••••••',
-            icono: Icons.lock_outline,
-            obscure: !controller.verPassword.value,
-            suffix: controller.verPassword.value
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            onSuffixTap: () {
-              controller.verPassword.value = !controller.verPassword.value;
-            },
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        _campo(
+          controller: passwordController,
+          hint: '••••••••',
+          icono: Icons.lock_outline,
+          obscure: !verPassword,
+          suffix: verPassword
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            setState(() {
+              verPassword = !verPassword;
+            });
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildRememberMe() {
-    return Obx(
-      () => Row(
-        children: [
-          Checkbox(
-            value: controller.recordarSesion.value,
-            onChanged: (valor) {
-              controller.recordarSesion.value = valor ?? false;
-            },
-          ),
-          InkWell(
-            onTap: () {
-              controller.recordarSesion.value = !controller.recordarSesion.value;
-            },
-            child: Text(
-              'Mantener sesión iniciada',
-              style: TextStyle(
-                color: ColoresApp.textoSecundario,
-              ),
+    return Row(
+      children: [
+        Checkbox(
+          value: recordarSesion,
+          onChanged: (valor) {
+            setState(() {
+              recordarSesion = valor ?? false;
+            });
+          },
+        ),
+        InkWell(
+          onTap: () {
+            setState(() {
+              recordarSesion = !recordarSesion;
+            });
+          },
+          child: Text(
+            'Mantener sesión iniciada',
+            style: TextStyle(
+              color: ColoresApp.textoSecundario,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -287,11 +381,15 @@ class LoginPantalla extends GetView<LoginControlador> {
         fillColor: ColoresApp.fondo,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
       ),
     );

@@ -1,59 +1,46 @@
-import 'package:get/get.dart';
-
 import '../../../dominio/casos_uso/diagnostico_caso_uso.dart';
 import '../../../dominio/entidades/diagnostico.dart';
 import '../../../dominio/utilidades/resultado.dart';
 import '../../autenticacion/controladores/sesion_controlador.dart';
-import '../../rutas/app_rutas.dart';
 
-class PerfilControlador extends GetxController {
+class PerfilControlador {
   final DiagnosticoCasoUso _casoUso;
 
   PerfilControlador({
     required DiagnosticoCasoUso casoUso,
   }) : _casoUso = casoUso;
 
-  final totalScans = 0.obs;
-  final healthScore = 0.0.obs;
+  int totalScans = 0;
+  double healthScore = 0.0;
 
-  String get nombreUsuario =>
-      Get.find<SesionControlador>().nombreUsuario;
+  String get nombreUsuario => SesionMemoria.nombreUsuario;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _cargarDatos();
-  }
-
-  Future<void> _cargarDatos() async {
+  Future<void> recargarDatos() async {
     final resultado = await _casoUso.listarDiagnosticos();
+
     switch (resultado) {
       case Exito<List<Diagnostico>>():
         final diagnosticos = resultado.data;
-        totalScans.value = diagnosticos.length;
+        totalScans = diagnosticos.length;
 
         if (diagnosticos.isEmpty) {
-          healthScore.value = 0.0;
+          healthScore = 0.0;
         } else {
           final promedio = diagnosticos
-                  .map((d) => d.confianza)
+                  .map((diagnostico) => diagnostico.confianza)
                   .reduce((a, b) => a + b) /
               diagnosticos.length;
-          healthScore.value = (promedio * 100).roundToDouble();
+
+          healthScore = (promedio * 100).roundToDouble();
         }
+
       case Fracaso<List<Diagnostico>>():
-        totalScans.value = 0;
-        healthScore.value = 0.0;
+        totalScans = 0;
+        healthScore = 0.0;
     }
   }
 
-  Future<void> recargarDatos() async {
-    await _cargarDatos();
-  }
-
-  void irAHistorial() => Get.toNamed(AppRutas.historial);
-
   void cerrarSesion() {
-    Get.find<SesionControlador>().cerrarSesion();
+    SesionMemoria.cerrarSesion();
   }
 }

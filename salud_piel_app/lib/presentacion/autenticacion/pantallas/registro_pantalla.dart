@@ -1,14 +1,115 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constantes/colores.dart';
-import '../controladores/registro_controlador.dart';
+import '../../rutas/app_rutas.dart';
+import '../controladores/auth_provider.dart';
 
-class RegistroPantalla extends GetView<RegistroControlador> {
+class RegistroPantalla extends ConsumerStatefulWidget {
   const RegistroPantalla({super.key});
 
   @override
+  ConsumerState<RegistroPantalla> createState() =>
+      _RegistroPantallaState();
+}
+
+class _RegistroPantallaState extends ConsumerState<RegistroPantalla> {
+  final nombreController = TextEditingController();
+  final correoController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  bool verPassword = false;
+  bool verConfirmPassword = false;
+
+  @override
+  void dispose() {
+    nombreController.dispose();
+    correoController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _mostrarMensaje(String titulo, String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$titulo\n$mensaje'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _registrar() async {
+    final nombre = nombreController.text.trim();
+    final correo = correoController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    if (nombre.isEmpty ||
+        correo.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      _mostrarMensaje(
+        'Campos incompletos',
+        'Completa todos los campos.',
+      );
+      return;
+    }
+
+    if (!correo.contains('@')) {
+      _mostrarMensaje(
+        'Correo inválido',
+        'Ingresa un correo válido.',
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      _mostrarMensaje(
+        'Contraseña débil',
+        'La contraseña debe tener mínimo 6 caracteres.',
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _mostrarMensaje(
+        'Contraseñas diferentes',
+        'Las contraseñas no coinciden.',
+      );
+      return;
+    }
+
+    final error = await ref.read(sesionProvider.notifier).registrar(
+          nombre,
+          correo,
+          password,
+        );
+
+    if (!mounted) return;
+
+    if (error != null) {
+      _mostrarMensaje(
+        'Error',
+        error,
+      );
+      return;
+    }
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRutas.informacionPersonal,
+      (route) => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cargando = ref.watch(
+      sesionProvider.select((estado) => estado.cargando),
+    );
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       body: SafeArea(
@@ -90,7 +191,7 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                         _label('Nombre completo'),
 
                         _campo(
-                          controller: controller.nombreController,
+                          controller: nombreController,
                           hint: 'Ej. Juan Pérez',
                           icono: Icons.person_outline,
                         ),
@@ -100,7 +201,7 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                         _label('Correo electrónico'),
 
                         _campo(
-                          controller: controller.correoController,
+                          controller: correoController,
                           hint: 'usuario@ejemplo.com',
                           icono: Icons.email_outlined,
                         ),
@@ -119,9 +220,20 @@ class RegistroPantalla extends GetView<RegistroControlador> {
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton.icon(
-                            onPressed: () => controller.registrar(),
-                            icon: const Icon(Icons.arrow_forward),
-                            label: const Text('Crear cuenta'),
+                            onPressed: cargando ? null : _registrar,
+                            icon: cargando
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(Icons.arrow_forward),
+                            label: Text(
+                              cargando ? 'Creando cuenta...' : 'Crear cuenta',
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: ColoresApp.primario,
                               foregroundColor: Colors.white,
@@ -144,7 +256,12 @@ class RegistroPantalla extends GetView<RegistroControlador> {
 
                         Center(
                           child: TextButton(
-                            onPressed: controller.irALogin,
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                AppRutas.login,
+                              );
+                            },
                             child: Text.rich(
                               TextSpan(
                                 text: '¿Ya tienes una cuenta? ',
@@ -177,49 +294,48 @@ class RegistroPantalla extends GetView<RegistroControlador> {
   }
 
   Widget _buildRegPasswordField() {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _label('Contraseña'),
-          _campo(
-            controller: controller.passwordController,
-            hint: '••••••••',
-            icono: Icons.lock_outline,
-            obscure: !controller.verPassword.value,
-            suffix: controller.verPassword.value
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            onSuffixTap: () {
-              controller.verPassword.value = !controller.verPassword.value;
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _label('Contraseña'),
+        _campo(
+          controller: passwordController,
+          hint: '••••••••',
+          icono: Icons.lock_outline,
+          obscure: !verPassword,
+          suffix: verPassword
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            setState(() {
+              verPassword = !verPassword;
+            });
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildRegConfirmPasswordField() {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _label('Confirmar contraseña'),
-          _campo(
-            controller: controller.confirmPasswordController,
-            hint: '••••••••',
-            icono: Icons.shield_outlined,
-            obscure: !controller.verConfirmPassword.value,
-            suffix: controller.verConfirmPassword.value
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            onSuffixTap: () {
-              controller.verConfirmPassword.value =
-                  !controller.verConfirmPassword.value;
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _label('Confirmar contraseña'),
+        _campo(
+          controller: confirmPasswordController,
+          hint: '••••••••',
+          icono: Icons.shield_outlined,
+          obscure: !verConfirmPassword,
+          suffix: verConfirmPassword
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+          onSuffixTap: () {
+            setState(() {
+              verConfirmPassword = !verConfirmPassword;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -260,11 +376,15 @@ class RegistroPantalla extends GetView<RegistroControlador> {
         fillColor: ColoresApp.fondo,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ColoresApp.borde),
+          borderSide: BorderSide(
+            color: ColoresApp.borde,
+          ),
         ),
       ),
     );

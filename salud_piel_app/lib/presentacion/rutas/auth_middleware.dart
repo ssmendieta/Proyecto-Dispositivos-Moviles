@@ -7,7 +7,6 @@ import 'app_rutas.dart';
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-    final sesion = Get.find<SesionControlador>();
     final rutasPublicas = [
       AppRutas.carga,
       AppRutas.bienvenida,
@@ -16,10 +15,15 @@ class AuthMiddleware extends GetMiddleware {
     ];
 
     final rutaActual = route ?? '';
-    if (rutasPublicas.contains(rutaActual)) return null;
 
-    if (!sesion.sesionIniciada.value) {
-      return const RouteSettings(name: AppRutas.login);
+    if (rutasPublicas.contains(rutaActual)) {
+      return null;
+    }
+
+    if (!SesionMemoria.sesionIniciada) {
+      return const RouteSettings(
+        name: AppRutas.login,
+      );
     }
 
     return null;

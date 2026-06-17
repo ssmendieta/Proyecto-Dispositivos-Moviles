@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../autenticacion/controladores/auth_provider.dart';
 import '../../constantes/colores.dart';
-import '../controladores/perfil_controlador.dart';
+import '../../rutas/app_rutas.dart';
+import '../controladores/perfil_provider.dart';
 
-class PerfilPantalla extends GetView<PerfilControlador> {
+class PerfilPantalla extends ConsumerWidget {
   const PerfilPantalla({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sesion = ref.watch(sesionProvider);
+    final perfil = ref.watch(perfilProvider);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -27,18 +31,18 @@ class PerfilPantalla extends GetView<PerfilControlador> {
 
             const SizedBox(height: 18),
 
-            Obx(() => Text(
-              controller.nombreUsuario,
+            Text(
+              sesion.nombreUsuario,
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: ColoresApp.textoPrincipal,
               ),
-            )),
+            ),
 
             const SizedBox(height: 8),
 
-           const Text(
+            const Text(
               'Perfil de usuario',
               style: TextStyle(
                 color: ColoresApp.textoSecundario,
@@ -47,18 +51,27 @@ class PerfilPantalla extends GetView<PerfilControlador> {
             ),
 
             const SizedBox(height: 30),
-            Obx(() => _infoCard(
-              icono: Icons.camera_alt_outlined,
-              titulo: 'Análisis realizados',
-              valor: '${controller.totalScans}',
-            )),
+
+            if (perfil.cargando)
+              const CircularProgressIndicator()
+            else
+              _infoCard(
+                icono: Icons.camera_alt_outlined,
+                titulo: 'Análisis realizados',
+                valor: '${perfil.totalScans}',
+              ),
 
             const SizedBox(height: 24),
 
             _opcionPerfil(
               icono: Icons.history,
               texto: 'Ver Historial',
-              onTap: controller.irAHistorial,
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRutas.historial,
+                );
+              },
             ),
 
             const SizedBox(height: 12),
@@ -67,7 +80,15 @@ class PerfilPantalla extends GetView<PerfilControlador> {
               icono: Icons.logout,
               texto: 'Cerrar sesión',
               color: ColoresApp.peligro,
-              onTap: () => controller.cerrarSesion(),
+              onTap: () {
+                ref.read(sesionProvider.notifier).cerrarSesion();
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRutas.login,
+                  (route) => false,
+                );
+              },
             ),
           ],
         ),
@@ -128,7 +149,10 @@ class PerfilPantalla extends GetView<PerfilControlador> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -138,7 +162,10 @@ class PerfilPantalla extends GetView<PerfilControlador> {
         ),
         child: Row(
           children: [
-            Icon(icono, color: colorFinal),
+            Icon(
+              icono,
+              color: colorFinal,
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Text(
@@ -149,7 +176,10 @@ class PerfilPantalla extends GetView<PerfilControlador> {
                 ),
               ),
             ),
-            Icon(Icons.chevron_right, color: colorFinal),
+            Icon(
+              Icons.chevron_right,
+              color: colorFinal,
+            ),
           ],
         ),
       ),
