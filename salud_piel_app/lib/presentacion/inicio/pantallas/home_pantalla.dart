@@ -80,7 +80,10 @@ class HomePantalla extends ConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Get.toNamed(AppRutas.historial);
+                      Navigator.pushNamed(
+                        context,
+                        AppRutas.historial,
+                      );
                     },
                     child: const Text('Ver historial'),
                   ),

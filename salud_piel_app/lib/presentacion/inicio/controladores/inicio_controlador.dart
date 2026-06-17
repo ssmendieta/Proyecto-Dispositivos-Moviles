@@ -1,15 +1,7 @@
-import 'package:get/get.dart';
-
-import '../../rutas/app_rutas.dart';
-
-class InicioControlador extends GetxController {
-  final indiceActual = 0.obs;
-
-  void irAHistorial() {
-    Get.toNamed(AppRutas.historial);
-  }
+class InicioControlador {
+  int indiceActual = 0;
 
   void cambiarPagina(int indice) {
-    indiceActual.value = indice;
+    indiceActual = indice;
   }
 }
