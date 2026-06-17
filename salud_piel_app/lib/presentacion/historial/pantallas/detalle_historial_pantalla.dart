@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../dominio/entidades/diagnostico.dart';
@@ -18,7 +17,10 @@ class DetalleHistorialPantalla extends StatelessWidget {
   });
 
   Map<String, dynamic>? get _contextoIA {
-    if (diagnostico.contextoIA == null) return null;
+    if (diagnostico.contextoIA == null) {
+      return null;
+    }
+
     try {
       return jsonDecode(diagnostico.contextoIA!) as Map<String, dynamic>;
     } catch (_) {
@@ -28,7 +30,9 @@ class DetalleHistorialPantalla extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fecha = DateFormat('dd MMM yyyy - HH:mm').format(diagnostico.fecha);
+    final fecha = DateFormat('dd MMM yyyy - HH:mm').format(
+      diagnostico.fecha,
+    );
     final imagenPath = diagnostico.imagenPath;
     final descripcion = diagnostico.descripcion ?? '';
     final contexto = _contextoIA;
@@ -40,10 +44,14 @@ class DetalleHistorialPantalla extends StatelessWidget {
         elevation: 0,
         title: const Text(
           'Detalle del análisis',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back),
         ),
       ),
@@ -148,12 +156,13 @@ class DetalleHistorialPantalla extends StatelessWidget {
                   titulo: 'Posibles causas',
                   icono: Icons.search_outlined,
                   contenido: (contexto['causas'] as List)
-                      .map((c) => '• $c')
+                      .map((causa) => '• $causa')
                       .join('\n\n'),
                 ),
               ],
               if ((contexto['recomendacionDermatologo'] as String?)
-                      ?.isNotEmpty == true) ...[
+                      ?.isNotEmpty ==
+                  true) ...[
                 const SizedBox(height: 16),
                 _seccion(
                   titulo: 'Recomendación del dermatólogo',
@@ -161,13 +170,14 @@ class DetalleHistorialPantalla extends StatelessWidget {
                   contenido: contexto['recomendacionDermatologo'] as String,
                 ),
               ],
-              if ((contexto['consejosCuidado'] as List?)?.isNotEmpty == true) ...[
+              if ((contexto['consejosCuidado'] as List?)?.isNotEmpty ==
+                  true) ...[
                 const SizedBox(height: 16),
                 _seccion(
                   titulo: 'Consejos de cuidado',
                   icono: Icons.spa_outlined,
                   contenido: (contexto['consejosCuidado'] as List)
-                      .map((c) => '• $c')
+                      .map((consejo) => '• $consejo')
                       .join('\n'),
                 ),
               ],

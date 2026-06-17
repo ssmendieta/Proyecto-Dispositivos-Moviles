@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../dominio/entidades/diagnostico.dart';
@@ -36,15 +35,19 @@ class TarjetaHistorial extends StatelessWidget {
   Widget build(BuildContext context) {
     final estado = _derivarEstado(diagnostico.confianza);
     final colorEstado = _colorEstado(estado);
-    final progreso = diagnostico.confianza;
-    final fechaFormateada = DateFormat('dd MMM yyyy').format(diagnostico.fecha);
+    final fechaFormateada = DateFormat('dd MMM yyyy').format(
+      diagnostico.fecha,
+    );
 
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        Get.to(
-          () => DetalleHistorialPantalla(
-            diagnostico: diagnostico,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DetalleHistorialPantalla(
+              diagnostico: diagnostico,
+            ),
           ),
         );
       },
@@ -153,7 +156,7 @@ class TarjetaHistorial extends StatelessWidget {
                             ),
 
                             const SizedBox(height: 14),
-                            
+
                             Text(
                               'Resultado guardado',
                               style: TextStyle(
