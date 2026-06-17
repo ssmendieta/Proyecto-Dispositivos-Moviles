@@ -32,20 +32,20 @@ class GeminiServicio implements IGeminiServicio {
     _cargarKeys();
   }
 
-  /*void _cargarKeys() {
-    for (int i = 1;; i++) {
-      final key = dotenv.env['GEMINI_API_KEY${i == 1 ? '' : '_$i'}'];
-      if (key == null || key.isEmpty || key == 'tu_api_key_de_gemini_aqui') break;
-      _apiKeys.add(key);
-    }
-    if (_apiKeys.isEmpty) {
-      final key = dotenv.env['GEMINI_API_KEY'];
-      if (key != null && key.isNotEmpty && key != 'tu_api_key_de_gemini_aqui') {
-        _apiKeys.add(key);
+    void _cargarKeys() {
+      for (int i = 1; ; i++) {
+        final nombreKey = i == 1 ? 'GEMINI_API_KEY' : 'GEMINI_API_KEY_$i';
+        final key = dotenv.env[nombreKey];
+
+        if (key == null ||
+            key.trim().isEmpty ||
+            key.trim() == 'tu_api_key_de_gemini_aqui') {
+          break;
+        }
+
+        _apiKeys.add(key.trim());
       }
     }
-  }*/
-
   void _rotarKey() {
     _model = null;
     _keyIndex = (_keyIndex + 1) % _apiKeys.length;
