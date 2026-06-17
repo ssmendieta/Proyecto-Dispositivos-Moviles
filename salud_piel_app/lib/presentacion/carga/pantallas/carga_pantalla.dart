@@ -1,15 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../autenticacion/controladores/auth_provider.dart';
 import '../../constantes/colores.dart';
-import '../controladores/carga_controlador.dart';
+import '../../rutas/app_rutas.dart';
 
-class CargaPantalla extends GetView<CargaControlador> {
+class CargaPantalla extends ConsumerStatefulWidget {
   const CargaPantalla({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  ConsumerState<CargaPantalla> createState() => _CargaPantallaState();
+}
 
+class _CargaPantallaState extends ConsumerState<CargaPantalla> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      _iniciar();
+    });
+  }
+
+  Future<void> _iniciar() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    await ref.read(sesionProvider.notifier).verificarSesion();
+
+    if (!mounted) return;
+
+    final sesion = ref.read(sesionProvider);
+
+    if (sesion.sesionIniciada) {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRutas.inicio,
+      );
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRutas.bienvenida,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColoresApp.primario,
       body: Center(
@@ -29,7 +65,9 @@ class CargaPantalla extends GetView<CargaControlador> {
                 color: ColoresApp.primario,
               ),
             ),
+
             const SizedBox(height: 28),
+
             const Text(
               'SkinGPT',
               style: TextStyle(
@@ -38,7 +76,9 @@ class CargaPantalla extends GetView<CargaControlador> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 10),
+
             Text(
               'IA dermatológica inteligente',
               style: TextStyle(
@@ -46,7 +86,9 @@ class CargaPantalla extends GetView<CargaControlador> {
                 fontSize: 16,
               ),
             ),
+
             const SizedBox(height: 40),
+
             const SizedBox(
               width: 34,
               height: 34,
