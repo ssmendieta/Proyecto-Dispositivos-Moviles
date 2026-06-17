@@ -2,16 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../dominio/casos_uso/gemini_caso_uso.dart';
+import '../../../datos/providers/dependencias_provider.dart';
 import '../../../dominio/entidades/detalle_producto_ia.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../compartidos/widget/imagen_producto.dart';
 import '../../constantes/colores.dart';
 import '../widget/agregar_a_rutina_sheet.dart';
 
-class DetalleProductoPantalla extends StatefulWidget {
+class DetalleProductoPantalla extends ConsumerStatefulWidget {
   final Producto producto;
 
   const DetalleProductoPantalla({
@@ -20,10 +20,12 @@ class DetalleProductoPantalla extends StatefulWidget {
   });
 
   @override
-  State<DetalleProductoPantalla> createState() => _DetalleProductoPantallaState();
+  ConsumerState<DetalleProductoPantalla> createState() =>
+      _DetalleProductoPantallaState();
 }
 
-class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
+class _DetalleProductoPantallaState
+    extends ConsumerState<DetalleProductoPantalla> {
   DetalleProductoIA? _detalleIA;
   bool _cargando = false;
   String? _errorIA;
@@ -31,7 +33,7 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
   @override
   void initState() {
     super.initState();
-    _cargarDetalleIA();
+    Future.microtask(_cargarDetalleIA);
   }
 
   Future<void> _cargarDetalleIA() async {
@@ -40,9 +42,13 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
     if (producto.instruccionesIA != null &&
         producto.instruccionesIA!.isNotEmpty) {
       try {
-        final json = jsonDecode(producto.instruccionesIA!) as Map<String, dynamic>;
+        final json = jsonDecode(
+          producto.instruccionesIA!,
+        ) as Map<String, dynamic>;
+
         _detalleIA = DetalleProductoIA(
-          explicacionIngredientes: json['explicacionIngredientes'] as String? ?? '',
+          explicacionIngredientes:
+              json['explicacionIngredientes'] as String? ?? '',
           beneficios: (json['beneficios'] as List<dynamic>?)
                   ?.map((e) => e.toString())
                   .toList() ??
@@ -51,32 +57,61 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           advertencias: json['advertencias'] as String?,
           ratingIA: (json['ratingIA'] as num?)?.toDouble() ?? 0.0,
         );
-        if (mounted) setState(() {});
+
+        if (mounted) {
+          setState(() {});
+        }
+
         return;
       } catch (_) {}
     }
 
     _errorIA = null;
-    setState(() => _cargando = true);
 
-    final geminiCasoUso = Get.find<GeminiCasoUso>();
+    if (mounted) {
+      setState(() {
+        _cargando = true;
+      });
+    }
+
+    final geminiCasoUso = ref.read(geminiCasoUsoProvider);
 
     try {
       final detalle = await geminiCasoUso.analizarProducto(producto).timeout(
-        const Duration(seconds: 20),
-      );
+            const Duration(seconds: 20),
+          );
+
       if (detalle != null) {
         _detalleIA = detalle;
       } else {
-        _errorIA = geminiCasoUso.ultimoError ?? 'No se pudo obtener información del producto.';
+        _errorIA = geminiCasoUso.ultimoError ??
+            'No se pudo obtener información del producto.';
       }
     } on TimeoutException {
-      _errorIA = 'La consulta tardó demasiado. Verifica tu conexión e intenta de nuevo.';
+      _errorIA =
+          'La consulta tardó demasiado. Verifica tu conexión e intenta de nuevo.';
     } catch (e) {
       _errorIA = 'Error inesperado: $e';
     }
 
-    if (mounted) setState(() => _cargando = false);
+    if (mounted) {
+      setState(() {
+        _cargando = false;
+      });
+    }
+  }
+
+  void _abrirAgregarARutina() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return AgregarARutinaSheet(
+          producto: widget.producto,
+        );
+      },
+    );
   }
 
   @override
@@ -94,10 +129,14 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
         elevation: 0,
         title: const Text(
           'Detalle del producto',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back),
         ),
       ),
@@ -109,6 +148,7 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
             const SizedBox(height: 20),
             _seccionDescripcion(descripcion),
             _seccionModoUso(producto),
+
             if (_detalleIA != null) ...[
               const SizedBox(height: 16),
               _seccionBeneficios(_detalleIA!),
@@ -136,18 +176,14 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
               const SizedBox(height: 20),
               _seccionError(_errorIA!),
             ],
+
             const SizedBox(height: 24),
+
             SizedBox(
               width: double.infinity,
               height: 56,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.bottomSheet(
-                    AgregarARutinaSheet(producto: producto),
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                  );
-                },
+                onPressed: _abrirAgregarARutina,
                 icon: const Icon(Icons.add),
                 label: const Text('Agregar a rutina'),
                 style: ElevatedButton.styleFrom(
@@ -169,7 +205,11 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
     );
   }
 
-  Widget _header(Producto producto, String marca, String categoria) {
+  Widget _header(
+    Producto producto,
+    String marca,
+    String categoria,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -239,7 +279,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       icono: Icons.check_circle_outline,
       items: detalle.beneficios.isNotEmpty
           ? detalle.beneficios
-          : ['Complementa la rutina diaria.', 'Recomendado según el tipo de piel y diagnóstico.'],
+          : [
+              'Complementa la rutina diaria.',
+              'Recomendado según el tipo de piel y diagnóstico.',
+            ],
     );
   }
 
@@ -269,7 +312,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.auto_awesome, color: Color(0xFF7B5EA7)),
+          const Icon(
+            Icons.auto_awesome,
+            color: Color(0xFF7B5EA7),
+          ),
           const SizedBox(width: 12),
           const Expanded(
             child: Column(
@@ -288,14 +334,18 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           ),
           Row(
             children: [
-              ...List.generate(5, (i) {
-                final filled = i < detalle.ratingIA.round();
-                return Icon(
-                  filled ? Icons.star : Icons.star_border,
-                  color: const Color(0xFFFFB800),
-                  size: 22,
-                );
-              }),
+              ...List.generate(
+                5,
+                (i) {
+                  final filled = i < detalle.ratingIA.round();
+
+                  return Icon(
+                    filled ? Icons.star : Icons.star_border,
+                    color: const Color(0xFFFFB800),
+                    size: 22,
+                  );
+                },
+              ),
               const SizedBox(width: 6),
               Text(
                 detalle.ratingIA.toStringAsFixed(1),
@@ -323,8 +373,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.warning_amber_rounded,
-              color: Color(0xFFE85757)),
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Color(0xFFE85757),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -367,12 +419,17 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           SizedBox(
             width: 18,
             height: 18,
-            child: CircularProgressIndicator(strokeWidth: 2),
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
           ),
           SizedBox(width: 12),
           Text(
             'Analizando producto con IA...',
-            style: TextStyle(color: Color(0xFF888888), fontSize: 14),
+            style: TextStyle(
+              color: Color(0xFF888888),
+              fontSize: 14,
+            ),
           ),
         ],
       ),
@@ -389,7 +446,11 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       ),
       child: Column(
         children: [
-          const Icon(Icons.cloud_off, size: 40, color: Color(0xFFE85757)),
+          const Icon(
+            Icons.cloud_off,
+            size: 40,
+            color: Color(0xFFE85757),
+          ),
           const SizedBox(height: 12),
           Text(
             mensaje,
@@ -402,12 +463,14 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           ),
           const SizedBox(height: 16),
           OutlinedButton.icon(
-            onPressed: () => _cargarDetalleIA(),
+            onPressed: _cargarDetalleIA,
             icon: const Icon(Icons.refresh),
             label: const Text('Reintentar'),
             style: OutlinedButton.styleFrom(
               foregroundColor: const Color(0xFF7B5EA7),
-              side: const BorderSide(color: Color(0xFF7B5EA7)),
+              side: const BorderSide(
+                color: Color(0xFF7B5EA7),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -421,6 +484,7 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
   Widget _seccionModoUso(Producto producto) {
     final modo = producto.comoUsar ??
         'Aplicar según la indicación de la rutina. Evitar contacto con los ojos y suspender su uso si aparece irritación.';
+
     return _seccion(
       titulo: 'Modo de uso',
       icono: Icons.schedule_outlined,
@@ -443,7 +507,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icono, color: ColoresApp.primario),
+          Icon(
+            icono,
+            color: ColoresApp.primario,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -488,7 +555,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icono, color: ColoresApp.primario),
+          Icon(
+            icono,
+            color: ColoresApp.primario,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -509,8 +579,12 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('• ',
-                            style: TextStyle(color: Color(0xFF7B5EA7))),
+                        const Text(
+                          '• ',
+                          style: TextStyle(
+                            color: Color(0xFF7B5EA7),
+                          ),
+                        ),
                         Expanded(
                           child: Text(
                             item,

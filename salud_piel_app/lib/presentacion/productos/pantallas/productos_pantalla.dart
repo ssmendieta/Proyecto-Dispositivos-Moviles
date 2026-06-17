@@ -152,16 +152,36 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
     required this.producto,
   });
 
+  void _abrirDetalle(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetalleProductoPantalla(
+          producto: producto,
+        ),
+      ),
+    );
+  }
+
+  void _abrirAgregarARutina(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return AgregarARutinaSheet(
+          producto: producto,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
-        Get.to(
-          () => DetalleProductoPantalla(
-            producto: producto,
-          ),
-        );
+        _abrirDetalle(context);
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -173,10 +193,10 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child: ImagenProducto(
-                  imagenPath: producto.imagenPath,
-                  borderRadius: 14,
-                ),
+              child: ImagenProducto(
+                imagenPath: producto.imagenPath,
+                borderRadius: 14,
+              ),
             ),
 
             const SizedBox(height: 10),
@@ -210,13 +230,7 @@ class _TarjetaProductoCatalogo extends StatelessWidget {
               height: 34,
               child: OutlinedButton(
                 onPressed: () {
-                  Get.bottomSheet(
-                    AgregarARutinaSheet(
-                      producto: producto,
-                    ),
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                  );
+                  _abrirAgregarARutina(context);
                 },
                 child: const Text('+ Rutina'),
               ),

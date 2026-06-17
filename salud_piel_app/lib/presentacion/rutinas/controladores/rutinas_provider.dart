@@ -1,29 +1,42 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../datos/providers/dependencias_provider.dart';
 import '../../../dominio/casos_uso/rutina_caso_uso.dart';
 import '../../../dominio/entidades/producto.dart';
 import '../../../dominio/entidades/rutina.dart';
 import '../../../dominio/enumeraciones/momento_rutina.dart';
 import '../../../dominio/utilidades/resultado.dart';
 
-class ValorCompat<T> {
-  T value;
+class RutinasEstado {
+  final List<Rutina> rutinas;
+  final String filtroSeleccionado;
+  final bool cargando;
+  final bool mananaSeleccionada;
+  final bool nocheSeleccionada;
 
-  ValorCompat(this.value);
-}
+  const RutinasEstado({
+    required this.rutinas,
+    required this.filtroSeleccionado,
+    required this.cargando,
+    required this.mananaSeleccionada,
+    required this.nocheSeleccionada,
+  });
 
-class RutinasControlador {
-  final RutinaCasoUso _casoUso;
-
-  RutinasControlador({
-    required RutinaCasoUso casoUso,
-  }) : _casoUso = casoUso {
-    cargarRutinas();
+  RutinasEstado copyWith({
+    List<Rutina>? rutinas,
+    String? filtroSeleccionado,
+    bool? cargando,
+    bool? mananaSeleccionada,
+    bool? nocheSeleccionada,
+  }) {
+    return RutinasEstado(
+      rutinas: rutinas ?? this.rutinas,
+      filtroSeleccionado: filtroSeleccionado ?? this.filtroSeleccionado,
+      cargando: cargando ?? this.cargando,
+      mananaSeleccionada: mananaSeleccionada ?? this.mananaSeleccionada,
+      nocheSeleccionada: nocheSeleccionada ?? this.nocheSeleccionada,
+    );
   }
-
-  final rutinas = <Rutina>[];
-  final filtroSeleccionado = ValorCompat<String>('Todas');
-  final cargando = ValorCompat<bool>(true);
-  final mananaSeleccionada = ValorCompat<bool>(false);
-  final nocheSeleccionada = ValorCompat<bool>(false);
 
   Rutina? _rutinaPorMomento(MomentoRutina momento) {
     for (final rutina in rutinas) {
@@ -31,26 +44,7 @@ class RutinasControlador {
         return rutina;
       }
     }
-
     return null;
-  }
-
-  Future<void> cargarRutinas() async {
-    cargando.value = true;
-
-    final resultado = await _casoUso.listarRutinas();
-
-    switch (resultado) {
-      case Exito<List<Rutina>>():
-        rutinas
-          ..clear()
-          ..addAll(resultado.data);
-
-      case Fracaso<List<Rutina>>():
-        break;
-    }
-
-    cargando.value = false;
   }
 
   List<RutinaProducto> get rutinaManana {
@@ -84,22 +78,78 @@ class RutinasControlador {
 
     return totalCompletados / totalProductos;
   }
+}
+
+class RutinasNotifier extends StateNotifier<RutinasEstado> {
+  final RutinaCasoUso _casoUso;
+
+  RutinasNotifier({
+    required RutinaCasoUso casoUso,
+  })  : _casoUso = casoUso,
+        super(
+          const RutinasEstado(
+            rutinas: [],
+            filtroSeleccionado: 'Todas',
+            cargando: true,
+            mananaSeleccionada: false,
+            nocheSeleccionada: false,
+          ),
+        );
+
+  Rutina? _rutinaPorMomento(MomentoRutina momento) {
+    for (final rutina in state.rutinas) {
+      if (rutina.momento == momento) {
+        return rutina;
+      }
+    }
+
+    return null;
+  }
+
+  Future<void> cargarRutinas() async {
+    state = state.copyWith(
+      cargando: true,
+    );
+
+    final resultado = await _casoUso.listarRutinas();
+
+    switch (resultado) {
+      case Exito<List<Rutina>>():
+        state = state.copyWith(
+          rutinas: resultado.data,
+          cargando: false,
+        );
+
+      case Fracaso<List<Rutina>>():
+        state = state.copyWith(
+          cargando: false,
+        );
+    }
+  }
 
   void cambiarFiltro(String filtro) {
-    filtroSeleccionado.value = filtro;
+    state = state.copyWith(
+      filtroSeleccionado: filtro,
+    );
   }
 
   void toggleMananaSheet() {
-    mananaSeleccionada.value = !mananaSeleccionada.value;
+    state = state.copyWith(
+      mananaSeleccionada: !state.mananaSeleccionada,
+    );
   }
 
   void toggleNocheSheet() {
-    nocheSeleccionada.value = !nocheSeleccionada.value;
+    state = state.copyWith(
+      nocheSeleccionada: !state.nocheSeleccionada,
+    );
   }
 
   void resetSheetState() {
-    mananaSeleccionada.value = false;
-    nocheSeleccionada.value = false;
+    state = state.copyWith(
+      mananaSeleccionada: false,
+      nocheSeleccionada: false,
+    );
   }
 
   Future<void> agregarProducto({
@@ -135,7 +185,7 @@ class RutinasControlador {
   }
 
   Future<void> toggleManana(int index) async {
-    final productos = rutinaManana;
+    final productos = state.rutinaManana;
 
     if (index >= productos.length) {
       return;
@@ -159,7 +209,7 @@ class RutinasControlador {
   }
 
   Future<void> toggleNoche(int index) async {
-    final productos = rutinaNoche;
+    final productos = state.rutinaNoche;
 
     if (index >= productos.length) {
       return;
@@ -183,7 +233,7 @@ class RutinasControlador {
   }
 
   Future<void> eliminarManana(int index) async {
-    final productos = rutinaManana;
+    final productos = state.rutinaManana;
 
     if (index >= productos.length) {
       return;
@@ -206,7 +256,7 @@ class RutinasControlador {
   }
 
   Future<void> eliminarNoche(int index) async {
-    final productos = rutinaNoche;
+    final productos = state.rutinaNoche;
 
     if (index >= productos.length) {
       return;
@@ -238,7 +288,9 @@ class RutinasControlador {
       return;
     }
 
-    final productos = List<RutinaProducto>.from(rutinaManana);
+    final productos = List<RutinaProducto>.from(
+      state.rutinaManana,
+    );
 
     if (productos.isEmpty || oldIndex >= productos.length) {
       return;
@@ -266,7 +318,9 @@ class RutinasControlador {
       return;
     }
 
-    final productos = List<RutinaProducto>.from(rutinaNoche);
+    final productos = List<RutinaProducto>.from(
+      state.rutinaNoche,
+    );
 
     if (productos.isEmpty || oldIndex >= productos.length) {
       return;
@@ -284,3 +338,18 @@ class RutinasControlador {
     await cargarRutinas();
   }
 }
+
+final rutinasProvider =
+    StateNotifierProvider<RutinasNotifier, RutinasEstado>(
+  (ref) {
+    final notifier = RutinasNotifier(
+      casoUso: ref.watch(rutinaCasoUsoProvider),
+    );
+
+    Future.microtask(() {
+      notifier.cargarRutinas();
+    });
+
+    return notifier;
+  },
+);

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constantes/colores.dart';
 import '../../../dominio/entidades/rutina.dart';
-import '../../inicio/controladores/inicio_controlador.dart';
-import '../controladores/rutinas_controlador.dart';
+import '../../constantes/colores.dart';
+import '../../inicio/controladores/inicio_provider.dart';
+import '../controladores/rutinas_provider.dart';
 
-class GestionarRutinaPantalla extends GetView<RutinasControlador> {
+class GestionarRutinaPantalla extends ConsumerWidget {
   const GestionarRutinaPantalla({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final estado = ref.watch(rutinasProvider);
+    final notifier = ref.read(rutinasProvider.notifier);
+
     return Scaffold(
       backgroundColor: ColoresApp.fondo,
       appBar: AppBar(
@@ -18,63 +21,66 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
         elevation: 0,
         title: const Text(
           'Gestionar Rutina',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back),
         ),
       ),
-      body: Obx(
-        () {
-          controller.rutinas.length;
-          return DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              Container(
-                color: Colors.white,
-                child: TabBar(
-                  labelColor: ColoresApp.primario,
-                  unselectedLabelColor: ColoresApp.textoSecundario,
-                  indicatorColor: ColoresApp.primario,
-                  tabs: const [
-                    Tab(text: 'Mañana'),
-                    Tab(text: 'Noche'),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    _listaGestion(
-                      titulo: 'Rutina de Mañana',
-                      productos: controller.rutinaManana,
-                      onReorder: controller.reordenarManana,
-                      onEliminar: controller.eliminarManana,
-                      onAgregar: () {
-                        Get.back();
-                        Get.find<InicioControlador>().cambiarPagina(3);
-                      },
+      body: estado.cargando
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    child: TabBar(
+                      labelColor: ColoresApp.primario,
+                      unselectedLabelColor: ColoresApp.textoSecundario,
+                      indicatorColor: ColoresApp.primario,
+                      tabs: const [
+                        Tab(text: 'Mañana'),
+                        Tab(text: 'Noche'),
+                      ],
                     ),
-                    _listaGestion(
-                      titulo: 'Rutina de Noche',
-                      productos: controller.rutinaNoche,
-                      onReorder: controller.reordenarNoche,
-                      onEliminar: controller.eliminarNoche,
-                      onAgregar: () {
-                        Get.back();
-                        Get.find<InicioControlador>().cambiarPagina(3);
-                      },
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        _listaGestion(
+                          titulo: 'Rutina de Mañana',
+                          productos: estado.rutinaManana,
+                          onReorder: notifier.reordenarManana,
+                          onEliminar: notifier.eliminarManana,
+                          onAgregar: () {
+                            ref.read(indiceActualProvider.notifier).state = 3;
+                            Navigator.pop(context);
+                          },
+                        ),
+                        _listaGestion(
+                          titulo: 'Rutina de Noche',
+                          productos: estado.rutinaNoche,
+                          onReorder: notifier.reordenarNoche,
+                          onEliminar: notifier.eliminarNoche,
+                          onAgregar: () {
+                            ref.read(indiceActualProvider.notifier).state = 3;
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-        },
-      ),
+            ),
     );
   }
 
@@ -108,7 +114,9 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
               ),
             ],
           ),
+
           const SizedBox(height: 18),
+
           Expanded(
             child: productos.isEmpty
                 ? Center(
@@ -121,9 +129,7 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
                   )
                 : ReorderableListView.builder(
                     itemCount: productos.length,
-                    onReorder: (oldIndex, newIndex) {
-                      onReorder(oldIndex, newIndex);
-                    },
+                    onReorder: onReorder,
                     buildDefaultDragHandles: false,
                     itemBuilder: (context, index) {
                       final rp = productos[index];
@@ -188,7 +194,9 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () => onEliminar(index),
+                              onPressed: () {
+                                onEliminar(index);
+                              },
                               icon: const Icon(Icons.close),
                             ),
                           ],
@@ -197,7 +205,9 @@ class GestionarRutinaPantalla extends GetView<RutinasControlador> {
                     },
                   ),
           ),
+
           const SizedBox(height: 12),
+
           SizedBox(
             width: double.infinity,
             height: 56,

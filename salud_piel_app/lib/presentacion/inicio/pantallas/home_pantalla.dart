@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
-import '../../rutinas/controladores/rutinas_controlador.dart';
+import '../../rutinas/controladores/rutinas_provider.dart';
 import '../../rutas/app_rutas.dart';
 import '../controladores/inicio_provider.dart';
 import '../widgets/tarjeta_producto_grande.dart';
@@ -14,7 +13,9 @@ class HomePantalla extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rutinasControlador = Get.find<RutinasControlador>();
+    final rutinas = ref.watch(rutinasProvider);
+    final manana = rutinas.rutinaManana;
+    final noche = rutinas.rutinaNoche;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -159,94 +160,78 @@ class HomePantalla extends ConsumerWidget {
 
             const SizedBox(height: 12),
 
-            Obx(() {
-              rutinasControlador.rutinas.length;
-              final manana = rutinasControlador.rutinaManana;
+            if (rutinas.cargando)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
 
-              if (manana.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            if (!rutinas.cargando && manana.isNotEmpty) ...[
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.wb_sunny_outlined,
-                        color: ColoresApp.primario,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'RUTINA DE MAÑANA',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: ColoresApp.primario,
-                        ),
-                      ),
-                    ],
+                  Icon(
+                    Icons.wb_sunny_outlined,
+                    color: ColoresApp.primario,
+                    size: 18,
                   ),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: manana.take(2).map((rp) {
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 14),
-                          child: TarjetaProductoPequena(
-                            nombre: rp.producto.nombre,
-                            marca: rp.producto.marca ?? '',
-                            imagenPath: rp.producto.imagenPath,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                  const SizedBox(width: 6),
+                  Text(
+                    'RUTINA DE MAÑANA',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: ColoresApp.primario,
+                    ),
                   ),
-                  const SizedBox(height: 28),
                 ],
-              );
-            }),
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: manana.take(2).map((rp) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 14),
+                      child: TarjetaProductoPequena(
+                        nombre: rp.producto.nombre,
+                        marca: rp.producto.marca ?? '',
+                        imagenPath: rp.producto.imagenPath,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 28),
+            ],
 
-            Obx(() {
-              rutinasControlador.rutinas.length;
-              final noche = rutinasControlador.rutinaNoche;
-
-              if (noche.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            if (!rutinas.cargando && noche.isNotEmpty) ...[
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.nightlight_round,
-                        color: ColoresApp.primario,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'RUTINA DE NOCHE',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: ColoresApp.primario,
-                        ),
-                      ),
-                    ],
+                  Icon(
+                    Icons.nightlight_round,
+                    color: ColoresApp.primario,
+                    size: 18,
                   ),
-                  const SizedBox(height: 14),
-                  TarjetaProductoGrande(
-                    nombre: noche.first.producto.nombre,
-                    marca: noche.first.producto.marca ?? '',
-                    imagenPath: noche.first.producto.imagenPath,
+                  const SizedBox(width: 6),
+                  Text(
+                    'RUTINA DE NOCHE',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: ColoresApp.primario,
+                    ),
                   ),
-                  const SizedBox(height: 28),
                 ],
-              );
-            }),
+              ),
+              const SizedBox(height: 14),
+              TarjetaProductoGrande(
+                nombre: noche.first.producto.nombre,
+                marca: noche.first.producto.marca ?? '',
+                imagenPath: noche.first.producto.imagenPath,
+              ),
+              const SizedBox(height: 28),
+            ],
 
             Container(
               padding: const EdgeInsets.all(20),
