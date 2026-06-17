@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 import '../../constantes/colores.dart';
 import '../../rutinas/controladores/rutinas_controlador.dart';
-import '../controladores/inicio_controlador.dart';
+import '../../rutas/app_rutas.dart';
+import '../controladores/inicio_provider.dart';
 import '../widgets/tarjeta_producto_grande.dart';
 import '../widgets/tarjeta_producto_pequena.dart';
 
-class HomePantalla extends GetView<InicioControlador> {
+class HomePantalla extends ConsumerWidget {
   const HomePantalla({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final rutinasControlador = Get.find<RutinasControlador>();
 
     return SafeArea(
@@ -27,10 +29,10 @@ class HomePantalla extends GetView<InicioControlador> {
                   backgroundColor: Color(0xFFE6D5F7),
                 ),
                 const SizedBox(width: 14),
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'SkinGPT',
                       style: TextStyle(
                         fontSize: 28,
@@ -38,8 +40,8 @@ class HomePantalla extends GetView<InicioControlador> {
                         color: ColoresApp.textoPrincipal,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
+                    SizedBox(height: 4),
+                    Text(
                       'Estado de la piel',
                       style: TextStyle(
                         fontSize: 15,
@@ -54,7 +56,10 @@ class HomePantalla extends GetView<InicioControlador> {
             const SizedBox(height: 25),
 
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 18,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
@@ -73,8 +78,10 @@ class HomePantalla extends GetView<InicioControlador> {
                       ),
                     ),
                   ),
-                 TextButton(
-                    onPressed: controller.irAHistorial,
+                  TextButton(
+                    onPressed: () {
+                      Get.toNamed(AppRutas.historial);
+                    },
                     child: const Text('Ver historial'),
                   ),
                 ],
@@ -86,7 +93,7 @@ class HomePantalla extends GetView<InicioControlador> {
             InkWell(
               borderRadius: BorderRadius.circular(22),
               onTap: () {
-                controller.cambiarPagina(2);
+                ref.read(indiceActualProvider.notifier).state = 2;
               },
               child: Container(
                 width: double.infinity,
@@ -140,7 +147,7 @@ class HomePantalla extends GetView<InicioControlador> {
                 ),
                 TextButton(
                   onPressed: () {
-                    controller.cambiarPagina(1);
+                    ref.read(indiceActualProvider.notifier).state = 1;
                   },
                   child: const Text('Ver todo'),
                 ),
@@ -152,7 +159,11 @@ class HomePantalla extends GetView<InicioControlador> {
             Obx(() {
               rutinasControlador.rutinas.length;
               final manana = rutinasControlador.rutinaManana;
-              if (manana.isEmpty) return const SizedBox.shrink();
+
+              if (manana.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -176,16 +187,18 @@ class HomePantalla extends GetView<InicioControlador> {
                   ),
                   const SizedBox(height: 14),
                   Row(
-                    children: manana.take(2).map((rp) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 14),
-                        child: TarjetaProductoPequena(
-                          nombre: rp.producto.nombre,
-                          marca: rp.producto.marca ?? '',
-                          imagenPath: rp.producto.imagenPath,
+                    children: manana.take(2).map((rp) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 14),
+                          child: TarjetaProductoPequena(
+                            nombre: rp.producto.nombre,
+                            marca: rp.producto.marca ?? '',
+                            imagenPath: rp.producto.imagenPath,
+                          ),
                         ),
-                      ),
-                    )).toList(),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 28),
                 ],
@@ -195,7 +208,11 @@ class HomePantalla extends GetView<InicioControlador> {
             Obx(() {
               rutinasControlador.rutinas.length;
               final noche = rutinasControlador.rutinaNoche;
-              if (noche.isEmpty) return const SizedBox.shrink();
+
+              if (noche.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
