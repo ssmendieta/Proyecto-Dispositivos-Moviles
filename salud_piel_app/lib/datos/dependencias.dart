@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
 
 import '../dominio/casos_uso/autenticacion_caso_uso.dart';
 import '../dominio/casos_uso/diagnostico_caso_uso.dart';
@@ -9,12 +8,6 @@ import '../dominio/casos_uso/escaneo_caso_uso.dart';
 import '../dominio/casos_uso/gemini_caso_uso.dart';
 import '../dominio/casos_uso/producto_caso_uso.dart';
 import '../dominio/casos_uso/rutina_caso_uso.dart';
-import '../dominio/repositorios/i_auth_repositorio.dart';
-import '../dominio/repositorios/i_diagnostico_repositorio.dart';
-import '../dominio/repositorios/i_gemini_servicio.dart';
-import '../dominio/repositorios/i_ml_servicio.dart';
-import '../dominio/repositorios/i_producto_repositorio.dart';
-import '../dominio/repositorios/i_rutina_repositorio.dart';
 import '../dominio/utilidades/resultado.dart';
 
 import 'datos/app_database.dart';
@@ -71,7 +64,7 @@ class Dependencias {
       servicio: geminiServicio,
     );
 
-    final dependencias = AppDependencias(
+    return AppDependencias(
       appDatabase: appDb,
       authRepositorio: authRepositorio,
       diagnosticoRepositorio: diagnosticoRepositorio,
@@ -86,25 +79,11 @@ class Dependencias {
       escaneoCasoUso: escaneoCasoUso,
       geminiCasoUso: geminiCasoUso,
     );
-
-    _registrarCompatibilidadGetX(dependencias);
-
-    return dependencias;
   }
 
-  static void _registrarCompatibilidadGetX(AppDependencias dependencias) {
-    Get.put<AppDatabase>(dependencias.appDatabase);
-
-    Get.put<IAuthRepositorio>(dependencias.authRepositorio);
-    Get.put<IDiagnosticoRepositorio>(dependencias.diagnosticoRepositorio);
-    Get.put<IProductoRepositorio>(dependencias.productoRepositorio);
-    Get.put<IRutinaRepositorio>(dependencias.rutinaRepositorio);
-
-    Get.put<IMlServicio>(dependencias.mlServicio);
-    Get.put<IGeminiServicio>(dependencias.geminiServicio);
-  }
-
-  static Future<void> _cargarImagenesUnsplash(ProductoRepositorio repo) async {
+  static Future<void> _cargarImagenesUnsplash(
+    ProductoRepositorio repo,
+  ) async {
     final accessKey = dotenv.env['UNSPLASH_ACCESS_KEY'];
 
     if (accessKey == null || accessKey.isEmpty) {

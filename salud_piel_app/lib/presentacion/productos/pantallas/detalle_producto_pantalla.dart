@@ -437,6 +437,11 @@ class _DetalleProductoPantallaState
   }
 
   Widget _seccionError(String mensaje) {
+  final esErrorApiKey = mensaje.toLowerCase().contains('api key') ||
+      mensaje.toLowerCase().contains('.env') ||
+      mensaje.toLowerCase().contains('gemini');
+
+  if (esErrorApiKey) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -446,40 +451,79 @@ class _DetalleProductoPantallaState
       ),
       child: Column(
         children: [
-          const Icon(
-            Icons.cloud_off,
+          Icon(
+            Icons.auto_awesome_outlined,
             size: 40,
-            color: Color(0xFFE85757),
+            color: ColoresApp.primario,
           ),
           const SizedBox(height: 12),
           Text(
-            mensaje,
+            'Información inteligente no disponible por ahora.',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF555555),
-              height: 1.5,
-              fontSize: 14,
+            style: TextStyle(
+              color: ColoresApp.textoPrincipal,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
             ),
           ),
-          const SizedBox(height: 16),
-          OutlinedButton.icon(
-            onPressed: _cargarDetalleIA,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Reintentar'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFF7B5EA7),
-              side: const BorderSide(
-                color: Color(0xFF7B5EA7),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          const SizedBox(height: 8),
+          Text(
+            'Puedes seguir usando el producto normalmente y agregarlo a tu rutina. Esta sección se activará cuando haya conexión y una API configurada.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: ColoresApp.textoSecundario,
+              height: 1.5,
+              fontSize: 14,
             ),
           ),
         ],
       ),
     );
   }
+
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(22),
+    ),
+    child: Column(
+      children: [
+        const Icon(
+          Icons.cloud_off,
+          size: 40,
+          color: Color(0xFFE85757),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'No se pudo cargar la información inteligente del producto.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: ColoresApp.textoSecundario,
+            height: 1.5,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton.icon(
+          onPressed: _cargarDetalleIA,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Reintentar'),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: ColoresApp.primario,
+            side: BorderSide(
+              color: ColoresApp.primario,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _seccionModoUso(Producto producto) {
     final modo = producto.comoUsar ??
