@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 import 'datos/dependencias.dart';
 import 'datos/providers/dependencias_provider.dart';
-import 'presentacion/rutas/app_binding.dart';
 import 'presentacion/rutas/app_paginas.dart';
 import 'presentacion/rutas/app_rutas.dart';
 
@@ -31,12 +29,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Salud Piel',
       debugShowCheckedModeBanner: false,
-      initialBinding: AppBinding(),
-      getPages: AppPaginas.paginas,
       initialRoute: AppRutas.carga,
+      onGenerateRoute: AppPaginas.onGenerateRoute,
     );
   }
 }

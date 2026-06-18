@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../autenticacion/controladores/sesion_controlador.dart';
 import 'app_rutas.dart';
 
-class AuthMiddleware extends GetMiddleware {
-  @override
-  RouteSettings? redirect(String? route) {
+class AuthMiddleware {
+  static RouteSettings? redirect(String? route) {
     final rutasPublicas = [
+      '/',
       AppRutas.carga,
       AppRutas.bienvenida,
       AppRutas.login,

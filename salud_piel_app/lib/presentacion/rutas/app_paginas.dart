@@ -1,15 +1,11 @@
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
-import '../../datos/servicios/ml_servicio.dart';
-import '../../dominio/casos_uso/diagnostico_caso_uso.dart';
-import '../../dominio/casos_uso/gemini_caso_uso.dart';
 import '../../dominio/entidades/diagnostico.dart';
 import '../../dominio/entidades/producto.dart';
 import '../autenticacion/pantallas/login_pantalla.dart';
 import '../autenticacion/pantallas/registro_pantalla.dart';
 import '../bienvenida/pantallas/bienvenida_pantalla.dart';
 import '../carga/pantallas/carga_pantalla.dart';
-import '../diagnostico/controladores/diagnostico_controlador.dart';
 import '../diagnostico/pantallas/diagnostico_pantalla.dart';
 import '../escaneo/pantallas/escaneo_pantalla.dart';
 import '../historial/pantallas/detalle_historial_pantalla.dart';
@@ -25,97 +21,106 @@ import 'app_rutas.dart';
 import 'auth_middleware.dart';
 
 class AppPaginas {
-  static final _middleware = [AuthMiddleware()];
+  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    final redireccion = AuthMiddleware.redirect(settings.name);
 
-  static final paginas = [
-    GetPage(
-      name: AppRutas.carga,
-      page: () => const CargaPantalla(),
-    ),
-    GetPage(
-      name: AppRutas.bienvenida,
-      page: () => const BienvenidaPantalla(),
-    ),
-    GetPage(
-      name: AppRutas.login,
-      page: () => const LoginPantalla(),
-    ),
-    GetPage(
-      name: AppRutas.registro,
-      page: () => const RegistroPantalla(),
-    ),
-    GetPage(
-      name: AppRutas.informacionPersonal,
-      page: () => const InformacionPersonalPantalla(),
-    ),
-    GetPage(
-      name: AppRutas.inicio,
-      page: () => const InicioPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.escaneo,
-      page: () => const EscaneoPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.diagnostico,
-      middlewares: _middleware,
-      page: () {
-        final args = Get.arguments;
-        final controller = DiagnosticoControlador(
-          casoUso: Get.find<DiagnosticoCasoUso>(),
-          geminiCasoUso: Get.find<GeminiCasoUso>(),
-        );
-        if (args is ResultadoAnalisis) {
-          controller.cargarDesdeResultadoML(args);
-          controller.cargarInformacionIA();
-        } else if (args is String && args.isNotEmpty) {
-          controller.imagenPath.value = args;
+    if (redireccion != null) {
+      return _crearRuta(
+        RouteSettings(
+          name: redireccion.name,
+          arguments: redireccion.arguments,
+        ),
+        _paginaPorRuta(
+          RouteSettings(
+            name: redireccion.name,
+            arguments: redireccion.arguments,
+          ),
+        ),
+      );
+    }
+
+    return _crearRuta(
+      settings,
+      _paginaPorRuta(settings),
+    );
+  }
+
+  static MaterialPageRoute<dynamic> _crearRuta(
+    RouteSettings settings,
+    Widget pagina,
+  ) {
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (_) => pagina,
+    );
+  }
+
+  static Widget _paginaPorRuta(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+      case AppRutas.carga:
+        return const CargaPantalla();
+
+      case AppRutas.bienvenida:
+        return const BienvenidaPantalla();
+
+      case AppRutas.login:
+        return const LoginPantalla();
+
+      case AppRutas.registro:
+        return const RegistroPantalla();
+
+      case AppRutas.informacionPersonal:
+        return const InformacionPersonalPantalla();
+
+      case AppRutas.inicio:
+        return const InicioPantalla();
+
+      case AppRutas.escaneo:
+        return const EscaneoPantalla();
+
+      case AppRutas.diagnostico:
+        return const DiagnosticoPantalla();
+
+      case AppRutas.productos:
+        return const ProductosPantalla();
+
+      case AppRutas.productoDetalle:
+        final argumento = settings.arguments;
+
+        if (argumento is Producto) {
+          return DetalleProductoPantalla(
+            producto: argumento,
+          );
         }
-        return DiagnosticoPantalla(controller: controller);
-      },
-    ),
-    GetPage(
-      name: AppRutas.productos,
-      page: () => ProductosPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.productoDetalle,
-      page: () {
-        final producto = Get.arguments as Producto;
-        return DetalleProductoPantalla(producto: producto);
-      },
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.rutinas,
-      page: () => const RutinasPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.gestionarRutina,
-      page: () => const GestionarRutinaPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.perfil,
-      page: () => const PerfilPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.historial,
-      page: () => const HistorialPantalla(),
-      middlewares: _middleware,
-    ),
-    GetPage(
-      name: AppRutas.historialDetalle,
-      page: () {
-        final diagnostico = Get.arguments as Diagnostico;
-        return DetalleHistorialPantalla(diagnostico: diagnostico);
-      },
-      middlewares: _middleware,
-    ),
-  ];
+
+        return const ProductosPantalla();
+
+      case AppRutas.rutinas:
+        return const RutinasPantalla();
+
+      case AppRutas.gestionarRutina:
+        return const GestionarRutinaPantalla();
+
+      case AppRutas.perfil:
+        return const PerfilPantalla();
+
+      case AppRutas.historial:
+        return const HistorialPantalla();
+
+      case AppRutas.historialDetalle:
+        final argumento = settings.arguments;
+
+        if (argumento is Diagnostico) {
+          return DetalleHistorialPantalla(
+            diagnostico: argumento,
+          );
+        }
+
+        return const HistorialPantalla();
+
+      default:
+        return const CargaPantalla();
+    }
+  }
 }
